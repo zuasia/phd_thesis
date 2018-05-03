@@ -1,0 +1,28 @@
+%!TEX root=../../paper.tex
+
+\begin{table}[t]
+\large
+\centering
+\caption{Interactions in mobile Web applications fall into three categories based on different QoS type and QoS target combinations.}
+\renewcommand*{\arraystretch}{1.2}
+\renewcommand*{\tabcolsep}{10pt}
+\resizebox{\columnwidth}{!}
+{
+  \begin{tabular}{l l l c}
+  \toprule[0.15em]
+  \bigstrut\textbf{QoS Type} & \bigstrut\textbf{\specialcell{QoS Target\\($P_I$, $P_U$)}} & \multicolumn{1}{c}{\bigstrut\textbf{~~~~~~~~Description}} & \bigstrut\textbf{Interaction}\\
+  \midrule[0.05em]
+  Continuous & (16.6, 33.3) ms & \specialcell{QoS experience is evaluated\\by \textit{continuous} frame latencies.} & T, M\\
+  \midrule
+  \multirow{2}{*}[-23pt]{Single} & (100, 300) ms & \specialcell{QoS experience is evaluated
+\\by \textit{single} frame latency. Users
+\\expect \textit{short} response period.} & T \\ \cline{2-4}
+  & (1, 10) s & \specialcell{QoS experience is evaluated
+\\by \textit{single} frame latency. Users
+\\expect \textit{long} response period.} & L, T \\
+  \bottomrule[0.15em]
+  \end{tabular}
+}
+\label{tab:qos_info}
+\end{table}
+

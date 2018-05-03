@@ -1,0 +1,78 @@
+\addvspace {10pt}
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Overview of my cross-layer research contributions.\relax }}{5}
+\contentsline {figure}{\numberline {1.2}{\ignorespaces The mobile Web computing scope. My research takes a compute-driven, client-centric approach.\relax }}{8}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces A typical Web browser architecture.\relax }}{15}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Webpage load time with respect to changing network latency. Each marker corresponds to an RTT value. We also superimpose the round-trip time (RTT) range for different cellular technologies derived from both technical specifications as well as real measurements in the field\nobreakspace {}\cite {HPBN,carrier_measure}.\relax }}{19}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Webpage load time with respect to CPU frequency on a Galaxy S5 smartphone. The markers represent CPU frequencies, which range from 0.4\nobreakspace {}GHz (left) to 2.5\nobreakspace {}GHz (right). We also overlay the load time on a desktop CPU (the dotted line) for comparison purpose.\relax }}{21}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces The correlation between smartphone battery capacities and their screen sizes. There is an almost linear relationship over the time.\relax }}{23}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces CPU measured peak power consumption has increased significantly compared to other key mobile device components over the years. In particular, the multicore CPU power alone can exceed SoC-level TDP.\relax }}{24}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces We pick 24 representative webpages from 10,000 of the hottest webpages as per \texttt {www.alexa.com}\relax }}{30}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces {\texttt {www.cnn.com}} is a representative webpage from our benchmark suite because it is almost the centroid.\relax }}{36}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces In-order versus out-of-order Pareto optimal frontiers.\relax }}{37}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces In-order Pareto optimal frontier for each kernel.\relax }}{39}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Out-of-order Pareto optimal frontier for each kernel.\relax }}{40}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Pseudo-code of the \textit {Style} kernel. It consists of a matching phase and an applying phase. SRU accelerates the applying phase, which takes about two-thirds of the \textit {Style} kernel execution time.\relax }}{44}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces SRU coupled with scratchpad memories.\relax }}{46}
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Analysis of RLP and CSS properties across webpages.\relax }}{48}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {RLP analysis.}}}{48}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {CSS property analysis.}}}{48}
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Pseudo-code of the \textit {Style} kernel with the new API.\relax }}{49}
+\contentsline {figure}{\numberline {4.10}{\ignorespaces DOM tree access behavior across webpages.\relax }}{51}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {DOM node reuse behavior.}}}{51}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {DOM node access hit rate.}}}{51}
+\contentsline {figure}{\numberline {4.11}{\ignorespaces Representative DOM tree access patterns.\relax }}{54}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {{\texttt {www.sina.com.cn}}}}}{54}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {{\texttt {www.slashdot.org}}}}}{54}
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Using the \texttt {DOMCache\_ST()} API in the rendering engine. The new DOM attribute store API (line 4 in the new code) replaces the original attribute value assignment (line 4 in the original code), and performs cache management.\relax }}{56}
+\contentsline {figure}{\numberline {4.13}{\ignorespaces Performance and energy improvement of the SRU.\relax }}{60}
+\contentsline {figure}{\numberline {4.14}{\ignorespaces Energy savings with a browser engine cache.\relax }}{62}
+\contentsline {figure}{\numberline {4.15}{\ignorespaces DOM Cache and Render Cache hit rate for desktop webpages.\relax }}{63}
+\contentsline {figure}{\numberline {4.16}{\ignorespaces Execution time with the browser engine cache of the three designs. Values are normalized to each design's baseline configuration without the browser engine cache.\relax }}{64}
+\contentsline {figure}{\numberline {4.17}{\ignorespaces Energy-efficiency improvement over three designs.\relax }}{65}
+\contentsline {figure}{\numberline {4.18}{\ignorespaces Allocating area for caches versus specializations.\relax }}{66}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {5.1}{\ignorespaces The LTM (Loading-Tapping-Moving) user-application interaction model of mobile Web. LTM captures three primitive types of interaction: page loading, finger tapping, and finger moving. We use LTM as a framework to reason about user QoS experience.\relax }}{74}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Webpages have different ideal execution configurations to meet the cut-off latency while consuming the least energy.\relax }}{78}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces The distribution of ideal core and frequency configurations under different cut-off latencies.\relax }}{80}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Predictor correlations.\relax }}{85}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Predictor-response correlation.}}}{85}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Predictor self-correlation.}}}{85}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces CDF of prediction errors.\relax }}{88}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Load time model.}}}{88}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Energy model.}}}{88}
+\contentsline {figure}{\numberline {5.6}{\ignorespaces CDF of webpage load time under different configurations.\relax }}{91}
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Evaluation of different scheduling strategies.\relax }}{92}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Distribution of per webpage energy saving against the baseline.}}}{92}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Number of webpages that load under the strict cut-off latency of 3\nobreakspace {}seconds.}}}{92}
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Distribution of per-webpage energy comparisons.\relax }}{96}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Relative energy of the webpage-aware scheduler against the OS scheduler.}}}{96}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Relative energy of the integrated scheduler against the webpage-aware scheduler.}}}{96}
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Event handler variation in Ember.js todo list application.\relax }}{98}
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Event-based runtime scheduling framework.\relax }}{100}
+\contentsline {figure}{\numberline {5.11}{\ignorespaces The simplified view of frame lifetime in modern multiprocess/thread browsers. A frame starts when the browser process receives an input event and ends when the frame is displayed and the browser process is signaled. In between, an input event is processed by different stages spread across multiple threads. Different input events might interleave with each other.\relax }}{103}
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Frame tracking algorithm. The key idea is to attach each input event with a metadata (\texttt {Msg} in the code) that uniquely identifies an input event and is propagated with the event. We use two colors to represent metadata of two different events in this example.\relax }}{105}
+\contentsline {figure}{\numberline {5.13}{\ignorespaces The event execution trace of Paper.js under three different runtime schemesr.\relax }}{111}
+\contentsline {figure}{\numberline {5.14}{\ignorespaces \relax \fontsize {10.95}{13.6}\selectfont \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip The latency and energy model accuracy for \texttt {Paper.js}, which has the median accuracy of all the applications.\relax }}{112}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {\relax \fontsize {10.95}{13.6}\selectfont \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip {Latency model validation.}}}}{112}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {\relax \fontsize {10.95}{13.6}\selectfont \abovedisplayskip 11\p@ plus3\p@ minus6\p@ \abovedisplayshortskip \z@ plus3\p@ \belowdisplayshortskip 6.5\p@ plus3.5\p@ minus3\p@ \def \leftmargin \leftmargini \parsep 5\p@ plus2.5\p@ minus\p@ \topsep 10\p@ plus4\p@ minus6\p@ \itemsep 5\p@ plus2.5\p@ minus\p@ {\leftmargin \leftmargini \topsep 9\p@ plus3\p@ minus5\p@ \parsep 4.5\p@ plus2\p@ minus\p@ \itemsep \parsep }\belowdisplayskip \abovedisplayskip {Energy model validation.}}}}{112}
+\contentsline {figure}{\numberline {5.15}{\ignorespaces Energy consumption normalized to \textit {Perf}. Lower is better.\relax }}{113}
+\contentsline {figure}{\numberline {5.16}{\ignorespaces The architecture configuration distribution under the ``imperceptible'' (\textit {\textsc {EBS}\xspace -I}) and ``usable'' (\textit {\textsc {EBS}\xspace -U}) usage scenario.\relax }}{114}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Architecture configuration distribution for \textit {\textsc {EBS}\xspace -I}.}}}{114}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Architecture configuration distribution for \textit {\textsc {EBS}\xspace -U}.}}}{114}
+\contentsline {figure}{\numberline {5.17}{\ignorespaces Execution configuration switching frequency under \textit {\textsc {EBS}\xspace -I} and \textit {\textsc {EBS}\xspace -U}. Two configuration switching types exist: CPU frequency switch (solid) and core migrations (stripe).\relax }}{116}
+\contentsline {figure}{\numberline {5.18}{\ignorespaces QoS violations are presented as additional violations on top of \textit {Perf}. The $y$-axis of the two figures are kept the same for comparion purposes.\relax }}{117}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {QoS violation comparison under the imperceptible usage scenario.}}}{117}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {QoS violation comparison under the usable usage scenario.}}}{117}
+\addvspace {10pt}
+\contentsline {figure}{\numberline {6.1}{\ignorespaces The interplay between QoS, performance, and energy.\relax }}{126}
+\contentsline {figure}{\numberline {6.2}{\ignorespaces The syntax of {\fontfamily {cmtt}\selectfont GreenWeb}\xspace language extensions.\relax }}{134}
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Express the QoS type of \texttt {ontouchstart} event as ``continuous,'' and use the default $P_I$ and $P_U$ values.\relax }}{138}
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Express the QoS type of \texttt {ontouchmove} event as ``continuous,'' and use 20\nobreakspace {}ms and 100\nobreakspace {}ms as the new QoS targets.\relax }}{139}
+\contentsline {figure}{\numberline {6.5}{\ignorespaces \textsc {AutoGreen}\xspace 's workflow to automatically annotate mobile Web applications with {\fontfamily {cmtt}\selectfont GreenWeb}\xspace APIs.\relax }}{142}
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Microbenchmarking results. Energy numbers are normalized to \textit {Perf}, which provides the best QoS and consumes the most energy. QoS violations are presented as additional violations on top of \textit {Perf}. \textit {GreenWeb-I} and \textit {GreenWeb-U} are {\fontfamily {cmtt}\selectfont GreenWeb}\xspace under two usage scenarios.\relax }}{146}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Energy consumption normalized to \textit {Perf}. Lower is better.}}}{146}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {QoS violations normalized to \textit {Perf}. Lower is better.}}}{146}
+\addvspace {10pt}

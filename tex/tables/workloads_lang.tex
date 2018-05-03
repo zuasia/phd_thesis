@@ -1,0 +1,33 @@
+% !TEX root = ../../paper.tex
+
+\begin{table}[p]
+\large
+\centering
+\captionsetup{width=1\columnwidth}
+\caption{Applications used for evaluating \greenweb. They are the same as the ones used for evaluating \ebs in \Sect{sec:runtime:ebs:eval}. ``Annotation'' indicates percentage of events that are annotated. ``Events'' indicates the amount of events triggered during full interaction. Note: we only annotate and count events that are directly triggered by mobile user interactions as discussed in \Sect{sec:runtime:ltm}. Applications marked with * are manually annotated because they are developed using libraries that \autogreen does not currently support. Their annotation percentage numbers are estimated.}
+\renewcommand*{\arraystretch}{1.5}
+\renewcommand*{\tabcolsep}{6pt}
+\resizebox{1\columnwidth}{!}
+{
+\begin{tabular}{l | c l l | c c}
+\toprule[0.15em]
+\bigstrut\textbf{Application}  &  \bigstrut\textbf{Interaction} & \bigstrut\textbf{QoS Type}  & \bigstrut\textbf{QoS Target}  & \bigstrut\textbf{Events} & \bigstrut\textbf{Annotation}         \\
+\midrule[0.05em]
+\website{BBC}          & Loading   & Single        & (1, 10) s          & 60    &  20\%$^*$  \\
+\website{Google}       & Loading   & Single        & (1, 10) s          & 26    & 87.5\%       \\
+\website{CamanJS}      & Tapping   & Single        & (1, 10) s          & 24    & 100\%    \\
+\website{LZMA-JS}      & Tapping   & Single        & (1, 10) s           & 39    & 100\%    \\
+\website{MSN}          & Tapping   & Single        & (100, 300) ms         & 126   & 51.2\%    \\
+\website{Todo}         & Tapping   & Single        & (100, 300) ms        & 26    & 38.3\%      \\
+\website{Amazon}       & Moving    & Continuous    & (16.6, 33.3) ms      & 101   &   33\%$^*$  \\
+\website{Craigslist}   & Moving    & Continuous    & (16.6, 33.3) ms    & 22    & 84.6\%      \\
+\website{Paper.js}     & Moving    & Continuous    & (16.6, 33.3) ms    & 560    & 100\%   \\
+\website{Cnet}        & Tapping   & Continuous    & (16.6, 33.3) ms       & 60    & 55.3\%   \\
+\website{Goo.ne.jp}          & Tapping   & Continuous    & (16.6, 33.3) ms     & 23    & 51.8\%    \\
+\website{W3Schools}    & Tapping   & Continuous    & (16.6, 33.3) ms      & 59    & 100\%    \\
+\bottomrule[0.15em]
+\end{tabular}
+}
+\label{tab:app}
+\end{table}
+

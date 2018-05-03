@@ -1,0 +1,25 @@
+%!TEX root=../../paper.tex
+
+\begin{table}[t]
+\large
+\centering
+\captionsetup{width=.8\columnwidth}
+\caption{Performance (quantified as instruction-per-cycle, IPC) and power prediction errors of our microarchitecture design-space exploration using statistical inferential models}
+\renewcommand*{\arraystretch}{1.4}
+\renewcommand*{\tabcolsep}{15pt}
+\resizebox{.8\columnwidth}{!}
+{
+	\begin{tabular}{l c c}
+	\toprule[0.15em]
+	\bigstrut\textbf{Kernel}	& \bigstrut\textbf{IPC Error (\%)} & \bigstrut\textbf{Power Error (\%)} \\
+	\midrule[0.05em]
+	\textit{Dom}		&	7.98	&	5.64	\\
+	\textit{Style}		&	6.04	&	4.52	\\
+	\textit{Layout}	&	5.47	&	4.94	\\
+	\textit{Render}	&	5.68	&	4.37	\\
+	\textit{Mix}		&	5.47	&	4.76	\\
+	\bottomrule[0.15em]
+	\end{tabular}
+}
+\label{tab:model}
+\end{table}

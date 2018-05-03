@@ -1,0 +1,14 @@
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\addvspace {10pt}
+\contentsline {table}{\numberline {4.1}{\ignorespaces Microarchitecture design-space parameters. The first column shows the parameters that are considered in our DSE. The second column shows the metric that the value of each parameter is measured. The $i$::$j$::$k$ in the third column denotes values ranging from $i$ to $k$ at steps of $j$\relax }}{34}
+\contentsline {table}{\numberline {4.2}{\ignorespaces Microarchitecture configurations for P1 and P2 in Figure\nobreakspace {}\G@refundefinedtrue \text {\normalfont \bfseries ??}\GenericWarning { }{LaTeX Warning: Reference `fig:ivso' on page 42 undefined}. They represent different energy-delay trade-offs. For comparison purpose, we also show the parameters for ARM Cortex-A15, whose information is gather from measurements using the 7-Zip LZMA Benchmark\nobreakspace {}\cite {7cpu-a15} and ARM's public presentation\nobreakspace {}\cite {a15-slide}.\relax }}{42}
+\addvspace {10pt}
+\contentsline {table}{\numberline {5.1}{\ignorespaces Model Predictors\relax }}{82}
+\contentsline {table}{\numberline {5.2}{\ignorespaces List of evaluated applications. ``Interaction Description'' provides a high-level description of the kind of interactions that are performed on each application. ``Time'' indicates the total interaction duration. ``Events'' indicates the amount of events triggered during an interaction.\relax }}{110}
+\addvspace {10pt}
+\contentsline {table}{\numberline {6.1}{\ignorespaces Interactions in mobile Web applications fall into three categories based on different QoS type and QoS target combinations.\relax }}{129}
+\contentsline {table}{\numberline {6.2}{\ignorespaces Specifications of the {\fontfamily {cmtt}\selectfont GreenWeb}\xspace APIs. Each API is a new CSS rule specifying the QoS information when a particular event is triggered on certain Web application element.\relax }}{135}
+\contentsline {table}{\numberline {6.3}{\ignorespaces Applications used for evaluating {\fontfamily {cmtt}\selectfont GreenWeb}\xspace . They are the same as the ones used for evaluating \textsc {EBS}\xspace in Chapter\nobreakspace {}\G@refundefinedtrue \text {\normalfont \bfseries ??}\GenericWarning { }{LaTeX Warning: Reference `sec:runtime:ebs:eval' on page 145 undefined}. ``Annotation'' indicates percentage of events that are annotated. ``Events'' indicates the amount of events triggered during full interaction. Note: we only annotate and count events that are directly triggered by mobile user interactions as discussed in Chapter\nobreakspace {}\G@refundefinedtrue \text {\normalfont \bfseries ??}\GenericWarning { }{LaTeX Warning: Reference `sec:runtime:ltm' on page 145 undefined}. Applications marked with * are manually annotated because they are developed using libraries that \textsc {AutoGreen}\xspace does not currently support. Their annotation percentage numbers are estimated.\relax }}{145}
+\addvspace {10pt}
