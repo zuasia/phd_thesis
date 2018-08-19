@@ -11,6 +11,7 @@ $(PAPER).pdf: $(TEX) $(FIGS)
 	bibtex $(PAPER)
 	pdflatex $(PAPER)
 	pdflatex $(PAPER)
+	pdflatex $(PAPER)
 
 clean:
 	rm -f *.aux *.bbl *.blg *.log *.out $(PAPER).pdf

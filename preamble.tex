@@ -1,0 +1,74 @@
+%!TEX root=paper.tex
+
+\usepackage{lipsum}
+
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage[table]{xcolor}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{xspace}
+\usepackage{soul}
+\usepackage{subfig}
+\usepackage[skip=.1in]{caption}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{textcomp}
+\usepackage{fancyhdr}
+\usepackage[normalem]{ulem}
+\usepackage[hyphens]{url}
+\usepackage{makecell}
+\usepackage{gensymb}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{amsmath}
+\usepackage{pbox}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=VioletRed
+}
+
+\usepackage[british]{babel}
+
+
+\newcommand{\website}[1]{{\texttt {#1}}}
+\newcommand{\program}[1]{{\tt #1}}
+\newcommand{\benchmark}[1]{{\it #1}}
+\newcommand{\fixme}[1]{{\textcolor{red}{$fixme:$~\textit{#1}}}}
+
+\renewcommand{\figurename}{Fig.}
+%\renewcommand{\paragraph}[1]{\textbf{#1}~~}
+\newcommand{\figline}{{\vspace*{.05in}\hline}}
+
+\newcommand{\Sec}[1]{Chapter~\ref{#1}}
+\newcommand{\Fig}[1]{Figure~\ref{#1}}
+\newcommand{\Tbl}[1]{Table~\ref{#1}}
+\newcommand{\Equ}[1]{Equation.~\ref{#1}}
+\newcommand{\Apx}[1]{Appendix~\ref{#1}}
+
+\newcommand{\specialcell}[2][c]{\begin{tabular}[#1]{@{}l@{}}#2\end{tabular}}
+\newcommand{\note}[1]{\textcolor{red}{#1}}
+
+\newcolumntype{x}[1]{>{\centering\arraybackslash\hspace{0pt}}p{#1}}
+\newcolumntype{y}[1]{>{\raggeright\arraybackslash\hspace{0pt}}p{#1}}
+
+\newcommand{\greenweb}{{\fontfamily{cmtt}\selectfont GreenWeb}\xspace}
+\newcommand{\webcore}{{\fontfamily{cmtt}\selectfont WebCore}\xspace}
+\newcommand{\webrt}{{\fontfamily{cmtt}\selectfont WebRT}\xspace}
+\newcommand{\autogreen}{\textsc{AutoGreen}\xspace}
+\newcommand{\ebs}{\textsc{EBS}\xspace}
+
+\newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
+
+\newcommand{\ams}{{\fontfamily{cmtt}\selectfont AMS}\xspace}
+\newcommand{\atm}{ATM\xspace}
+\newcommand{\C}{$\celsius$\xspace}
+\newcommand{\tistate}{T$_{i}$-state\xspace}
+\newcommand{\tistates}{T$_{i}$-states\xspace}
+
+\newcommand{\Algo}[1]{Algorithm~\ref{#1}}
+\newcommand{\Tab}[1]{Table~\ref{#1}}
+\newcommand{\Mark}[1]{\textsuperscript{#1}}
+\newcommand{\marker}[1]{{\sl #1}}
+

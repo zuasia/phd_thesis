@@ -13,6 +13,8 @@
 
 \documentclass[12pt]{report}	% The documentclass must be ``report''.
 
+\input{preamble}
+
 \usepackage{utdiss2}  		% Dissertation package style file.
 
 
@@ -276,8 +278,7 @@
 \titlepage              % Produces the title page.
 
 
-\graphicspath{{figs/}}
-\input{tex/macros}
+%\graphicspath{{figs/}}
 
 \input{tex/dedication}
 \input{tex/ack}
@@ -305,10 +306,9 @@
 %
 \input{tex/intro}
 \input{tex/background}
-\input{tex/motivation}
-\input{tex/arch}
-\input{tex/runtime}
-\input{tex/lang}
+\input{tex/temperature}
+\input{tex/voltage}
+\input{tex/multicore}
 \input{tex/conc}
 
 
@@ -342,7 +342,7 @@
                 % explicitly cited in the text. 		     %
 		%						     %
 \bibliographystyle{plain}  % Here the bibliography 		     %
-\bibliography{tex/refs}        % is inserted.			     %
+\bibliography{ref}        % is inserted.			     %
 %\index{Bibliography@\emph{Bibliography}}%			     %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

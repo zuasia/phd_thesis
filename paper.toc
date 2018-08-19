@@ -1,83 +1,54 @@
-\contentsline {chapter}{Acknowledgments}{v}
-\contentsline {chapter}{Abstract}{x}
-\contentsline {chapter}{List of Tables}{xv}
-\contentsline {chapter}{List of Figures}{xvi}
-\contentsline {chapter}{Chapter 1.\hspace *{1em}Introduction}{1}
-\contentsline {section}{\numberline {1.1}Research Contributions}{3}
-\contentsline {section}{\numberline {1.2}Long-term Impact}{6}
-\contentsline {section}{\numberline {1.3}Research Scope}{7}
-\contentsline {section}{\numberline {1.4}Dissertation Organization}{10}
-\contentsline {section}{\numberline {1.5}Previously Published Material}{10}
-\contentsline {chapter}{Chapter 2.\hspace *{1em}Web: A Universal Application Platform}{13}
-\contentsline {section}{\numberline {2.1}The Scope of the Web}{13}
-\contentsline {section}{\numberline {2.2}Web Languages and The Web Browser Runtime}{14}
-\contentsline {chapter}{Chapter 3.\hspace *{1em}The Need for High-Performance and Energy-Efficient Computation in Mobile Web}{17}
-\contentsline {section}{\numberline {3.1}The Need for Compute Performance in Mobile Web}{18}
-\contentsline {section}{\numberline {3.2}The Need for Energy-Efficient Computation}{22}
-\contentsline {chapter}{Chapter 4.\hspace *{1em}WebCore: A Mobile Processor Architecture for Web Computing}{26}
-\contentsline {section}{\numberline {4.1}Experimental Setup}{29}
-\contentsline {section}{\numberline {4.2}Customizing General-Purpose Cores}{32}
-\contentsline {subsection}{\numberline {4.2.1}Design Space Exploration}{32}
-\contentsline {subsection}{\numberline {4.2.2}In-order vs. Out-of-order Design Space Exploration}{37}
-\contentsline {subsection}{\numberline {4.2.3}Sources of Inefficiency}{40}
-\contentsline {section}{\numberline {4.3}Style Resolution Unit}{41}
-\contentsline {subsection}{\numberline {4.3.1}Motivation}{43}
-\contentsline {subsection}{\numberline {4.3.2}Hardware Design}{46}
-\contentsline {subsection}{\numberline {4.3.3}Software Support and Programmability}{49}
-\contentsline {section}{\numberline {4.4}Browser Engine Cache}{50}
-\contentsline {subsection}{\numberline {4.4.1}Motivation}{50}
-\contentsline {subsection}{\numberline {4.4.2}Hardware Design}{53}
-\contentsline {subsection}{\numberline {4.4.3}Software Support and Programmability}{55}
-\contentsline {section}{\numberline {4.5}WebCore Evaluation}{57}
-\contentsline {subsection}{\numberline {4.5.1}Overhead Analysis}{58}
-\contentsline {subsection}{\numberline {4.5.2}Style Resolution Unit}{59}
-\contentsline {subsection}{\numberline {4.5.3}Browser Engine Cache}{61}
-\contentsline {subsection}{\numberline {4.5.4}Combined Evaluation}{64}
-\contentsline {section}{\numberline {4.6}Related Work}{67}
-\contentsline {subsection}{\numberline {4.6.1}Architecture Specializations for the Web}{68}
-\contentsline {subsection}{\numberline {4.6.2}Specialized Cache Design}{68}
-\contentsline {subsection}{\numberline {4.6.3}Web Applications Characterization}{69}
-\contentsline {chapter}{Chapter 5.\hspace *{1em}WebRT: Energy-Efficient Web Browser Runtime}{71}
-\contentsline {section}{\numberline {5.1}Experimental Setup}{73}
-\contentsline {section}{\numberline {5.2}LTM Model of Mobile User Interaction}{74}
-\contentsline {section}{\numberline {5.3}Motivation: Energy-Delay Trade-off}{76}
-\contentsline {subsection}{\numberline {5.3.1}Representative Analysis}{77}
-\contentsline {subsection}{\numberline {5.3.2}Comprehensive Analysis}{79}
-\contentsline {section}{\numberline {5.4}Webpage-aware Scheduling}{81}
-\contentsline {subsection}{\numberline {5.4.1}Performance and Energy Modeling}{83}
-\contentsline {subsection}{\numberline {5.4.2}Model Evaluation}{86}
-\contentsline {subsection}{\numberline {5.4.3}Scheduler Implementation}{89}
-\contentsline {subsection}{\numberline {5.4.4}Evaluation}{90}
-\contentsline {section}{\numberline {5.5}Event-based Scheduling}{97}
-\contentsline {subsection}{\numberline {5.5.1}Scheduling Unit}{98}
-\contentsline {subsection}{\numberline {5.5.2}Scheduler Design Overview}{99}
-\contentsline {subsection}{\numberline {5.5.3}Scheduler Implementation Details}{101}
-\contentsline {subsection}{\numberline {5.5.4}Experimental Setup}{107}
-\contentsline {subsection}{\numberline {5.5.5}Evaluation}{109}
-\contentsline {section}{\numberline {5.6}Related Work}{119}
-\contentsline {subsection}{\numberline {5.6.1}Single ISA/DVFS Scheduling}{119}
-\contentsline {subsection}{\numberline {5.6.2}Web Performance Optimizations}{121}
-\contentsline {subsection}{\numberline {5.6.3}Web Energy Optimizations}{121}
-\contentsline {chapter}{Chapter 6.\hspace *{1em}GreenWeb: Web Language Extensions for Energy-Efficient Web Computing}{123}
-\contentsline {section}{\numberline {6.1}Trade-off Between QoS, Performance, and Energy}{125}
-\contentsline {section}{\numberline {6.2}QoS Abstractions for Web Applications}{127}
-\contentsline {subsection}{\numberline {6.2.1}QoS Type}{128}
-\contentsline {subsection}{\numberline {6.2.2}QoS Target}{131}
-\contentsline {section}{\numberline {6.3}QoS-Aware Web API Design}{133}
-\contentsline {subsection}{\numberline {6.3.1}Design Principles}{133}
-\contentsline {subsection}{\numberline {6.3.2}QoS-Aware Web API Design}{134}
-\contentsline {subsection}{\numberline {6.3.3}Example Usage}{137}
-\contentsline {section}{\numberline {6.4}Automatic Annotation}{141}
-\contentsline {section}{\numberline {6.5}GreenWeb and WebRT Inteplay}{143}
-\contentsline {section}{\numberline {6.6}Evaluation}{144}
-\contentsline {subsection}{\numberline {6.6.1}Energy-Efficiency Improvement}{144}
-\contentsline {subsection}{\numberline {6.6.2}Annotation Effort}{149}
-\contentsline {section}{\numberline {6.7}Discussion}{151}
-\contentsline {section}{\numberline {6.8}Related Work}{153}
-\contentsline {subsection}{\numberline {6.8.1}Language Support for Web Performance}{154}
-\contentsline {subsection}{\numberline {6.8.2}Language Support for Energy Efficiency}{154}
-\contentsline {subsection}{\numberline {6.8.3}Mobile QoS Characterization}{156}
-\contentsline {chapter}{Chapter 7.\hspace *{1em}Retrospective and Prospective Remarks}{157}
-\contentsline {section}{\numberline {7.1}Retrospective}{157}
-\contentsline {section}{\numberline {7.2}Prospective}{159}
-\contentsline {chapter}{Vita}{163}
+\select@language {british}
+\contentsline {chapter}{Acknowledgments}{v}{Doc-Start}
+\contentsline {chapter}{Abstract}{x}{Doc-Start}
+\contentsline {chapter}{List of Tables}{xiii}{Doc-Start}
+\contentsline {chapter}{List of Figures}{xiv}{Doc-Start}
+\contentsline {chapter}{Chapter 1.\hspace *{1em}Introduction}{1}{chapter.1}
+\contentsline {paragraph}{Thesis Statement}{2}{chapter.1}
+\contentsline {section}{\numberline {1.1}Research Contributions}{2}{section.1.1}
+\contentsline {section}{\numberline {1.2}Long-term Impact}{7}{section.1.2}
+\contentsline {section}{\numberline {1.3}Dissertation Organization}{8}{section.1.3}
+\contentsline {section}{\numberline {1.4}Previously Published Material}{8}{section.1.4}
+\contentsline {chapter}{Chapter 2.\hspace *{1em}Timing Margin: A Perpetual Role in Microprocessors}{11}{chapter.2}
+\contentsline {section}{\numberline {2.1}The Importance of Timing Margin in Modern Microprocessors}{11}{section.2.1}
+\contentsline {section}{\numberline {2.2}Major Consumers of Microprocessor's Pipeline Timing Margin}{14}{section.2.2}
+\contentsline {paragraph}{Temperature variation}{15}{section.2.2}
+\contentsline {paragraph}{Voltage variation}{15}{section.2.2}
+\contentsline {paragraph}{Process variation}{17}{figure.caption.3}
+\contentsline {paragraph}{Other noisy effects}{17}{figure.caption.3}
+\contentsline {section}{\numberline {2.3}The Need for Active Timing Margin and Its Management}{18}{section.2.3}
+\contentsline {chapter}{Chapter 3.\hspace *{1em}Ti-states: Active Timing Margin Management in the Temperature Inversion Region}{22}{chapter.3}
+\contentsline {section}{\numberline {3.1}Experimental Setup}{25}{section.3.1}
+\contentsline {subsubsection}{AMD\textsuperscript {\textregistered } A10-8700P Accelerated Processing Unit}{25}{figure.caption.6}
+\contentsline {subsubsection}{Temperature Control Setup}{27}{figure.caption.6}
+\contentsline {subsubsection}{Timing Margin Sensors: On-chip Power Supply Monitors (PSMs)}{28}{figure.caption.6}
+\contentsline {subsection}{\numberline {3.1.1}Characterizing Timing Margin Under Temperature Inversion Variation}{29}{subsection.3.1.1}
+\contentsline {subsubsection}{Circuit Speed Variation Under Different Temperature}{29}{figure.caption.7}
+\contentsline {subsubsection}{Estimating Active Timing Margin's Undervolting Opportunity}{32}{figure.caption.7}
+\contentsline {subsection}{\numberline {3.1.2}Temperature Inversion States (Ti-States)}{34}{subsection.3.1.2}
+\contentsline {subsubsection}{Methodology to Construct the Ti-States Table}{34}{subsection.3.1.2}
+\contentsline {subsubsection}{Evaluating Ti-State's Voltage and Power Reduction Effects}{37}{figure.caption.8}
+\contentsline {subsection}{\numberline {3.1.3}Managing Ti-State Processors in Advanced Technology Nodes}{40}{subsection.3.1.3}
+\contentsline {subsubsection}{Scaling to FinFET and FD-SOI}{41}{subsection.3.1.3}
+\contentsline {subsection}{\numberline {3.1.4}T$_{i}$-state\xspace Power Analysis under FinFET and FD-SOI}{43}{subsection.3.1.4}
+\contentsline {subsection}{\numberline {3.1.5}Runtime Temperature Control}{46}{subsection.3.1.5}
+\contentsline {subsection}{\numberline {3.1.6}Related Work}{47}{subsection.3.1.6}
+\contentsline {chapter}{Chapter 4.\hspace *{1em}Architecture and Scheduling Optimization for Active Timing Margin of Voltage Variation}{49}{chapter.4}
+\contentsline {section}{\numberline {4.1}Active Timing Margin in the POWER7+ Multicore Processor}{51}{section.4.1}
+\contentsline {section}{\numberline {4.2}Efficiency Analysis of Active Timing Margin on Multicore}{54}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Experimental Infrastructure}{55}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Core Scaling}{56}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Workload Heterogeneity}{59}{subsection.4.2.3}
+\contentsline {section}{\numberline {4.3}Root-Cause Analysis of Active Timing Margin's Inefficiencies}{61}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Measuring the On-chip Voltage Drop}{62}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}On-chip Voltage Drop Analysis}{65}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Decomposing the On-chip Voltage Drop}{69}{subsection.4.3.3}
+\contentsline {section}{\numberline {4.4}Architecture \/ Scheduling Optimization}{73}{section.4.4}
+\contentsline {subsection}{\numberline {4.4.1}Solution for Recovering Multicore Scaling Loss}{73}{subsection.4.4.1}
+\contentsline {subsection}{\numberline {4.4.2}Power Reduction Improvement}{77}{subsection.4.4.2}
+\contentsline {subsection}{\numberline {4.4.3}Related Work}{80}{subsection.4.4.3}
+\contentsline {chapter}{Chapter 5.\hspace *{1em}Multicore Active Timing Margin Management for Maximizing Performance Efficiency}{82}{chapter.5}
+\contentsline {chapter}{Chapter 6.\hspace *{1em}Retrospective and Prospective Remarks}{83}{chapter.6}
+\contentsline {section}{\numberline {6.1}Retrospective}{83}{section.6.1}
+\contentsline {section}{\numberline {6.2}Prospective}{85}{section.6.2}
+\contentsline {chapter}{Vita}{89}{section.6.2}
