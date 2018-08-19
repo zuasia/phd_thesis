@@ -1,8 +1,8 @@
 \select@language {british}
 \contentsline {chapter}{Acknowledgments}{v}{Doc-Start}
 \contentsline {chapter}{Abstract}{x}{Doc-Start}
-\contentsline {chapter}{List of Tables}{xiii}{Doc-Start}
-\contentsline {chapter}{List of Figures}{xiv}{Doc-Start}
+\contentsline {chapter}{List of Tables}{xv}{Doc-Start}
+\contentsline {chapter}{List of Figures}{xvi}{Doc-Start}
 \contentsline {chapter}{Chapter 1.\hspace *{1em}Introduction}{1}{chapter.1}
 \contentsline {paragraph}{Thesis Statement}{2}{chapter.1}
 \contentsline {section}{\numberline {1.1}Research Contributions}{2}{section.1.1}
@@ -51,4 +51,5 @@
 \contentsline {chapter}{Chapter 6.\hspace *{1em}Retrospective and Prospective Remarks}{83}{chapter.6}
 \contentsline {section}{\numberline {6.1}Retrospective}{83}{section.6.1}
 \contentsline {section}{\numberline {6.2}Prospective}{85}{section.6.2}
-\contentsline {chapter}{Vita}{89}{section.6.2}
+\contentsline {chapter}{Bibliography}{89}{section.6.2}
+\contentsline {chapter}{Vita}{103}{section.6.2}

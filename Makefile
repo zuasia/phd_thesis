@@ -1,17 +1,16 @@
 PAPER = paper
-TEX = $(wildcard tex/*.tex *.tex)
-BIB = tex/refs.bib
-FIGS = $(wildcard figs/*)
+TEX = $(wildcard *.tex tex/*.tex *.bib)
+BIB = ref.bib
+FIGS = $(wildcard graphs/*)
 
 .PHONY: all clean
 
 $(PAPER).pdf: $(TEX) $(FIGS)
-	echo $(FIGS)
-	pdflatex $(PAPER)
-	bibtex $(PAPER)
-	pdflatex $(PAPER)
-	pdflatex $(PAPER)
-	pdflatex $(PAPER)
+	pdflatex $(PAPER).tex
+	bibtex $(PAPER).aux
+	pdflatex $(PAPER).tex
+	pdflatex $(PAPER).tex
+	pdflatex $(PAPER).tex
 
 clean:
-	rm -f *.aux *.bbl *.blg *.log *.out $(PAPER).pdf
+	rm -f *.aux *.log *.out *.blg *.bbl *.pdf *.synctex.gz *.cut
