@@ -1,11 +1,11 @@
 %!TEX root=../paper.tex
 
-\chapter{Timing Margin: A Perpetual Role in Microprocessors}
+\chapter{Timing Margin: A Perpetual Role in \\Modern Microprocessors}
 \label{sec:background}
 
 This section explains the basics of microprocessor's timing margin, and motivates why active management of timing margin is necessary to improve power efficiency. This section first goes over the necessity of timing margin in modern microprocessors. Then it enumerates the main components involved in timing margin. We end this section with a brief discussion of the working mechanism of active timing margin.
 
-\section{The Importance of Timing Margin in Modern Microprocessors}
+\section{The Importance of Pipeline Timing Margin}
 \label{sec:background:importance}
 
 In the abstract form, general-purpose microprocessors are state machines that follows the von-Neumann architecture. In practice, microprocessors must be implemented in a physical form to perform the actual computation, be it add, multiply, store, or others. The physical implementation dates back to an early mechanical form as the Babbage Engine in the 1800s, and has evolved a long way to today's highly efficient electronic form as CMOS transistors. Whatever microprocessor's physical form of implementation is, they must be made and delivered with reliability guarantee, as any other human-engineered, physical instance that operate in the presence of uncertainty. Uncertainty exists because human do not have perfect control in the manufacturing and operating process. Uncertainty can be systematically biased, or purely random. Either way, it must be taken into account in a microprocessor's design, manufacturing and testing.
@@ -35,7 +35,7 @@ A good analogy of microprocessor pipeline's timing margin in everyday life is th
 
 Failing to take circuity's performance uncertainty into account can lead to the microprocessor malfunction. One good example is the rowhammer problem discovered in DRAM chips recently~\cite{kim2014flipping}. In DRAM chips, stressing one row can cause the row's adjacent cells to leak charge quicker than usual, and eventually causes a bit flip which may have serious repercussions. To protect against this situation, DRAMs need to provide ample headroom to tolerate the uncertainty in a cell's charge leakage time, such as by refreshing cells quicker which is a form of timing margin. Though DRAM is not exactly the same as a microprocessor, this case illustrates the importance of timing margin in CMOS chips.
 
-\section{Major Consumers of Microprocessor's Pipeline Timing Margin}
+\section{What Consumes the Timing Margin?}
 \label{sec:background:components}
 
 Timing margin can be implemented as tuning supply voltage slightly higher, which makes circuits operator faster and thus leaving some timing slack, or tuning the frequency slightly slower, which makes cycle time longer. These two methods are equivalent to each other. The former approach is widely known as \textit{voltage guardband} as described in \Fig{fig:voltage-guardband}. We explore both methods in this thesis.
@@ -61,7 +61,7 @@ Resistive parasitics cause supply voltage's IR drop following Ohm's law. Higher 
 
 \paragraph{Other noisy effects} such as transistor aging, processor testing inaccuracy also contribute to pipeline circuit timing uncertainty. However, these effects' intensity is not as strong as temperature, voltage, and process variation aforementioned, and the condition for it to occur is too extreme. For this reason, we leave out these effects in this proposal and focus on voltage, temperature and process variation.
 
-\section{The Need for Active Timing Margin and Its Management}
+\section{The Need for Active Timing Margin}
 \label{sec:background:motivation}
 
 Traditionally, timing margin is fixed during chip design stage, the process of which follows a \textit{worst-case} design approach. In other words, the amount of timing margin must be able to tolerate the most extreme conditions that slow down microprocessor circuits, such as very heavy $di/dt$ voltage droops, very large IR drop caused by high power workloads, and unusual operating temperature that degrade transistor performance. The aggregate corner case of all effects determine how much timing margin is added to the chip.
