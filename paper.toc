@@ -4,52 +4,52 @@
 \contentsline {chapter}{List of Tables}{xvi}{Doc-Start}
 \contentsline {chapter}{List of Figures}{xvii}{Doc-Start}
 \contentsline {chapter}{Chapter 1.\hspace *{1em}Introduction}{1}{chapter.1}
-\contentsline {paragraph}{Thesis Statement}{2}{chapter.1}
-\contentsline {section}{\numberline {1.1}Research Contributions}{2}{section.1.1}
+\contentsline {paragraph}{Thesis Statement}{4}{chapter.1}
+\contentsline {section}{\numberline {1.1}Research Contributions}{4}{section.1.1}
 \contentsline {section}{\numberline {1.2}Long-term Impact}{7}{section.1.2}
-\contentsline {section}{\numberline {1.3}Dissertation Organization}{8}{section.1.3}
-\contentsline {section}{\numberline {1.4}Previously Published Material}{8}{section.1.4}
-\contentsline {chapter}{Chapter 2.\hspace *{1em}Timing Margin: A Perpetual Role in \\Modern Microprocessors}{11}{chapter.2}
-\contentsline {section}{\numberline {2.1}The Importance of Pipeline Timing Margin}{11}{section.2.1}
-\contentsline {section}{\numberline {2.2}What Consumes the Timing Margin?}{14}{section.2.2}
-\contentsline {paragraph}{Temperature variation}{15}{section.2.2}
-\contentsline {paragraph}{Voltage variation}{15}{section.2.2}
-\contentsline {paragraph}{Process variation}{17}{figure.caption.3}
-\contentsline {paragraph}{Other noisy effects}{17}{figure.caption.3}
-\contentsline {section}{\numberline {2.3}The Need for Active Timing Margin}{18}{section.2.3}
-\contentsline {chapter}{Chapter 3.\hspace *{1em}Ti-states: Active Timing Margin Management in the Temperature Inversion Region}{22}{chapter.3}
-\contentsline {section}{\numberline {3.1}Experimental Setup}{25}{section.3.1}
-\contentsline {subsubsection}{AMD\textsuperscript {\textregistered } A10-8700P Accelerated Processing Unit}{25}{figure.caption.6}
-\contentsline {subsubsection}{Temperature Control Setup}{27}{figure.caption.6}
-\contentsline {subsubsection}{Timing Margin Sensors: On-chip Power Supply Monitors (PSMs)}{28}{figure.caption.6}
-\contentsline {subsection}{\numberline {3.1.1}Characterizing Timing Margin Under Temperature Inversion Variation}{29}{subsection.3.1.1}
-\contentsline {subsubsection}{Circuit Speed Variation Under Different Temperature}{29}{figure.caption.7}
-\contentsline {subsubsection}{Estimating Active Timing Margin's Undervolting Opportunity}{32}{figure.caption.7}
-\contentsline {subsection}{\numberline {3.1.2}Temperature Inversion States (Ti-States)}{34}{subsection.3.1.2}
-\contentsline {subsubsection}{Methodology to Construct the Ti-States Table}{34}{subsection.3.1.2}
-\contentsline {subsubsection}{Evaluating Ti-State's Voltage and Power Reduction Effects}{37}{figure.caption.8}
-\contentsline {subsection}{\numberline {3.1.3}Managing Ti-State Processors in Advanced Technology Nodes}{40}{subsection.3.1.3}
-\contentsline {subsubsection}{Scaling to FinFET and FD-SOI}{41}{subsection.3.1.3}
-\contentsline {subsection}{\numberline {3.1.4}T$_{i}$-state\xspace Power Analysis under FinFET and FD-SOI}{43}{subsection.3.1.4}
-\contentsline {subsection}{\numberline {3.1.5}Runtime Temperature Control}{46}{subsection.3.1.5}
-\contentsline {subsection}{\numberline {3.1.6}Related Work}{47}{subsection.3.1.6}
-\contentsline {chapter}{Chapter 4.\hspace *{1em}Architecture and Scheduling Optimization for Active Timing Margin of Voltage Variation}{49}{chapter.4}
-\contentsline {section}{\numberline {4.1}Active Timing Margin in the POWER7+ Multicore Processor}{51}{section.4.1}
-\contentsline {section}{\numberline {4.2}Efficiency Analysis of Active Timing Margin on Multicore}{54}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Experimental Infrastructure}{55}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}Core Scaling}{56}{subsection.4.2.2}
-\contentsline {subsection}{\numberline {4.2.3}Workload Heterogeneity}{59}{subsection.4.2.3}
-\contentsline {section}{\numberline {4.3}Root-Cause Analysis of Active Timing Margin's Inefficiencies}{61}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}Measuring the On-chip Voltage Drop}{62}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}On-chip Voltage Drop Analysis}{65}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Decomposing the On-chip Voltage Drop}{69}{subsection.4.3.3}
-\contentsline {section}{\numberline {4.4}Architecture \/ Scheduling Optimization}{73}{section.4.4}
-\contentsline {subsection}{\numberline {4.4.1}Solution for Recovering Multicore Scaling Loss}{73}{subsection.4.4.1}
-\contentsline {subsection}{\numberline {4.4.2}Power Reduction Improvement}{77}{subsection.4.4.2}
-\contentsline {subsection}{\numberline {4.4.3}Related Work}{80}{subsection.4.4.3}
-\contentsline {chapter}{Chapter 5.\hspace *{1em}Multicore Active Timing Margin Management for Maximizing Performance Efficiency}{82}{chapter.5}
-\contentsline {chapter}{Chapter 6.\hspace *{1em}Retrospective and Prospective Remarks}{83}{chapter.6}
-\contentsline {section}{\numberline {6.1}Retrospective}{83}{section.6.1}
-\contentsline {section}{\numberline {6.2}Prospective}{85}{section.6.2}
-\contentsline {chapter}{Bibliography}{89}{section.6.2}
-\contentsline {chapter}{Vita}{103}{section.6.2}
+\contentsline {section}{\numberline {1.3}Dissertation Organization}{9}{section.1.3}
+\contentsline {section}{\numberline {1.4}Previously Published Material}{10}{section.1.4}
+\contentsline {chapter}{Chapter 2.\hspace *{1em}Timing Margin: A Perpetual Role in \\Modern Microprocessors}{12}{chapter.2}
+\contentsline {section}{\numberline {2.1}The Importance of Pipeline Timing Margin}{12}{section.2.1}
+\contentsline {section}{\numberline {2.2}What Consumes the Timing Margin?}{15}{section.2.2}
+\contentsline {paragraph}{Temperature variation}{16}{section.2.2}
+\contentsline {paragraph}{Voltage variation}{16}{section.2.2}
+\contentsline {paragraph}{Process variation}{18}{figure.caption.3}
+\contentsline {paragraph}{Other noisy effects}{18}{figure.caption.3}
+\contentsline {section}{\numberline {2.3}The Need for Active Timing Margin}{19}{section.2.3}
+\contentsline {chapter}{Chapter 3.\hspace *{1em}Ti-states: Active Timing Margin Management in the Temperature Inversion Region}{23}{chapter.3}
+\contentsline {section}{\numberline {3.1}Experimental Setup}{26}{section.3.1}
+\contentsline {subsubsection}{AMD\textsuperscript {\textregistered } A10-8700P Accelerated Processing Unit}{26}{figure.caption.6}
+\contentsline {subsubsection}{Temperature Control Setup}{28}{figure.caption.6}
+\contentsline {subsubsection}{Timing Margin Sensors: On-chip Power Supply Monitors (PSMs)}{29}{figure.caption.6}
+\contentsline {subsection}{\numberline {3.1.1}Characterizing Timing Margin Under Temperature Inversion Variation}{30}{subsection.3.1.1}
+\contentsline {subsubsection}{Circuit Speed Variation Under Different Temperature}{30}{figure.caption.7}
+\contentsline {subsubsection}{Estimating Active Timing Margin's Undervolting Opportunity}{33}{figure.caption.7}
+\contentsline {subsection}{\numberline {3.1.2}Temperature Inversion States (Ti-States)}{35}{subsection.3.1.2}
+\contentsline {subsubsection}{Methodology to Construct the Ti-States Table}{35}{subsection.3.1.2}
+\contentsline {subsubsection}{Evaluating Ti-State's Voltage and Power Reduction Effects}{38}{figure.caption.8}
+\contentsline {subsection}{\numberline {3.1.3}Managing Ti-State Processors in Advanced Technology Nodes}{41}{subsection.3.1.3}
+\contentsline {subsubsection}{Scaling to FinFET and FD-SOI}{42}{subsection.3.1.3}
+\contentsline {subsection}{\numberline {3.1.4}T$_{i}$-state\xspace Power Analysis under FinFET and FD-SOI}{44}{subsection.3.1.4}
+\contentsline {subsection}{\numberline {3.1.5}Runtime Temperature Control}{47}{subsection.3.1.5}
+\contentsline {subsection}{\numberline {3.1.6}Related Work}{48}{subsection.3.1.6}
+\contentsline {chapter}{Chapter 4.\hspace *{1em}Architecture and Scheduling Optimization for Active Timing Margin of Voltage Variation}{50}{chapter.4}
+\contentsline {section}{\numberline {4.1}Active Timing Margin in the POWER7+ Multicore Processor}{52}{section.4.1}
+\contentsline {section}{\numberline {4.2}Efficiency Analysis of Active Timing Margin on Multicore}{55}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Experimental Infrastructure}{56}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Core Scaling}{57}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Workload Heterogeneity}{60}{subsection.4.2.3}
+\contentsline {section}{\numberline {4.3}Root-Cause Analysis of Active Timing Margin's Inefficiencies}{62}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Measuring the On-chip Voltage Drop}{63}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}On-chip Voltage Drop Analysis}{66}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Decomposing the On-chip Voltage Drop}{70}{subsection.4.3.3}
+\contentsline {section}{\numberline {4.4}Architecture \/ Scheduling Optimization}{74}{section.4.4}
+\contentsline {subsection}{\numberline {4.4.1}Solution for Recovering Multicore Scaling Loss}{74}{subsection.4.4.1}
+\contentsline {subsection}{\numberline {4.4.2}Power Reduction Improvement}{78}{subsection.4.4.2}
+\contentsline {subsection}{\numberline {4.4.3}Related Work}{81}{subsection.4.4.3}
+\contentsline {chapter}{Chapter 5.\hspace *{1em}Multicore Active Timing Margin Management for Maximizing Performance Efficiency}{83}{chapter.5}
+\contentsline {chapter}{Chapter 6.\hspace *{1em}Retrospective and Prospective Remarks}{84}{chapter.6}
+\contentsline {section}{\numberline {6.1}Retrospective}{84}{section.6.1}
+\contentsline {section}{\numberline {6.2}Prospective}{86}{section.6.2}
+\contentsline {chapter}{Bibliography}{90}{section.6.2}
+\contentsline {chapter}{Vita}{106}{section.6.2}
