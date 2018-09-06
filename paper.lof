@@ -2,74 +2,74 @@
 \addvspace {10pt}
 \contentsline {figure}{\numberline {1.1}{\ignorespaces Overview of this thesis's cross-layer research on active timing margin management. We characterizes state-of-the art hardware active timing margin mechanisms such as those that deal with fast $di/dt$ effects, proposes software scheduling techniques to aid aid these active timing chips, and draft firmware power management states to augment existing active timing margin techniques.\relax }}{9}{figure.caption.1}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Timing margin ensures reliability by creating extra room in pipeline's clock cycle time. It can be delivered by providing extra voltage, known as the voltage guardband. Active timing margin improves from conventional static margin with tighter clock cycle by overclocking or undervolting.\relax }}{16}{figure.caption.2}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Static timing margin.}}}{16}{subfigure.1.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Voltage guardband.}}}{16}{subfigure.1.2}
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Active timing margin.}}}{16}{subfigure.1.3}
-\contentsline {figure}{\numberline {2.2}{\ignorespaces An electrical model of the power delivery path from the voltage regulator module (VRM) to on-chip transistors. Impedance of different types exist on this path because of the electrical parasitics on the motherboard as well as inside the package. IR drop and the L$di/dt$ effect are caused by these parasitics.\relax }}{19}{figure.caption.3}
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Active timing margin protects $di/dt$ effect by making frequency/clock cycle track supply voltage, which improves performance and reduces timing margin wastage.\relax }}{23}{figure.caption.4}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Static timing margin tolerates worst-case $di/dt$ effect with fixed low frequency.}}}{23}{subfigure.3.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Active timing margin tolerates $di/dt$ effect by making frequency track voltage variation.}}}{23}{subfigure.3.2}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Timing margin ensures reliability by creating extra room in pipeline's clock cycle time. It can be delivered by providing extra voltage, known as the voltage guardband. Active timing margin improves from conventional static margin with tighter clock cycle by overclocking or undervolting.\relax }}{17}{figure.caption.2}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Static timing margin.}}}{17}{subfigure.1.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Voltage guardband.}}}{17}{subfigure.1.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Active timing margin.}}}{17}{subfigure.1.3}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces An electrical model of the power delivery path from the voltage regulator module (VRM) to on-chip transistors. Impedance of different types exist on this path because of the electrical parasitics on the motherboard as well as inside the package. IR drop and the L$di/dt$ effect are caused by these parasitics.\relax }}{20}{figure.caption.3}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Active timing margin protects $di/dt$ effect by making frequency/clock cycle track supply voltage, which improves performance and reduces timing margin wastage.\relax }}{24}{figure.caption.4}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Static timing margin tolerates worst-case $di/dt$ effect with fixed low frequency.}}}{24}{subfigure.3.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Active timing margin tolerates $di/dt$ effect by making frequency track voltage variation.}}}{24}{subfigure.3.2}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Temperature inversion is having more impact on processor performance as technology scales.\relax }}{26}{figure.caption.5}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Under low voltage, temperature inversion increases circuit performance.}}}{26}{subfigure.1.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Temperature inversion's inflection voltage approaches nominal supply.}}}{26}{subfigure.1.2}
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Die photo of the A10-8700P SoC.\relax }}{29}{figure.caption.6}
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Temperature control setup.\relax }}{29}{figure.caption.6}
-\contentsline {figure}{\numberline {3.4}{\ignorespaces PSM logic.\relax }}{29}{figure.caption.6}
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Temperature inversion happens below 0.9~V and is progressively stronger when voltage scales down.\relax }}{32}{figure.caption.7}
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Estimating voltage reduction potential based on PSM characterization at different temperatures.\relax }}{32}{figure.caption.7}
-\contentsline {figure}{\numberline {3.7}{\ignorespaces Voltage reduction potential is more pronounced in the near-threshold low voltage region.\relax }}{32}{figure.caption.7}
-\contentsline {figure}{\numberline {3.8}{\ignorespaces Exploring T$_{i}$-state\xspace at 80$\celsius $\xspace : measuring the ``training'' workloads' timing margin.\relax }}{40}{figure.caption.8}
-\contentsline {figure}{\numberline {3.9}{\ignorespaces T$_{i}$-state\xspace undervolting decision at 80$\celsius $\xspace closely tracks the ``golden'' reference runs' timing margin, which is needed for reliability.\relax }}{40}{figure.caption.8}
-\contentsline {figure}{\numberline {3.10}{\ignorespaces $V_{dd}$ reduction due to T$_{i}$-states\xspace . The line corresponds to the VRM's quantized output values.\relax }}{41}{figure.3.10}
-\contentsline {figure}{\numberline {3.11}{\ignorespaces Power saving increases at higher temperatures. We mimic workload temperature by externally controlling die temperature to a 40$\celsius $\xspace ~--~80$\celsius $\xspace range. T$_{i}$-state\xspace 's power reduction is independent of the workload activity. \relax }}{42}{figure.caption.9}
-\contentsline {figure}{\numberline {3.12}{\ignorespaces Power versus temperature under different scaling factors for different workloads. In FinFET and FD-SOI, T$_{i}$-state\xspace makes GPU power smaller at high temperature. The optimal temperature is different for the workloads and the different scaling settings, and this is because the ratio of static to dynamic power across the workloads varies.\relax }}{46}{figure.caption.11}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Benchmark {\it FFT}}}}{46}{subfigure.12.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Benchmark {\it particlefilter}}}}{46}{subfigure.12.2}
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Benchmark {\it Reduction}}}}{46}{subfigure.12.3}
-\contentsline {figure}{\numberline {3.13}{\ignorespaces T$_{i}$-state\xspace temperature and voltage control: two loops work in synergy to minimize power. Loop~1 is a fast control loop that uses T$_{i}$-state\xspace table to keep adjusting voltage in response to silicon temperature variation. Loop~2 is a slow control loop that sets the optimal temperature based on workload steady-state dynamic power profile.\relax }}{49}{figure.caption.12}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Temperature inversion is having more impact on processor performance as technology scales.\relax }}{27}{figure.caption.5}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Under low voltage, temperature inversion increases circuit performance.}}}{27}{subfigure.1.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Temperature inversion's inflection voltage approaches nominal supply.}}}{27}{subfigure.1.2}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Die photo of the A10-8700P SoC.\relax }}{30}{figure.caption.6}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Temperature control setup.\relax }}{30}{figure.caption.6}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces PSM logic.\relax }}{30}{figure.caption.6}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Temperature inversion happens below 0.9~V and is progressively stronger when voltage scales down.\relax }}{33}{figure.caption.7}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Estimating voltage reduction potential based on PSM characterization at different temperatures.\relax }}{33}{figure.caption.7}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Voltage reduction potential is more pronounced in the near-threshold low voltage region.\relax }}{33}{figure.caption.7}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Exploring T$_{i}$-state\xspace at 80$\celsius $\xspace : measuring the ``training'' workloads' timing margin.\relax }}{41}{figure.caption.8}
+\contentsline {figure}{\numberline {3.9}{\ignorespaces T$_{i}$-state\xspace undervolting decision at 80$\celsius $\xspace closely tracks the ``golden'' reference runs' timing margin, which is needed for reliability.\relax }}{41}{figure.caption.8}
+\contentsline {figure}{\numberline {3.10}{\ignorespaces $V_{dd}$ reduction due to T$_{i}$-states\xspace . The line corresponds to the VRM's quantized output values.\relax }}{42}{figure.3.10}
+\contentsline {figure}{\numberline {3.11}{\ignorespaces Power saving increases at higher temperatures. We mimic workload temperature by externally controlling die temperature to a 40$\celsius $\xspace ~--~80$\celsius $\xspace range. T$_{i}$-state\xspace 's power reduction is independent of the workload activity. \relax }}{43}{figure.caption.9}
+\contentsline {figure}{\numberline {3.12}{\ignorespaces Power versus temperature under different scaling factors for different workloads. In FinFET and FD-SOI, T$_{i}$-state\xspace makes GPU power smaller at high temperature. The optimal temperature is different for the workloads and the different scaling settings, and this is because the ratio of static to dynamic power across the workloads varies.\relax }}{47}{figure.caption.11}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Benchmark {\it FFT}}}}{47}{subfigure.12.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Benchmark {\it particlefilter}}}}{47}{subfigure.12.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Benchmark {\it Reduction}}}}{47}{subfigure.12.3}
+\contentsline {figure}{\numberline {3.13}{\ignorespaces T$_{i}$-state\xspace temperature and voltage control: two loops work in synergy to minimize power. Loop~1 is a fast control loop that uses T$_{i}$-state\xspace table to keep adjusting voltage in response to silicon temperature variation. Loop~2 is a slow control loop that sets the optimal temperature based on workload steady-state dynamic power profile.\relax }}{50}{figure.caption.12}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Interactions among CPMs, DPLLs, and VRMs to guarantee reliability and improve efficiency in POWER7+. CPM measures the timing margin and the controller adjusts voltage and frequency accordingly.\relax }}{55}{figure.caption.13}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Control loop overview.}}}{55}{subfigure.1.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {CPM behavior.}}}{55}{subfigure.1.2}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Active timing margin can save power effectively. However, the benefits decrease as more cores are used to actively run the application.\relax }}{59}{figure.caption.14}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Power saving.}}}{59}{subfigure.2.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Energy reduction.}}}{59}{subfigure.2.2}
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Active timing margin can improve performance by increasing frequency. However, the overclocking benefits decrease as more cores are used.\relax }}{61}{figure.caption.15}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Frequency-boosting mode.}}}{61}{subfigure.3.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Execution time.}}}{61}{subfigure.3.2}
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Improvements reduce at different rates for each of the PARSEC and SPLASH-2 workloads when cores are progressively activated, leading to magnified workload variation when all cores are active.\relax }}{63}{figure.caption.16}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Power-saving mode.}}}{63}{subfigure.4.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Frequency-boosting mode.}}}{63}{subfigure.4.2}
-\contentsline {figure}{\numberline {4.5}{\ignorespaces CPMs can sense the chip supply voltage with a precision of about 21mV per CPM bit at peak frequency.\relax }}{65}{figure.caption.17}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Mapping between on-chip voltage and CPM values.}}}{65}{subfigure.5.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {The CPMs' sensitivity toward supply voltage in each core.}}}{65}{subfigure.5.2}
-\contentsline {figure}{\numberline {4.6}{\ignorespaces On-chip voltage drop analysis across cores under different workloads.\relax }}{67}{figure.caption.18}
-\contentsline {figure}{\numberline {4.7}{\ignorespaces Voltage drop component analysis, including $di/dt$ droop, IR drop and the loadline effect.\relax }}{67}{figure.caption.18}
-\contentsline {figure}{\numberline {4.8}{\ignorespaces Different components of on-chip voltage drop for some PARSEC and SPLASH-2 benchmarks. In general, as more of the processor's cores are activated, voltage drop increases by varying magnitudes across workloads.\relax }}{70}{figure.caption.19}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {raytrace.}}}{70}{subfigure.8.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {barnes.}}}{70}{subfigure.8.2}
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {blackscholes.}}}{70}{subfigure.8.3}
-\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {bodytrack.}}}{70}{subfigure.8.4}
-\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {ferret.}}}{70}{subfigure.8.5}
-\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {lu\_ncb.}}}{70}{subfigure.8.6}
-\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {ocean\_cp.}}}{70}{subfigure.8.7}
-\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {swaptions.}}}{70}{subfigure.8.8}
-\contentsline {subfigure}{\numberline {(i)}{\ignorespaces {vips.}}}{70}{subfigure.8.9}
-\contentsline {subfigure}{\numberline {(j)}{\ignorespaces {water\_nsquared.}}}{70}{subfigure.8.10}
-\contentsline {figure}{\numberline {4.9}{\ignorespaces Power-intensive workloads induce large loadline and IR drop, which severely limits the active timing margin system's undervolting capability, and thus impacts the system's overall power-saving potential.\relax }}{74}{figure.caption.20}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {}}}{74}{subfigure.9.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {}}}{74}{subfigure.9.2}
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {}}}{74}{subfigure.9.3}
-\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {}}}{74}{subfigure.9.4}
-\contentsline {figure}{\numberline {4.10}{\ignorespaces Loadline borrowing balances workloads across multiple sockets to reduce per-socket voltage drop and create room for active timing margin.\relax }}{77}{figure.caption.21}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Workload consolidation.}}}{77}{subfigure.10.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Loadline borrowing.}}}{77}{subfigure.10.2}
-\contentsline {figure}{\numberline {4.11}{\ignorespaces Distributing {\it raytrace} across two processors reduces passive voltage drop, allowing more power saving under high core count.\relax }}{79}{figure.caption.22}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Undervolt scaling.}}}{79}{subfigure.11.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Power scaling.}}}{79}{subfigure.11.2}
-\contentsline {figure}{\numberline {4.12}{\ignorespaces Loadline borrowing's power and energy improvement under different numbers of active cores. Compared to the baseline, loadline borrowing consistently shifts up every workload's power improvement.\relax }}{80}{figure.caption.23}
-\contentsline {figure}{\numberline {4.13}{\ignorespaces Loadline borrowing's power and energy improvement when eight cores are active.\relax }}{81}{figure.caption.24}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Interactions among CPMs, DPLLs, and VRMs to guarantee reliability and improve efficiency in POWER7+. CPM measures the timing margin and the controller adjusts voltage and frequency accordingly.\relax }}{56}{figure.caption.13}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Control loop overview.}}}{56}{subfigure.1.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {CPM behavior.}}}{56}{subfigure.1.2}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Active timing margin can save power effectively. However, the benefits decrease as more cores are used to actively run the application.\relax }}{60}{figure.caption.14}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Power saving.}}}{60}{subfigure.2.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Energy reduction.}}}{60}{subfigure.2.2}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Active timing margin can improve performance by increasing frequency. However, the overclocking benefits decrease as more cores are used.\relax }}{62}{figure.caption.15}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Frequency-boosting mode.}}}{62}{subfigure.3.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Execution time.}}}{62}{subfigure.3.2}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Improvements reduce at different rates for each of the PARSEC and SPLASH-2 workloads when cores are progressively activated, leading to magnified workload variation when all cores are active.\relax }}{64}{figure.caption.16}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Power-saving mode.}}}{64}{subfigure.4.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Frequency-boosting mode.}}}{64}{subfigure.4.2}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces CPMs can sense the chip supply voltage with a precision of about 21mV per CPM bit at peak frequency.\relax }}{66}{figure.caption.17}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Mapping between on-chip voltage and CPM values.}}}{66}{subfigure.5.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {The CPMs' sensitivity toward supply voltage in each core.}}}{66}{subfigure.5.2}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces On-chip voltage drop analysis across cores under different workloads.\relax }}{68}{figure.caption.18}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Voltage drop component analysis, including $di/dt$ droop, IR drop and the loadline effect.\relax }}{68}{figure.caption.18}
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Different components of on-chip voltage drop for some PARSEC and SPLASH-2 benchmarks. In general, as more of the processor's cores are activated, voltage drop increases by varying magnitudes across workloads.\relax }}{71}{figure.caption.19}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {raytrace.}}}{71}{subfigure.8.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {barnes.}}}{71}{subfigure.8.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {blackscholes.}}}{71}{subfigure.8.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {bodytrack.}}}{71}{subfigure.8.4}
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {ferret.}}}{71}{subfigure.8.5}
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {lu\_ncb.}}}{71}{subfigure.8.6}
+\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {ocean\_cp.}}}{71}{subfigure.8.7}
+\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {swaptions.}}}{71}{subfigure.8.8}
+\contentsline {subfigure}{\numberline {(i)}{\ignorespaces {vips.}}}{71}{subfigure.8.9}
+\contentsline {subfigure}{\numberline {(j)}{\ignorespaces {water\_nsquared.}}}{71}{subfigure.8.10}
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Power-intensive workloads induce large loadline and IR drop, which severely limits the active timing margin system's undervolting capability, and thus impacts the system's overall power-saving potential.\relax }}{75}{figure.caption.20}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {}}}{75}{subfigure.9.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {}}}{75}{subfigure.9.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {}}}{75}{subfigure.9.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {}}}{75}{subfigure.9.4}
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Loadline borrowing balances workloads across multiple sockets to reduce per-socket voltage drop and create room for active timing margin.\relax }}{78}{figure.caption.21}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Workload consolidation.}}}{78}{subfigure.10.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Loadline borrowing.}}}{78}{subfigure.10.2}
+\contentsline {figure}{\numberline {4.11}{\ignorespaces Distributing {\it raytrace} across two processors reduces passive voltage drop, allowing more power saving under high core count.\relax }}{80}{figure.caption.22}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Undervolt scaling.}}}{80}{subfigure.11.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Power scaling.}}}{80}{subfigure.11.2}
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Loadline borrowing's power and energy improvement under different numbers of active cores. Compared to the baseline, loadline borrowing consistently shifts up every workload's power improvement.\relax }}{81}{figure.caption.23}
+\contentsline {figure}{\numberline {4.13}{\ignorespaces Loadline borrowing's power and energy improvement when eight cores are active.\relax }}{82}{figure.caption.24}
 \addvspace {10pt}
 \addvspace {10pt}
