@@ -15,6 +15,9 @@ The magnitude of the efficiency drop aforementioned, however, varies significant
 
 \section{Active Timing Margin in the POWER7+ Multicore Processor}
 \label{sec:voltage:background}
+
+\TODO{to be merged with the next chapter}
+
 The POWER7+ is an eight-core out-of-order processor manufactured on a 32-nm process. It supports 4-way simultaneous multithreading, allowing a total of 32 threads to execute simultaneously on the system~\cite{manousopoulos2012characterizing}.
 
 A POWER7+ processor has two main power domains, each with its own on-chip power delivery network (PDN). The V$_{dd}$ domain is dedicated to the logic circuits in the core and caches, and the V$_{cs}$ domain is dedicated for the on-chip storage structures~\cite{zyuban2013ibm,barth201045nm}. The PDNs are shared among all eight cores to reduce voltage noise~\cite{james2007comparison}. In our study, we primarily focus on voltage variation over the logic circuits's power domain as it is the main power consumer.

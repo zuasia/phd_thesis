@@ -1,0 +1,32 @@
+\begin{table*}[t]
+\centering
+
+% \begin{tabular}{l|c*{15}{c}}
+% core               & P0C0 & P0C1 & P0C2 & P0C3 & P0C4  & P0C5 & P0C6 & P0C7 & P1C0 & P1C1 & P1C2 & P1C3 & P1C4  & P1C5 & P1C6 & P1C7\\
+% \hline
+% idle limit  & 9 & 8 & 4 & 11 & 10 & 7 & 8 & 2 & 4 & 8 & 5 & 8 & 7 & 5 & 10 & 3\\
+% uBench limit & 9 & 8 & 4 & {\color{red} 10} & {\color{red}  9} & 7 & 8 & 2 & 4 & 8 & 5 & {\color{red} 5} & {\color{red} 6} & {\color{red} 4} & 10 & {\color{red} 2}\\
+% SPEC normal & 8 & 7 & {\color{blue} 4} & 9 & 8 & 6 & 7 & {\color{blue} 2} & 3 & 7 & {\color{blue} 5} & 4 & 5 & 3 & 8 & {\color{blue} 2}\\
+% SPEC worst & 7 & 6 & 3 & 6 & 6 & 5 & 5 & {\color{ForestGreen} 2} & {\color{ForestGreen} 3} & 3 & {\color{ForestGreen} 5} & 3 & 3 & 2 & 6 & {\color{ForestGreen} 2}\\
+% \end{tabular}
+%\vspace{0.2cm}
+%\caption{Extreme CPM delay reduction step that makes system stable. Under ubench stress, the highlighted cores' (e.g., P0C3) limit delays are rolled back from their idle config because uBench stresses paths more completely and hits paths untested when idle. The uBench-tested delay config makes the aggressive ATM system more reliable. }
+
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l|c*{15}{c}}
+               & P0C0 & P0C1 & P0C2 & P0C3 & P0C4  & P0C5 & P0C6 & P0C7 & P1C0 & P1C1 & P1C2 & P1C3 & P1C4  & P1C5 & P1C6 & P1C7\\
+\hline
+idle limit  & 9 & 8 & 4 & 11 & 10 & 7 & 8 & 2 & 4 & 8 & 5 & 8 & 7 & 5 & 10 & 3\\
+uBench limit & 9 & 8 & 4 & 10 & 9 & 7 & 8 & 2 & 4 & 8 & 5 & 5 & 6 & 4 & 10 & 2\\
+thread normal & 8 & 7 & 4 & 9 & 8 & 6 & 7 & 2 & 3 & 7 & 5 & 4 & 5 & 3 & 8 & 2\\
+thread worst & 6 & 6 & 3 & 6 & 6 & 5 & 5 & 2 & 3 & 3 & 5 & 3 & 3 & 2 & 6 & 2\\
+\end{tabular}
+}
+\vspace{0.2cm}
+\caption{ATM customization limits under system idle, uBench, and real-world application. Data is collected on two eight-core (C) POWER7+ processors (P). ATM limits are reflected as the number of stepped reduced from CPM's default inserted delay configuration.}
+
+%From system idle to uBench test, six cores' CPM delay need to be rolled back to guarantee successful run. Most SPEC and PARSEC workloads need one extra roll-back step to pass. Problematic workloads, such as \bench{x264} and \bench{ferret} needs more roll back at the cost of smaller overclocking benefits.
+
+\label{tab:limit-delay} 
+\vspace{-0.3cm}
+\end{table*}

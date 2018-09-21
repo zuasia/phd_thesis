@@ -2,3 +2,575 @@
 
 \chapter{Multicore Active Timing Margin Management for Maximizing Performance Efficiency}
 \label{sec:process}
+
+On multi-core and many-core chips, it is critical that active timing margin not only deals with the dynamically occurring effects that affect timing margin such as temperature and voltage variation, but also considers the core-to-core performance heterogeneity and fully utilize each core's available margin, tailored to each core's inherence performance.
+
+This chapter takes the hardware active timing margin designed to cope with voltage noise to the next level. We study enhancing a multicore's active timing margin capability according to each core's characteristics, as well as the running applications' characteristics. We heavily instrumented the control loop's operation and studied its maximal efficiency gain.
+
+By design, a chip's ATM implementation is usually programmable for post-silicon calibration of how aggressive the control loop should harness the available margin. If set too aggressively, ATM can improve power efficiency a lot, potentially at the cost of compromising execution correctness because not enough margin might be available. On the other hand, ATM cannot realized the full efficiency gain if it is set too conservatively. In today's practice, multicore's ATM configuration is usually conducted by batches in course granularity for ease of mass production, without taking into consideration the heterogeneity between cores and applications. We factor in these scenarios and investigate how to customize and manage ATM operation to maximize its efficiency gain.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[trim=0 0 0 0,clip,width=.825\linewidth]{graphs/process//noisy-latency.pdf}
+  \caption{\bench{SqueezeNet} inference latency on a POWER7+ core under different timing margin settings. Aggressively customizing Active Timing Margin, and co-locating it with ``friendly'' low-power applications enhance performance.}
+
+  \label{fig:motivate-latency}
+  \vspace{-0.5cm}
+\end{figure}
+
+\Fig{fig:motivate-latency} shows a POWER7+ processor core's performance under different timing margin settings~\cite{sinharoy2011power7, floyd2011introducing}. We instrument POWER7+'s ATM via its Critical Path Monitors (CPMs), a programmable interface of the chip's canary circuit that measures available margin~\cite{lefurgy2011active, drake2013single}. We illustrate with the inference latency of \bench{SqueezeNet}, a compressed convolutional neural network (CNN). Under conventional static timing, the chip clocks at 4.2~GHz, producing an average inference latency of 80~ms. Under the chip's default ATM, a poorly managed system that co-locates \bench{SqueezeNet} with high-power co-runners such as \bench{daxpy} increases frequency to 4.4~GHz, yielding a limited 3.75\% performance improvement. However, customizing each core's ATM and wisely managing the system to let \bench{SqueezeNet} run alone boosts core frequency to 5~GHz and reduces latency by 15\%, a 4X the performance gain over the default production system.
+
+Inspired by the benefits shown in~\Fig{fig:motivate-latency}, we set out to systematically customize each core's \emph{Active Timing Margin}, with the goal of extracting useful insights on ATM operation that will guide overall system level performance and power management. Although our work is conducted on an IBM POWER7+ server, the insights we gathered apply to other ATM systems as the knobs we instrument exist for all ATM implementations.
+
+
+\begin{figure}[t!]
+  \centering
+  \vspace{-0.2cm}
+  \includegraphics[trim=20 80 20 80,clip,width=\linewidth]{graphs/process//atm-loop.pdf}
+  \caption{In POWER7+, Critical Path Monitor (CPM), Digital Phase Locked Loop (DPLL), and off-chip voltage controller work synergistically to let ATM provide just enough margin~\cite{lefurgy2013active}.}
+  \vspace{-0.5cm}
+  \label{fig:active-margin-loop}
+\end{figure}
+
+% \section{Active Timing Margin in POWER7+}
+% \label{sec:process:setup}
+
+% \begin{figure*}[t]
+%     \vspace*{-0.2cm}
+%     \begin{subfigure}{0.5\linewidth}
+%         \centering
+%         \includegraphics[trim=0 210 0 190,clip,width=\linewidth]{graphs/process//cpm-struct.pdf}
+%         \captionsetup{width=.8\linewidth}
+
+%         \caption{CPM structure: programming the inserted delay sets the margin sensed by the inverter chain.}
+         
+%         \label{fig:cpm-struct}
+%     \end{subfigure}
+%     \begin{subfigure}{0.5\linewidth}
+%         \centering
+%         \includegraphics[trim=0 0 0 0,clip,width=.8\linewidth]{graphs/process//delay-freq.pdf}
+%         \captionsetup{width=.8\linewidth}
+%         \caption{Reducing inserted delay increases ATM frequency.}
+%         \label{fig:delay-freq}
+%     \end{subfigure}
+
+%     \caption{CPM's inserted delay can be set by programming the number of inverters used~\cite{drake2007distributed, drake2013single}. Reducing the added delay makes the CPM count more time margin after a signal travels through the synthetic path which simulates real circuit toggling. The DPLL then increases frequency to harvest the excess margin reported by CPM's inverter chain.}
+
+%     \vspace*{-0.3cm}
+% \end{figure*}
+
+% %Traditionally, all processors are designed with a static timing margin that ensures correct execution under exceptional circumstances, such as big $di/dt$ events or extreme temperature, that significantly slow down circuits~\cite{zu2016tistate, papadimitriou2017harnessing}. The static margin is a fixed time buffer which ensures that, even under worst-case conditions, the signals still propagate by the end of each clock cycle. However, exceptional events occur very rarely~\cite{reddi2009voltage}, wasting the margin most of the time~\cite{powell2003pipeline}.
+
+% All processors are designed with a mechanism that ensures correct execution under exceptional circumstances, such as big $di/dt$ events or extreme temperature conditions that significantly slow down circuits~\cite{papadimitriou2017harnessing,tschanz2007adaptive,zu2016tistate}. The traditional \emph{static timing margin} approach adds a fixed time buffer implemented as a higher voltage which ensures that, even under exceptional cases, the signals still propagate by the end of each clock cycle. However, exceptional events occur very rarely~\cite{reddi2009voltage}, making static margin unnecessary most of the time~\cite{powell2003pipeline}. Consequently, the excess voltage is usually wasted.
+
+% %All processors are designed with a timing margin that ensures correct execution even under exceptional circumstances, such as big $di/dt$ events or severe temperature hotspots~\cite{powell2003pipeline, reddi2010voltage, miller2012vrsync, zu2016tistate}. Each of these events cuts into the delay of the chip's transistors, threatening to prevent signals from fully propagating before the end of a clock cycle; the timing margin is a buffer of extra time implemented as higher voltage which ensures that, even in the presence of an exceptional timing event, the signals will still propagate by the end of each clock cycle. In a chip with static timing margin, the margin is unnecessary most of the time: signals arrive at their destinations well in advance of the next clock signal because the exceptional event occurs very rarely~\cite{reddi2009voltage}. Consequently, the excess voltage is usually wasted.
+
+% Active Timing Margin adapts the timing margin dynamically to meet the needs of the chip environment~\cite{lefurgy2011active, tokunaga20145, bowman20158, vezyrtzis2018droop, zu2016tistate}. The buffered voltage in a static margin is converted to either power savings (a lower voltage) or performance enhancements (a higher frequency).
+
+% For our study of ATM, we use a two-socket POWER7+ server with ATM support. Each processor features eight out-of-order cores. The server runs Redhat 6.4 operating system, and all workloads are compiled with GCC 4.8.5. The POWER7+ supports efficiency management both in coarse-grained dynamic voltage and frequency scaling (DVFS), which adjusts p-states from 2.1~GHz to 4.2~GHz in 28~MHz steps by controlling $V_{dd}$ with a static timing margin, and in fine-grained ATM that further tunes $V_{dd}$ and frequency around each p-state.
+% %Each processor features eight out-of-order cores with four-way simultaneous multi-threading (SMT) for 64 logical cores. In this paper, we conduct our study on both processors to sweep more cores and identify trends across different chips. 
+
+% Like other ATM processors, POWER7+'s ATM consists of three parts: (1)~the timing margin sensor, (2)~the adaptive frequency control loop, and (3)~the overclocking/undervolting policy controller, as depicted in \Fig{fig:active-margin-loop}.
+
+% \textbf{Timing Margin Sensor} is the foundation of ATM. It monitors the excess timing margin either by directly measuring the available slack in a clock cycle~\cite{drake2007distributed} or by measuring circuit delay time~\cite{grenat20145}. It typically outputs integer measurements every cycle to provide real-time chip monitoring. In practice, a set of timing margin sensors are usually dispersed across the chip to capture spatial variation of different parasitic effects, such as temperature variation or core-focused $di/dt$ effect.
+
+% In the POWER7+, the timing margin sensor is implemented as a Critical Path Monitor (CPM). A CPM mimics real circuit delay with a set of synthetic paths and monitors the timing slack after the synthetic paths complete execution. There are five CPMs in each core, integrated inside the instruction fetch unit, instruction scheduling unit, fixed point unit, floating point unit, and last level cache as shown in \Fig{fig:active-margin-loop}. The worst of the five CPM measurements is reported every cycle.
+
+
+% \textbf{Adaptive Frequency Control Loop} is a hardware loop that operates between the timing margin sensor and an agile clock generator. Each cycle, the measured timing margin is sent to the clock generator, which compares the margin against a preset threshold and adjusts the clock frequency at very fast and short intervals.
+
+% An emergency timing event, such as a fast-occurring $di/dt$ effect, can drive the margin lower than the preset threshold (a timing margin violation). In response, the clock generator compensates by gating the clock for one cycle or---for a lower penalty---by reducing the clock frequency. The round trip time of the feedback loop must be less than several cycles to deal with fast occurring voltage noise~\cite{vezyrtzis2018droop}. Under typical conditions, the measured margin is far higher than the threshold.
+
+% To allow room for flexibility and maximizing effectiveness, the POWER7+ features a control loop for every core. It uses a digital phase-locked loop (DPLL) designed to quickly slew frequency at a fine granularity, enabling timely feedback~\cite{tierno2010dpll,lefurgy2011active}.
+
+% \textbf{Off-chip Voltage Control} determines whether to turn ATM's reclaimed margin into power savings via undervolting or into higher performance via overclocking based on user preferences. Often the goal is to reach a certain frequency target and convert the remaining timing margin into power savings. The POWER7+ off-chip controller reads a 32~ms sliding window average frequency of the slowest core of a chip and decides how much $V_{dd}$ can be reduced for the entire chip without hampering the user-specified frequency target.
+
+% In our study, we convert all of ATM's reclaimed timing margin into frequency and keep $V_{dd}$ unchanged. This process bypasses the restriction on undervolting wherein a chip's worst-case core limits the amount of undervolting. Overclocking allows each core to independently adapt to its conditions and can fully expose a chip's inter-core speed differential, potentially producing more performance benefit. We let ATM boost each core's frequency at $V_{dd}$ 1.25~V, the 4.2~GHz P-state.
+
+% \section{Customizing Active Timing \\Margin Operation}
+% \label{sec:process:configurability}
+
+% We explain how to customize a multicore's ATM operation to be more aggressive, which extracts more timing margin and increases frequency. Reconfiguring ATM's control loop to its operation limit is unexplored before, thus we propose a systematic procedure to characterize how the processor behaves under different scenarios and timing margin reclamation levels. The insights we gain when executing this procedure is instrumental for deploying customized ATM systems in production.
+
+% %We find ATM's operating limits vary between different workload scenarios, so a comprehensive procedure is needed to thoroughly profile ATM's reconfiguration and quantify the factors that affect its operating limits. We believe our approach sets the foundation for bringing out an ATM core's full performance and exposing the core-to-core speed variation.
+
+% \subsection{Programming Critical Path Monitors \\to Reconfigure Margin Reclamation}
+% \label{sec:process:configurability:howto}
+
+% \begin{figure}[t!]
+%   \centering
+%   \includegraphics[trim=10 280 10 280,clip,width=.8\linewidth]{graphs/process//profile-flow/profile-flow.pdf}
+%   \caption{Our ATM characterization methodology iterates over each core and follows a step-by step approach, going from the simplest system idle scenario to the complex real-world workloads.}
+%   \label{fig:methodology}
+%   \vspace{-0.5cm}
+% \end{figure}
+
+% We use the POWER7+'s programmable Critical Path Monitors (CPMs) to control ATM's operation aggressiveness. \Fig{fig:cpm-struct} illustrates the mechanism. A CPM uses three stages to measure timing margin: (1)~inserted delay, (2)~synthetic paths, and (3)~an inverter chain. The inserted delay is a configurable circuit. A user can specify the number of inverters a signal pass through to select its timing delay length. The synthetic path simulates a pipeline circuit's delay with a set of paths, including AND, OR, and XOR gates and wires. The final inverter chain quantifies the time left after the signal propagates past the inserted delay and synthetic path by counting the number of inverters a signal passes. The inverter count is a CPM's final output and is sent to the DPLL for clock adjustment.
+
+% By programming the inserted delay to different values, ATM's perception of the amount of available timing margin changes, and thus it is induced to become more or less aggressive in reclaiming timing margin. \Fig{fig:delay-freq} shows, for four example cores (C), across two processors (P) on the same system, how ATM converts more margin into frequency as the CPM inserted delay is reduced. The default delay (normalized to 0) makes ATM push core frequency to around 4.6~GHz, but reducing inserted delay (reduction steps beyond 0) pushes frequency to over 5~GHz, a 20\% improvement over the static timing margin baseline. Programming the inserted delay to a smaller value (higher delay reduction) decreases the time to the end of the synthetic path, leaving more margin to be counted by the inverter chain. The DPLL loop harnesses the excess margin by overclocking.
+
+% Before a POWER7+ processor is shipped, each CPM's inserted delay is configured with some default ``protection'' delay to keep the CPM timing margin conservative, which guarantees correct ATM execution. The protection delay also smooths out the speed differences between different corners of a chip. For the 64 CPMs in our two-socket system (we exclude CPMs in the LLC because it lies in a different clock domain), the protection delays range from 7 to 20, nearly a 3X range, indicating significant silicon speed variation.
+
+% In the POWER7+, we configure the inserted delay by programming it with a discrete step count through the server's accompanying service processor. Each step represents some amount of timing delay. Under the static margin at 4.2~GHz, reducing the inserted delay by one step lets the CPM detect one to three units more timing margin, equivalent to the speed variation caused by 20-60~mV $V_{dd}$ difference~\cite{drake2013single,zu2015adaptive}.
+
+% We reduce each core's CPM delay from the default amount to increase ATM aggressiveness. To simplify the exploration space, we reduce the four CPMs within a core (excluding the LLC CPM) by the same amount.
+
+% \subsection{Characterizing ATM Limits}
+% \label{sec:process:methodology}
+
+% As shown by \Fig{fig:delay-freq}, ATM has great potential for aggressive operation to achieve higher frequency. But to unlock ATM's full potential, we need a methodology to characterize the system. \Fig{fig:methodology} outlines our procedure. 
+
+% We profile an ATM chip on a per-core basis. System idle is our starting point for the analysis; micro-benchmarks (uBench) cover major paths in a core; and single-threaded benchmarks representing real use cases.
+
+% \textbf{System Idle} Running background operating system tasks, an idle system imposes the least stress on the processor. {Understanding each core's ATM operating limits under system idle provides us with valuable insight into inherent core-to-core differences.}
+
+% \textbf{Micro-benchmarks (uBench)} Traditionally, micro-benchmarks are used to measure the performance of individual processor modules, such as the branch predictor, floating point unit, and caches. In ATM, micro-benchmarks serve an additional purpose because each one primarily touches only one part of the core, avoiding complex microarchitectural interactions. We thus use uBench to get a more comprehensive profile of core-to-core microarchitecture level variation.
+
+% \input{tex/process_submodule/fig_idle-limit-dist}
+
+
+% \begin{figure*}[t]
+%     \centering
+%     \begin{subfigure}{.183\linewidth}
+%         \includegraphics[trim=0 0 140 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p0c0.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \captionsetup{oneside,margin={23pt,0pt}}
+%         \caption{Proc 0. Core 0.}
+%         \label{fig:idle_dist_p0c0}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}{.134\linewidth}
+%         \includegraphics[trim=135 0 140 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p0c1.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \caption{P0C1.}
+%         \label{fig:idle_dist_p0c1} 
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}{.134\linewidth}
+%         \includegraphics[trim=135 0 140 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p0c2.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \caption{P0C2.}
+%         \label{fig:idle_dist_p0c2} 
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}{.134\linewidth}
+%         \includegraphics[trim=135 0 140 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p0c3.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \caption{P0C3.}
+%         \label{fig:idle_dist_p0c3} 
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}{.134\linewidth}
+%         \includegraphics[trim=135 0 140 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p0c4.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \caption{P0C4.}
+%         \label{fig:idle_dist_p0c4} 
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}{.185\linewidth}
+%         \includegraphics[trim=135 0 0 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p0c5.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \captionsetup{oneside,margin={0pt,27pt}}
+%         \caption{P0C5.}
+%         \label{fig:idle_dist_p0c5} 
+%     \end{subfigure}
+%     %\vspace{-0.1in}
+%     \begin{subfigure}{.183\linewidth}
+%         \includegraphics[trim=0 0 140 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p0c6.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \captionsetup{oneside,margin={23pt,0pt}}
+%         \caption{P0C6.}
+%         \label{fig:idle_dist_p0c6} 
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}{.134\linewidth}
+%         \includegraphics[trim=135 0 140 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p0c7.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \caption{P0C7.}
+%         \label{fig:idle_dist_p0c7} 
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}{.134\linewidth}
+%         \includegraphics[trim=135 0 140 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p1c0.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \caption{P1C0.}
+%         \label{fig:idle_dist_p1c0}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}{.134\linewidth}
+%         \includegraphics[trim=135 0 140 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p1c1.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \caption{P1C1.}
+%         \label{fig:idle_dist_p1c1} 
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}{.134\linewidth}
+%         \includegraphics[trim=135 0 140 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p1c2.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \caption{P1C2.}
+%         \label{fig:idle_dist_p1c2} 
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}{.185\linewidth}
+%         \includegraphics[trim=135 0 0 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p1c3.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \captionsetup{oneside,margin={0pt,27pt}}
+%         \caption{P1C3.}
+%         \label{fig:idle_dist_p1c3} 
+%     \end{subfigure}
+%     %\vspace{-0.1in}
+%     \begin{subfigure}{.183\linewidth}
+%         \includegraphics[trim=0 0 140 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p1c4.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \captionsetup{oneside,margin={23pt,0pt}}
+%         \caption{P1C4.}
+%         \label{fig:idle_dist_p1c4} 
+%     \end{subfigure}
+%     \hspace{3pt}
+%     %\hfill
+%     \begin{subfigure}{.134\linewidth}
+%         \includegraphics[trim=135 0 140 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p1c5.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \caption{P1C5.}
+%         \label{fig:idle_dist_p1c5} 
+%     \end{subfigure}
+%     \hspace{3pt}
+%     %\hfill
+%     \begin{subfigure}{.134\linewidth}
+%         \includegraphics[trim=135 0 140 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p1c6.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \caption{P1C6.}
+%         \label{fig:idle_dist_p1c6} 
+%     \end{subfigure}
+%     \hspace{3pt}
+%     %\hfill
+%     \begin{subfigure}{.185\linewidth}
+%         \includegraphics[trim=135 0 0 0,clip,width=\linewidth]{graphs/process//idle-limit-dist/idle-limit-dist-p1c7.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \captionsetup{oneside,margin={0pt,27pt}}
+%         \caption{P1C7.}
+%         \label{fig:idle_dist_p1c7} 
+%     \end{subfigure}
+    
+%     \caption{The most aggressive CPM delay reduction that ensures system idle safety distributes over a narrow range (red bar, left y axis). The lower bound of each core's distribution is the core's \textit{idle limit}, usually entailing over 5000~MHz frequency (blue mark, right y axis).}
+%     \label{fig:idle-limit-dist} 
+%     \vspace{-0.2cm}
+% \end{figure*}
+
+% \textbf{Realistic Workloads} %\paragraph{Single-threaded Benchmark}
+% For the final step, we profile the system with complex applications from SPEC CPU 2017 and PARSEC. These benchmarks cover a wide spectrum of program space in the real world and have diverse architecture behavior~\cite{song2018spec,bienia2008parsecsplash}; hence they can touch more corner-case timing paths or create more active $di/dt$ effects than uBench, all of which threatens the safe execution of aggressively reconfigured ATM. {The single-threaded workloads help identify application, chip-wide, and individual core level heterogeneity.}
+
+% In each of the above setups, failure may occur as a result of timing violation, manifested as an abnormal application termination (e.g., segmentation fault), silent data corruption (SDC), or a system crash. For SDC related error, we rely on SPEC and uBench's inherent result checking tool for guaranteeing execution correctness. All these failures may occur because either the CPM's delay has become so short that it does not capture real circuit delays or system noise events, such as the $di/dt$ effect, overwhelms the control loop's ability to respond in time. Because the effects that cause ATM failure might be not fully deterministic, we repeat the profiling in each setup multiple times to produce a distribution of ATM operating limits. We expect the distributions to be tight because timing violations will not be entirely random. These distributions provide a holistic view of ATM margin reclamation capability, so we study them from here on.
+
+% Our methodology progresses through increasing workload complexity. Thus we often need to roll back the CPM delay setting that was successful in a previous less complex setup to a less aggressive point, reflecting a workload setup's unique impact on ATM's operation. Although the worst-case scenario might determine practical ATM reconfiguration in the real world, the middle point analysis shed useful insights on what affects the core-level customization of ATM's margin reclamation.
+
+% There is no guarantee that a particular circuit path or system noise event will deterministically lead to a timing violation, so we repeat the profiling in each of the above setups multiple times to produce a distribution of ATM operating limits. On the other hand, the effects that lead to a timing violation are not entirely random. Reconfiguring CPM inserted delay beyond a limit often leads to certain critical paths having much higher probabilities of experiencing timing errors; thus, the resulting distributions of successful CPM delays tend to be very tight. These distributions provide a holistic view of ATM's margin reclamation capability, so we study distributions here onward.
+
+% % A timing violation manifests as an abnormal application termination (e.g., segmentation fault) or a system crash. It happens because either the CPM's delay has become so short that it does not capture real circuit delays, or system noise events, such as the $di/dt$ effect that overwhelms the DPLL.
+% % %A timing violation manifests as either an abnormal application exit (e.g., early termination) or a system crash. These failures occur either because (1)~the removal of the CPM protection delay gives rise to a circuit path somewhere with a longer delay than that captured by the CPM; or (2)~system noise events, such as turbulence on the $V_{dd}$ power supply plane, undermine DPLL's ability to quickly slew frequency. 
+
+% % Our profiling methodology progresses through increasly complex workloads. Thus we often need to roll back the CPM delay setting to a less aggressive point, reflecting a workload's unique impact on ATM's operation.
+% % %Each step of our profiling methodology builds upon the previous, less complex setup and so may result in failure where the previous step was successful. Thus we often need to roll back ATM operation to a less aggressive reclamation point by reconfiguring CPM inserted delays. The rollback delta reflects the workload's unique impact on ATM's aggressive operation.
+
+% \section{Idle System Characterization}
+% \label{sec:process:idle}
+
+% Understanding ATM's margin reclamation limits in an idle system sets a starting point for further, more complex analysis. With no application code running, the system exerts minimal stress on ATM's reconfigured control loop, enabling us to use ATM to expose the silicon's inherent maximum speed.
+
+% %We leverage the CPM delay reduction results in \Fig{fig:delay-freq} and incrementally reconfigure ATM to be more aggressive until the system fails. In this setting, failure occurs either because CPM reconfiguration removes the system's built-in protection delay and could give rise to a circuit path somewhere for which the CPM cannot adequately represent its timing delay or because system noise events such as turbulence on $V_{dd}$'s power supply plane makes the DPLL fail to slew frequency in time. Nevertheless, under many CPM reconfigurations, the more aggressive ATM still yields flawless execution.
+
+% Running only the operating system, we build a distribution of the most aggressive yet safe CPM configuration points for each core, depicted in \Fig{fig:idle-limit-dist} by the amount of CPM delay reduction from the chip's default setting, along with the resulting frequencies. As expected, the distributions are tight, covering no more than two configurations. Each core's \textit{idle limit} is the lowest (most conservative) CPM delay reduction plotted, e.g. 9 in \Fig{fig:idle_dist_p0c0}. These are summarized in \Tab{tab:limit-delay}. 
+
+% \input{tex/process_submodule/tab_limit-delay}
+
+% The different core-to-core idle limits reveal lucrative performance potential for aggressive ATM customization (\Sec{sec:process:idle:potential}), and the significant core-to-core performance variation (\Sec{sec:process:idle:heterogeneity}) which is partly caused by the non-linearity in CPM configuration (\Sec{sec:process:idle:cpm_variation}).
+
+% \subsection{Significant Performance Potential}
+% \label{sec:process:idle:potential}
+
+% For most cores, the inserted delay can be aggressively reduced, making ATM's control loop see more timing margin for reclamation. As \Fig{fig:idle-limit-dist} shows, more than half the cores (e.g., P0C0 and P0C1) can tolerate reductions of at least seven steps of CPM inserted delay, elevating frequencies to over 5000~MHz: a 7\% improvement over default ATM's 4600~MHz and a 20\% improvement over static margin's 4200~MHz baseline, showing customized ATM can substantially improve performance.
+
+% \subsection{Exposed Inter-core Frequency Variation}
+% \label{sec:process:idle:heterogeneity}
+
+% Programming the CPM to change ATM operation yields different frequency levels for each core, despite the performance improvement. For instance, at the idle limit P1C2 runs at about 4850~MHz but P0C3 achieves about 5200~MHz. Even within a chip, there is a wide range (e.g., P0C2 and P0C3). The core-to-core frequency variation is essential for application performance management, which we discuss later.
+
+% The core to core differences are understood to be a result of manufacturing process variations~\cite{dighe2010within,rangan2011achieving}, i.e., some core's circuits are faster due to imperfection in the lithography process. For instance, as \Fig{fig:idle-limit-dist} shows, P0C3 can safely reduce its CPM delay by 11 steps, while P0C7 can only mitigate its delay by two, reflecting the varying amount of timing margin available for reclamation, which is caused by the two cores' speed difference.
+
+% However, because on the POWER7+ each core's performance potential is unlocked via ATM control loop's automatic harness of available timing margin, the functioning of ATM control loop also plays a critical role in the inter-core performance variation.
+
+% \subsection{Nonlinearity of CPM Configuration}
+% \label{sec:process:idle:cpm_variation}
+
+% The CPM inserted delay's configurable inverter chain is designed to have linear timing delay graduation for timing margin measurement. However, the manufacturing process makes it have non-linear graduation when configured to measure timing margin. The non-linearity magnifies the inter-core performance heterogeneity.
+
+% The inserted delay's non-linear configuration manifests as significant idle limit variation between cores. Consider P0C4 and P1C7, which are both able to increase frequency from 4600~MHz to 5100~MHz but do so with very different CPM changes: P0C4 reduces the delay by ten steps, while P1C7 only needs two steps. Hence, although the two cores have similar excess timing margins, P0C4's CPM encodes smaller timing delays in each step than P1C7. 
+
+% Within each core, CPM's non-linearity makes the timing margin encoded by one CPM delay step vary. \Fig{fig:delay-freq} shows that P1C6's frequency increases by over 200~MHz when going from step zero to one, jumping from the baseline 4600~MHz to over 4800~MHz. But in going from step one to two, there is an almost negligible change in frequency. Similarly, the frequency is nearly unchanged when increasing the CPM delay reduction from step five to six for P1C3, but reducing the delay by one additional step (i.e., going from six to seven) increases the frequency by over 100~MHz.
+
+% As another example, in \Fig{fig:idle_dist_p1c2} reducing P1C2's CPM delay by six is too aggressive and can crash the system; rolling back its delay by one step ensures safety but at the cost of 300~MHz. P1C1 (\Fig{fig:idle_dist_p1c1}) similarly needs its CPM delay reduction rolled back by one step (from nine to eight) for safe operation but at the cost of only 100~MHz. Though P1C2 could operate safely at a higher frequency, the large CPM jump forces the 300~MHz drop and amplifies the differences between the two cores.
+
+% In summary, the non-linearity configuration of the CPM and ATM control loop demands that customization of multi-core ATM operation be carried out carefully on the per-core basis because no single CPM configuration works uniformly for all cores.
+
+% \section{Micro-bench Characterization}
+% \label{sec:process:ubench}
+
+% \input{tex/process_submodule/fig_ubench-limit-dist}
+
+% While idle system characterization reveals insights on the performance benefits and the inter-core variation issues of multicore ATM customization, it does not evaluate the system's behavior under stress from real-world application codes. Before using more complex applications, we use micro-benchmark (uBench) as a valuable tool that controls program behavior to analyze individual processor components~\cite{papadimitriou2018micro}. Because uBench imposes more stress than idling, the CPM configuration tends to be more conservative, creating a practical point for processor deployment in the real world.
+
+% \subsection{Workload Selection}
+% \label{sec:process:ubench_benchmarks}
+
+% We evaluate system behavior under aggressive ATM customization using three uBench programs. These programs collectively cover all main parts of the microarchitecture, as well as the dispersed CPMs in a core. 
+
+% We use \bench{coremark}~\cite{coremark} to stress the core's control, branch, and integer units; \bench{daxpy} to stress the floating point unit; and \bench{stream}~\cite{stream} for its ability to generate cache misses and exercise the load-store unit. Prior work has used such benchmarks to exercise the functional units and validate the ATM~\cite{lefurgy2011active, lefurgy2013active}. We check the programs' run result to evaluate processor execution correctness. All incorrect runs manifest as system crashes or abnormal application exits.
+
+% Using these benchmarks ensures we challenge a reconfigured ATM by touching more paths than system idle. Meanwhile, these uBench programs create little system noise, especially the $di/dt$ effect. They have controlled, smooth program behaviors and avoid complex microarchitectural activity such as periodic pipeline flush, which is the root cause of workload-induced voltage droops~\cite{grochowski2002microarchitectural,powell2003pipeline,reddi2009voltage,reddi2010voltage,miller2012vrsync}. The $di/dt$ effect is dangerous for aggressively reconfigured ATM because its fast drooping voltage can prevent the control loop from engaging in time~\cite{vezyrtzis2018droop}, resulting in application failure. 
+
+% \subsection{What Makes Some Cores Fail?}
+% \label{sec:process:ubench_profiling}
+
+% We start the uBench characterization from the idle limit because it is the point that sustains stable system state. If this initial starting point fails, the CPM inserted delay is rolled back to have a longer timing delay to make ATM harness timing margin more conservatively until the program runs correctly. We find most cores' idle limits sustain correct uBench execution, which entails they can safely accommodate the major paths activated by the instructions used by uBench programs. 
+
+% For the server's two physical processors, uBench characterization exposes six cores that fail for the three programs. \Fig{fig:ubench-limit-dist} shows the distributions of reintroduced delays for these cores, using the ``rollback steps'' relative to the idle limit, which reflects the stress impact from uBench program execution compared with system idle. For those six cores, rollback ranges from one to three steps and sustains all uBench workloads.
+
+% All three programs, despite their different characteristics, show similar behaviors on the six problematic cores. The implication is that the microarchitecture blocks that limit aggressive ATM customization are the common structures used by all programs, such as instruction fetch and scheduling, rather than specific modules stressed by each application (e.g., FP unit).
+
+% Our later analysis with a power virus and a voltage virus corroborates this conjecture. Neither of these stress tests makes the cores fails at their \textit{uBench limit}.
+
+% The power virus creates a high IR drop and high-temperature condition. At \textit{uBench limit} in \Tab{tab:limit-delay}, eight copies of \bench{daxpy} threads creates over 160~W total chip power and around 70\C chip temperature, compared with the 50\C temperature under per-core test. However, the high power does not bring any core down, verifying the robustness of \textit{uBench limit}. 
+
+% We believe this observation is intuitive because the temperature's impact on circuit speed happens over the long term, which is well within ATM control loop's nanosecond-level response time. High temperature is beneficial for circuit speed in recent technologies~\cite{zu2016tistate}, reducing concerns on high-temperature conditions.
+
+% The voltage virus creates transient voltage droops that threaten the ATM control loop to respond in time. We repeatedly throttle all cores' instruction issue rates to its 1/128 in synchronized step while running \bench{daxpy} to create current surges, which induces worst-case $di/dt$ effect~\cite{lefurgy2011active, lefurgy2013active}. However, under this worst-case condition, no core fails at their \textit{uBench limit}, suggesting ATM works fairly robustly under aggressive customization. We, therefore, use the uBench limits as a reference point for further characterization using realistic applications.
+
+% % The uBench limit is an important configuration that likely reflects the core's inherent ATM achievable speed because most timing paths are protected by aggressively configured ATM operation and real programs have high confidence of correct execution.
+
+% \section{Realistic Workload \\Characterization}
+% \label{sec:process:realistic}
+
+% To run real applications, a production ATM system today adds some amount of protection margin to CPM's uBench limit configuration~\cite{lefurgy2011active}. To conservatively guarantee execution correctness, the added margin can be up to 50\% of the static guardband. But this leaves room for improvement as demonstrated by the 2X frequency gain during our system idle characterization. 
+
+% However, adding additional guardband as a conservative precaution ignores the application-dependent behavior and can waste valuable performance benefit. In this section, we profile with a variety of integer and floating point workloads from SPEC CPU 2017~\cite{SPEC2017} and PARSEC~3.0~\cite{bienia2008parsec}. We use these workloads because their result-checking tool provides a convenient method for checking execution correctness. Understanding per core ATM operating limits under these heterogeneous workloads offer helpful insights for deploying aggressively customized ATM chips in real-world use cases.
+
+% To understand all system factors that impact an aggressively fine-tune ATM processor, we profile with a variety of integer and floating point workloads from SPEC CPU 2017~\cite{SPEC2017} and PARSEC~3.0~\cite{bienia2008parsec}. These realistic workloads provide helpful insight for deploying aggressively fine-tuned ATM chips in real-world use cases. They often have more complicated code patterns that may touch corner timing paths in a core, or introduce complex microarchitectural behaviors that can lead to severe $di/dt$ effects, both of which threaten to violate the aggressively tuned CPM configuration after uBench profiling, even though the uBench limits already ensure the ATM control loop protects major core paths. 
+
+% %We find that SPEC and PARSEC benchmarks usually fail at the uBench limit; this is why ATM processors that are deployed into the field still rely on some safety margin, approximately 50\% of the original static guardband~\cite{lefurgy2011active}, after the CPMs have been calibrated using the uBench programs. Therefore, there is still substantial room for improvement.
+% %The delta between each application's limit CPM configuration and the uBench limits reveal the unique impact of an application's system noise effect. Most of the workloads require that each core roll back its CPM delay from the uBench limit by at least one step to ensure execution correctness. More importantly, we observe different applications impose widely different ``stress'' levels on the aggressively configured ATM chip. 
+
+% \subsection{Application Heterogeneity}
+% \label{sec:process:workload:heterogeneity}
+
+% \begin{figure}[b!]
+%     \begin{subfigure}{.48\linewidth}%[p0 core3] {
+%         \includegraphics[trim=0 0 100 0,clip,width=\linewidth]{graphs/process//spec-limit-dist/single-thread-cmp-p0c3.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \caption{P0C3}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}{.48\linewidth}%[p1 core6] {
+%         \includegraphics[trim=100 0 0 0,clip,width=\linewidth]{graphs/process//spec-limit-dist/single-thread-cmp-p1c6.pdf}
+%         \setlength{\abovecaptionskip}{-9pt}
+%         \caption{P1C6}
+%     \end{subfigure}
+%     \caption{\bench{x264} stresses ATM more heavily and needs a more conservative CPM configuration compared to \bench{gcc}, as indicated by the larger CPM rollback that is required for \bench{x264} over \bench{gcc}.}
+%     \label{fig:spec-limit-example} 
+% \end{figure}
+
+% \Fig{fig:spec-limit-example} shows \bench{x264} often requires significant CPM delay rollback from the uBench limit, whereas \bench{gcc} needs relatively little, allowing ATM to more aggressively boost frequency. The rollback reflects an application's unique system noise effects. Configuring ATM for the worst application in all cases, e.g., \bench{x264}, wastes ATM's margin reclamation potential when running more benign workloads. This is the approach taken by today's deployed ATM processors, which still rely on a safety margin as large as 50\% of the original static guardband~\cite{lefurgy2011active}. This is the case for today's ATM processors deployed into the field which still rely on some safety margin, approximately 50\% of the original static guardband~\cite{lefurgy2011active}.
+
+% To get a complete picture of the behavior of aggressively configured ATM cores on different workloads, we profile CPM rollback from the uBench limit for all $<app, core>$ pairs in \Fig{fig:app-cpm-heatmap}. We use the weighted average CPM rollback as it quantifies the application's unique stress level. Two applications may have quite a different delay reduction distributions even when they show the same lower bound in their CPM delay profile. 
+
+% From the individual rows in \Fig{fig:app-cpm-heatmap}, we see that each workload imposes a different amount of stress but does so consistently across cores. For instance, \bench{x264} and \bench{ferret} needs much more conservative ATM setting than \bench{gcc} and \bench{leela}, indicating these workloads have exert higher pressure on ATM's control loop.
+
+% We classify the workloads as ``heavy,'' ``medium,'' or ``light'' as shown in \Tab{tab:bench-cpm-type}. ``Heavy'' workloads pose the greatest threat to aggressively reconfigured ATM and often force a rollback of CPM inserted delay for more conservative operation. In contrast, ``light'' applications exert little pressure on ATM and often need no rollback from the uBench limit. The ``medium'' workloads show more sensitivity to a core's ATM control loop.
+
+% In \Tab{tab:limit-delay}, \textit{thread-worst} is the worst CPM configuration limit of all workloads and represents the most severe application stress in our profiling. The \textit{thread-normal} is less conservative and lets most medium, and light applications safely pass. From our realistic single-threaded workload profiling, we draw the following two key insights:
+
+% \begin{table}[t]
+%   %TODO: this table can be removed if space is needed
+%   \vspace{0.2cm}
+
+%   \centering
+%   \begin{tabular}{l|c*{2}{c}}
+%     \Xhline{1pt}
+%     stress level & benchmark \\
+%     \hline
+%     heavy  & \makecell{x264, exchange2, ferret} \\
+%     \hline
+%     medium & \makecell{perlbench, xalancbmk, xz, \\facesim, omnetpp, mcf, \\bodytrack, dedup} \\
+%     \hline
+%     light  & \makecell{gcc, bodytrack, deepsjeng, leela, \\freqmine, barnes, streamcluster, \\fluidanimate, fft, blackscholes} \\
+%     \Xhline{1pt}
+%   \end{tabular}
+
+%   \caption{Benchmark classification based on their stress level to aggressively configured ATM.} 
+%   \vspace{-0.5cm}
+%   \label{tab:bench-cpm-type} 
+% \end{table}
+
+% From the individual columns in \Fig{fig:app-cpm-heatmap}, we see that different cores exhibit varying levels of ``robustness'', where we define robustness as the immunity to CPM rollback from the core's CPM uBench limit. The cores on the right of~\Fig{fig:app-cpm-heatmap} has the highest robustness, requiring the least rollback across all applications, indicating their ATM control loops can deal with the system effects of any application. We anticipate they will continue to be robust on untested applications since the profiled workloads already cover different behaviors~\cite{song2018spec}.
+
+% The reason why certain applications and cores are more vulnerable after aggressive ATM customization is a combination of the core's inherent speed and the running application's characteristics. We conducted a best-effort static instruction analysis on the applications and concluded that more detailed insight into the running instructions is needed to predict each application's best-fit CPM setting on each core. For instance, \bench{gcc} covers a much richer set of instructions than \bench{exchange2}, likely touching more corner timing paths, yet stresses ATM much less. As another example, \bench{x264} has similar performance counter profiles as \bench{leela}, but their rollback requirements differ substantially. We, therefore, defer the root-cause analysis and the prediction of applications' heterogeneous CPM configuration to future work and focus on the variations already exposed.
+
+% \begin{figure}[tb!]
+%   \centering
+%   \includegraphics[trim=0 0 0 0,clip,width=\linewidth]{graphs/process//spec-limit-dist/app-rollback.png}
+%   \caption{Application's average CPM delay rollback from the core's uBench limit. The top workloads stress ATM heavily and need more delay rollback for less aggressive margin reclamation.}
+%   \label{fig:app-cpm-heatmap}
+%   \vspace{-0.4cm}
+% \end{figure}
+
+% \input{tex/process_submodule/fig_schedule-utilities}
+
+% \subsection{Core Robustness Heterogeneity}
+% \label{sec:process:workload:robustness}
+
+% %Looking horizontally in~\Fig{fig:app-cpm-heatmap}, different cores, cores exhibit varying ATM control ``robustness''---under complex workload-induced system noise, the amount of CPM delay needed to roll back from the core's inherent speed which is exposed by the uBench limit profile. In \Fig{fig:app-cpm-heatmap}, the cores on the right exhibit the highest robustness because they need the least rollback across all applications, indicating their ATM control loops can deal with the system effect caused by whatever application fairly well. 
+
+% Cores have varying levels of ``robustness'' to application heterogeneity, where we define robustness as the immunity to CPM rollback from the core's inherent speed (the uBench limit profile). From the columns in \Fig{fig:app-cpm-heatmap}, the cores on the right exhibit the highest robustness, requiring the least rollback across all applications, indicating their ATM control loops can deal with the system effects of any application.
+
+% \Fig{fig:core-cpm-var} sorts cores' average rollbacks across all workloads. The rightmost cores, P0C7, P1C2, and P1C7 are immune to workload effects, flawlessly executing all applications at their uBench limit. We anticipate they will continue to be robust on untested applications since the profiled workloads already cover various behaviors~\cite{song2018spec}. These ``robust cores'' can be relied upon in a production environment to execute any application. Among the robust cores, P1C7, however, is notable because its CPM delay was rolled back from the idle test to the uBench test, significantly reducing its frequency to a rather conservative 4800~MHz, possibly accounting for its apparent robustness. Contrariwise, P0C7 remains robust even at its CPM delay from the idle test. As such, there is no clear correlation between a core's speed and its ATM robustness. 
+
+% %To favor execution reliability, the cores that have more robust ATM operation on the right side of \Fig{fig:core-cpm-var} have higher priority for running applications.
+
+% \Fig{fig:core-cpm-var} also summarizes different cores' frequency variation under the profiled scenarios. At the uBench limit configuration, core-to-core speed varies by 300~MHz from the fastest, P0C6, to the slowest, P1C7. The speed gap shrinks to 200~MHz at the thread-worst limit, caused by CPM delay rollback of the non-robust ATM cores. Nevertheless, the non-uniform core frequency is still impressive and deserves proper management.
+% %If alternatively selected to favor performance, faster cores should be given higher priority for running applications.
+
+% \begin{figure}[t]
+%   \centering
+%   \includegraphics[trim=0 20 0 20,clip,width=\linewidth]{graphs/process//spec-rollback.pdf}
+%   \caption{Aggressively configured ATM cores exhibit different CPM rollback steps and frequencies when running realistic workloads.}
+%   \label{fig:core-cpm-var}
+%   \vspace{-0.4cm}
+% \end{figure}
+
+% \section{Managing ATM in the Field}
+% \label{sec:process:schedule}
+
+
+% In this section, we discuss how to manage a customized ATM system's performance in the presence of core-to-core variation as well as application heterogeneity. Overall, application performance is improved by customized ATM's elevated frequency level. However, the varying frequency levels for each core, and each application creates trouble for the processor in delivering a promised performance level to end users. Hence, we show how to schedule applications and make performance promises to latency sensitive applications.
+
+
+% %To manage ATM's performance variability, we first develop a predictor that informs frequency and performance for a candidate application schedule (\Sec{sec:schedule:predict}). Then we propose an ATM-aware scheduler to manage application performance improvement with deterministic behavior (\Sec{sec:schedule:framework}). We evaluate its effectiveness (\Sec{sec:schedule:result}).
+
+% \subsection{Performance Variability}
+
+% Under the conventional static margin setting, all cores are shipped with a single, fixed frequency of 4.2~GHz. The default ATM system tries to match this goal with a uniform boosted performance around 4.6~GHz, as shown by the ``default (sys idle)'' bar in~\Fig{fig:schedule-space}. The default CPM setting smooth core-to-core variation to a limited 50~MHz, as illustrated by the max and min frequencies. 
+
+% But when aggressively customizing each core's ATM setting to maximize performance, system operators must learn to manage core-to-core performance variation carefully. ATM customization exposes the core-to-core performance variation while boosting performance to over 4.9~GHz. The frequency variation is over 200~MHz between cores even when no application is running, as shown by the ``customized (sys idle)'' bar. 
+
+% At runtime, the frequency variation is further complicated because workloads consume a different amount of power, which induces varying levels of DC voltage drop along the chip's shared power delivery path. DC voltage drop decreases the supply voltage delivered to the transistors and erodes the timing margin, limiting the frequency gain available for ATM's control loop~\cite{zu2015adaptive}. 
+
+% Running eight copies of \bench{daxpy} raises power consumption by 60~W and drops a customized core's frequency to 4.5~GHz, as shown by the min freq of ``customized (workload).'' Though this is still much better than the static margin, the performance delivered to an application is much slower than the max frequency setting, which is over 5.0~GHz when idle. 
+
+% Hence, system operators that are deploying customized ATM system need to be careful when scheduling applications and making performance promises.
+
+
+% \subsection{Per-core Frequency Predictor}
+% \label{sec:process:schedule:predict}
+
+% To manage ATM's performance variability, we first develop a predictor that informs frequency and performance for a candidate application schedule. We develop this predictor by modeling each core's runtime average frequency $\overline{f}$, as a linear function of the transistors' supply voltage, $V_{chip}$. Among different dynamic effects, long-term stable effects such as temperature variation and DC voltage drop caused by high power determines core frequency ---infrequent, transient $di/dt$ events are handled transparently by the ATM control loop. 
+
+% Because past research has shown that speed is only modestly affected by temperature~\cite{zu2016tistate}, we base our model strictly on IR voltage drop. Subtracting the IR voltage drop, which is proportional to current and hence power consumption, we derive a linear relationship between ATM's dynamic frequency and the chip's total power consumption as shown in  \Eq{eq:freq-pred}. The value $b$ represents a core's static CPM setting, while $k' \cdot \overline{P}$ represents the dynamic variation, dominated by the IR voltage drop. 
+
+% \begin{equation}\label{eq:freq-pred}
+% \begin{split}
+% \overline{f} &= k \cdot \overline{V_{chip}} = k \cdot (V_{vrm} - R \cdot \overline{I})\\
+% &= k \cdot (V_{vrm} - R \cdot \frac{\overline{P}}{V_{vrm}})\\
+% &= -k' \cdot \overline{P} + b
+% \end{split}
+% \end{equation}
+
+% \Fig{fig:freq-pred} shows the linear model fitted for each core's customized CPM configuration. The measured data points align with \Eq{eq:freq-pred}'s predictions. Each additional watt degrades the frequency by about two MHz. In practice, each core stores its frequency prediction model and the model is indexed by the chip's total power consumption during job scheduling and runtime.
+
+
+
+% \subsection{Delivering Critical App's Performance}
+% \label{sec:process:schedule:framework}
+
+% \begin{figure*}[t]
+%   \centering
+%   \includegraphics[trim=10 90 10 150,clip,width=\linewidth]{graphs/process//schedule-flow/schedule-flow.pdf}
+%   \caption{Managing a customized ATM system needs to integrate the per-app performance predictor and per-core frequency predictor, so that \texttt{critical} application performance can be satifised by using faster cores and maintaining an estimated chip power budget.}
+%   \label{fig:schedule-flow}
+%   \vspace*{-0.4cm}
+% \end{figure*}
+
+% Frequency directly affects application performance. \Fig{fig:1t-perf-pred} shows application performance scales linearly with frequency, with different coefficients depending on the workload's memory behavior. A memory-bound workload, such as \bench{mcf}, enjoys less performance improvement from higher frequency compared with a compute-bound workload like \bench{x264} because cache misses limits the compute throughput. We, therefore, build a performance predictor for each application, using frequency as the input. In this way, thread performance on each core can be inferred by the chip's total power, using each core's frequency predictor as the intermediate step.
+
+% On a customized ATM system, each application's performance depends on both the core it runs on as each core has different CPM configuration which leads to varying frequency levels, and the applications running on other neighboring cores, as all applications contribute to the chip's total power which in turn affects each core's frequency through the DC voltage drop on the shared power delivery path. For some \texttt{critical} applications that the users are interested in, it is crucial that they get mapped to the customized cores that are high performance and robust. Meanwhile, it is also crucial that the co-located \texttt{background} applications are adequately managed so that the total chip power does not exceed the level that hampers critical app's core frequency. To handle this issue, we propose a scheme to selectively throttle \texttt{background} application performance to control total chip power, and indirectly frees up frequency potential for \texttt{critical} applications.
+
+% \begin{table}[h!]
+%   \centering
+%   \resizebox{\columnwidth}{!}{
+%   \begin{tabular}{c|c|c}
+%     \Xhline{1pt}
+
+%     Mem behavior      & Critical & Background \\
+%     \hline
+%     Intensive  & \makecell{resnet, vgg,\\ ferret, \\fluidanimate} & \makecell{mlp, gcc,\\facesim, lu\_cb, \\streamcluster, etc.} \\
+%     \hline
+%     Non-intensive  & \makecell{squeezenet, \\seq2seq, babi, \\bodytrack, vips} & \makecell{blackScholes, x264, \\swaptions,\\ raytrace, } \\
+%     \Xhline{1pt}
+%   \end{tabular}
+%     }
+
+%   \caption{Classifying critical and background applications, based on their memory subsystem interference behavior.} 
+%   \vspace{-0.2cm}
+
+%   \label{tab:bench-type} 
+% \end{table}
+
+% We use the applications in \Tab{tab:bench-type} for evaluation. The \texttt{critical} workloads are user-facing and require high performance for lower latency. They include deep learning inference (CNN, RNN, and LSTM models), object detection, real-time image processing, content similarity search, etc. The \texttt{background} workloads can tolerate lower performance and include workloads such as stock price estimation, 3D image rendering, compression, compilation, and machine learning training. For our work, we focus on the performance issue caused by the ATM system's shared power delivery problem and excludes performance interference from the memory subsystem which is a general issue for all multicores. Thus, we avoid co-locating two memory-intensive workloads at the same time to simplify the problem.
+
+% \Fig{fig:schedule-flow} outlines our management scheme. It takes into account the core-to-core performance and robustness variation as characterized in~\Sec{sec:realistic}, and the inter-core application power interference on the power delivery subsystem. First, the user selects how he/she would like to set different core's CPM. The default policy uses the chip's thread-worst CPM configuration as shown in \Tab{tab:limit-delay}, obtained through our earlier characterization.
+
+% The default thread-worst policy represents a balanced trade-off between performance and reliability. Most likely workloads can execute correctly while still providing better performance. The \texttt{critical} and \texttt{background} workloads all execute correctly under thread-worst.
+
+% For higher performance, the user selects an ``aggressive'' governor, which chooses an application's most aggressive CPM configuration that guarantees correct execution. In the current approach, this can be achieved by repetitive profiling an application's CPM limits in a tier of testing servers before shipping the application to production server clusters. For most medium and light workloads in~\Tab{tab:bench-type}, thread-normal represents the high-performance policy.
+
+% For higher robustness, the user can select a ``conservative'' governor, which only schedules \texttt{background} workloads onto robust cores picked by ATM characterization. The robust cores are scarce and may not provide the highest performance, but they have the highest guarantee of correct execution. The conservative policy is best for unknown applications or when application correctness is paramount.
+
+% The operating system then automatically sets each core's CPM setting according to user-selected policy. The faster cores after CPM customization are selected for running \texttt{critical} application. In parallel with CPM reconfiguration, the scheme reads user-specified QoS target for the \texttt{critical} application and infers the chip power needed to meet the performance goal using per-application performance predictor and per-core frequency predictor. To meet the QoS goal, total chip power under \texttt{critical} and co-running \texttt{background} workloads cannot exceed the calculated power budget.
+
+% The manager subtracts the estimated power of the \texttt{critical} workloads from the total chip power budget to get the power envelope available for the co-running \texttt{background} jobs. The \texttt{background} jobs can then be scheduled to the same chip under this envelope by carefully tuning their power consumption. On POWER7+ where $V_{dd}$ is shared for all cores, we adjust power consumption by changing core frequency. Depending on the power envelope, we can 1)~allow workloads to use aggressive ATM that has the highest frequency, 2)~set cores to different DVFS states' frequency levels or 3)~use power-gating to disable cores.
+
+% \begin{figure*}[t]
+%   \centering
+%   \includegraphics[trim=10 30 0 0,clip,width=\linewidth]{graphs/process//schedule-1t.pdf}
+%   \caption{\texttt{Critical} application performance co-located with \texttt{background} workloads under different settings, shown as $<\!critical:background\!>$ pairs. Aggressively customized ATM, together with low-power co-running \texttt{background} workloads, boosts performance by 15.4\% on average. With proper management, a 10\% performance improvement goal is guaranteed for \texttt{critical workloads} by throttling co-runner's core frequency to main total chip power below budget.}
+%   \label{fig:schedule-1t-results}
+%   \vspace*{-0.3cm}
+% \end{figure*}
+
+% \subsection{Performance Improvement}
+% \label{sec:process:schedule:result}
+
+% %We show in \Fig{fig:schedule-1t-results} the performance benefits provided by our scheduler to \texttt{fg} jobs in an aggressive ATM system. To study the impact of co-located jobs on a multi-core chip, we restrict execution to P0 of our two-socket system. We restrict the foreground job to a single core (possibly utilizing its SMT capabilities), which is a natural fit for many applications, such as LSTM and RNN inference.
+% %We evaluate the performance benefit of latency critical \texttt{fg} jobs in aggressive ATM systems in \Fig{fig:schedule-1t-results}. We co-locate all workloads onto P0 of our two-socket system to study the impact of co-located \texttt{bg} jobs on a multi-core. To highlight frequency's impact on job performance, we restrict \texttt{fg} job to use one core, which is natural for many applications, such as LSTM and RNN inference.
+
+% We evaluate our solution(s) against the static margin and the default ATM. Some customers turn off ATM for predictability. Hence the static margin is one of the fair baselines we compare with for evaluation. The system is running the stock DVFS operating system governors that already strive to improve system efficiency. Therefore, our results include that comparison implicitly. Since ATM systems are still new and rare, there is little other prior work to compare against directly.
+
+% Our evaluation is carried out when all cores are scheduled to run an application. In practice, power gating idle cores off when not enough workloads are available can further free up chip power and boost the performance of target workload~\cite{zu2015adaptive}. For all our tests, die temperature is maintained under 70\C, and no side effect on-chip cooling is observed. 
+
+% \Fig{fig:schedule-1t-results} summarizes the performance benefit of managing an aggressively customized ATM system. To highlight frequency interference's impact, we use one core to run \texttt{critical} application, which is a natural fit for many applications, such as LSTM and RNN inference. We co-locate all \texttt{critical} and \texttt{background} applications on processor 0 (P0) of our two-socket server.
+
+% Under static margin, the default DVFS governors makes POWER7+ processors clock at fixed 4.2~GHz to run applications, providing predictable but low performance. 
+
+% The default ATM improves performance uniformly for all cores, not with the highest efficiency. An unmanaged system ignores the sensitivity of core frequency to total chip power. ATM may be indiscriminately activated on all cores, both for \texttt{critical} and \texttt{background} workloads, which significantly raises total chip power, eroding timing margin and reducing all cores' frequency, thereby diminishing the \texttt{critical} application performance. This unmanaged system still increases frequency thanks to ATM's harnessed margin, but the improvement is restricted to only 6.1\% on average.
+
+% Aggressively customized ATM provides more frequency gain, but an unmanaged system prevents the processor from providing maximum benefit. Compared with the default ATM, an unmanaged processor system may carelessly assign the slowest core after CPM reconfiguration to a \texttt{critical} job, limiting the peak performance that can be achieved. The unmanaged system may also let all co-located \texttt{background} workloads run under their highest frequency, increasing total chip power and reducing \texttt{critical} workload frequency. However, in this scenario \texttt{critical} applications still enjoy 10.2\% improvement over static margin because customizing ATM unlocks substantial frequency gain.
+
+% A managed ATM system can opt to maximize the performance of \texttt{critical} applications. Specifically, \texttt{critical} applications get assigned to the fastest cores, and \texttt{background} application power is minimized by applying the lowest p-state. In this way, \texttt{critical} application frequency is maximized, at the cost of \texttt{background} workload performance. On average, \texttt{critical} workload performance improves by 15.2\%.
+
+% Alternatively, a managed ATM system can opt to balance \texttt{critical} and \texttt{background} jobs by letting \texttt{critical} applications just meet their performance goal, and maximizing \texttt{background} performance under that promise. Suppose the user targets 10\% performance improvement for a \texttt{critical} workload over the static margin run, our managed system then throttles \texttt{background} core frequencies with the minimal amount to control total chip power, letting the frequency of the core running \texttt{critical} workload reach the level that delivers target performance.
+
+% In \Fig{fig:schedule-1t-results} the performance of \bench{squeezenet}, \bench{ferret}, \bench{vgg19}, and \bench{fluidanimate} exceeds the 10\% improvment target when the chip aims at maximizing their performance. However, their performance drops below the target when the chip puts all cores into customized ATM states. A balanced point can be obtained by controlling \texttt{background} workload frequency. In this case, the frequency of co-located \bench{lu\_cb}, \bench{raytrace}, \bench{swaptions}, and \bench{x264} is set to the 4.2~GHz p-state.
+
+% On the contrary, \bench{seq2seq} outperform the 10\% improvement goal when its co-located \bench{streamcluster} runs under customized ATM. This is because \bench{streamcluster} consumes little power even when the frequency is high. The extra available power budget can be exploited by swapping \bench{streamcluster} with a more power-hungry co-runner, \bench{lu\_cb}, with core frequency properly throttled. 
+
+% The other \texttt{critical} and \texttt{background} workloads combinations meet the QoS target when ATM is aggressively customized for all cores. The high-frequency gain of ATM customization provides this benefit. For these cases, no core throttling needs to take place.
+
+% In summary, core-level ATM customization and ATM-aware application power management provides 5\% to 10\% steady performance improvement over the original ATM system. This result is notable because the improvement comes on a production-grade system where even a 1\% performance gain is considered significant.
