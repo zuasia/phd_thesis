@@ -47,8 +47,27 @@
 \contentsline {subsection}{\numberline {4.4.2}Power Reduction Improvement}{83}{subsection.4.4.2}
 \contentsline {subsection}{\numberline {4.4.3}Related Work}{86}{subsection.4.4.3}
 \contentsline {chapter}{Chapter 5.\hspace *{1em}Multicore Active Timing Margin Management for Maximizing Performance Efficiency}{88}{chapter.5}
-\contentsline {chapter}{Chapter 6.\hspace *{1em}Retrospective and Prospective Remarks}{92}{chapter.6}
-\contentsline {section}{\numberline {6.1}Retrospective}{92}{section.6.1}
-\contentsline {section}{\numberline {6.2}Prospective}{94}{section.6.2}
-\contentsline {chapter}{Bibliography}{98}{section.6.2}
-\contentsline {chapter}{Vita}{115}{section.6.2}
+\contentsline {section}{\numberline {5.1}Active Timing Margin in POWER7+}{90}{section.5.1}
+\contentsline {section}{\numberline {5.2}Customizing Active Timing \\Margin Operation}{94}{section.5.2}
+\contentsline {subsection}{\numberline {5.2.1}Programming Critical Path Monitors \\to Reconfigure Margin Reclamation}{94}{subsection.5.2.1}
+\contentsline {subsection}{\numberline {5.2.2}Characterizing ATM Limits}{96}{subsection.5.2.2}
+\contentsline {section}{\numberline {5.3}Idle System Characterization}{99}{section.5.3}
+\contentsline {subsection}{\numberline {5.3.1}Significant Performance Potential}{100}{subsection.5.3.1}
+\contentsline {subsection}{\numberline {5.3.2}Exposed Inter-core Frequency Variation}{100}{subsection.5.3.2}
+\contentsline {subsection}{\numberline {5.3.3}Nonlinearity of CPM Configuration}{101}{subsection.5.3.3}
+\contentsline {section}{\numberline {5.4}Micro-bench Characterization}{103}{section.5.4}
+\contentsline {subsection}{\numberline {5.4.1}Workload Selection}{103}{subsection.5.4.1}
+\contentsline {subsection}{\numberline {5.4.2}What Makes Some Cores Fail?}{104}{subsection.5.4.2}
+\contentsline {section}{\numberline {5.5}Realistic Workload \\Characterization}{106}{section.5.5}
+\contentsline {subsection}{\numberline {5.5.1}Application Heterogeneity}{107}{subsection.5.5.1}
+\contentsline {subsection}{\numberline {5.5.2}Core Robustness Heterogeneity}{110}{subsection.5.5.2}
+\contentsline {section}{\numberline {5.6}Managing ATM in the Field}{111}{section.5.6}
+\contentsline {subsection}{\numberline {5.6.1}Performance Variability}{111}{subsection.5.6.1}
+\contentsline {subsection}{\numberline {5.6.2}Per-core Frequency Predictor}{112}{subsection.5.6.2}
+\contentsline {subsection}{\numberline {5.6.3}Delivering Critical App's Performance}{113}{subsection.5.6.3}
+\contentsline {subsection}{\numberline {5.6.4}Performance Improvement}{117}{subsection.5.6.4}
+\contentsline {chapter}{Chapter 6.\hspace *{1em}Retrospective and Prospective Remarks}{128}{chapter.6}
+\contentsline {section}{\numberline {6.1}Retrospective}{128}{section.6.1}
+\contentsline {section}{\numberline {6.2}Prospective}{130}{section.6.2}
+\contentsline {chapter}{Bibliography}{134}{section.6.2}
+\contentsline {chapter}{Vita}{153}{section.6.2}

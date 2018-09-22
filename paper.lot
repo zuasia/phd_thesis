@@ -6,4 +6,7 @@
 \contentsline {table}{\numberline {3.2}{\ignorespaces FinFET and FD-SOI scaling settings: for completeness, we scale dynamic and leakage power with different factors to cover both aggressive and conservative scenarios.\relax }}{47}{table.caption.11}
 \addvspace {10pt}
 \addvspace {10pt}
+\contentsline {table}{\numberline {5.1}{\ignorespaces ATM customization limits under system idle, uBench, and real-world application. Data is collected on two eight-core (C) POWER7+ processors (P). ATM limits are reflected as the number of stepped reduced from CPM's default inserted delay configuration.\relax }}{100}{table.caption.31}
+\contentsline {table}{\numberline {5.2}{\ignorespaces Benchmark classification based on their stress level to aggressively configured ATM.\relax }}{108}{table.caption.34}
+\contentsline {table}{\numberline {5.3}{\ignorespaces Classifying critical and background applications, based on their memory subsystem interference behavior.\relax }}{115}{table.caption.39}
 \addvspace {10pt}

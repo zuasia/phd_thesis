@@ -73,4 +73,42 @@
 \addvspace {10pt}
 \contentsline {figure}{\numberline {5.1}{\ignorespaces \texttt {SqueezeNet} inference latency on a POWER7+ core under different timing margin settings. Aggressively customizing Active Timing Margin, and co-locating it with ``friendly'' low-power applications enhance performance.\relax }}{89}{figure.caption.26}
 \contentsline {figure}{\numberline {5.2}{\ignorespaces In POWER7+, Critical Path Monitor (CPM), Digital Phase Locked Loop (DPLL), and off-chip voltage controller work synergistically to let ATM provide just enough margin~\cite {lefurgy2013active}.\relax }}{91}{figure.caption.27}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces CPM's inserted delay can be set by programming the number of inverters used~\cite {drake2007distributed, drake2013single}. Reducing the added delay makes the CPM count more time margin after a signal travels through the synthetic path which simulates real circuit toggling. The DPLL then increases frequency to harvest the excess margin reported by CPM's inverter chain.\relax }}{121}{figure.caption.28}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {CPM structure: programming the inserted delay sets the margin sensed by the inverter chain.}}}{121}{subfigure.3.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Reducing inserted delay increases ATM frequency.}}}{121}{subfigure.3.2}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Our ATM characterization methodology iterates over each core and follows a step-by step approach, going from the simplest system idle scenario to the complex real-world workloads.\relax }}{122}{figure.caption.29}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces The limit configuration of each POWER7+ core (i.e., the most aggressive reduction of CPM's inserted delay from its default setting, beyond which ATM operation can cause system failure under idle condition) distributes over a narrow range (red bar, left y axis). The operating frequency at each core's limit delay config is over 4800~MHz, more than 15\% higher than static margin's 4200~MHz level (blue mark, right y axis).\relax }}{123}{figure.caption.30}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {p0 core 0.}}}{123}{subfigure.5.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {p0 core 1.}}}{123}{subfigure.5.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {p0 core 2.}}}{123}{subfigure.5.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {p0 core 3.}}}{123}{subfigure.5.4}
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {p0 core 4.}}}{123}{subfigure.5.5}
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {p0 core 5.}}}{123}{subfigure.5.6}
+\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {p0 core 6.}}}{123}{subfigure.5.7}
+\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {p0 core 7.}}}{123}{subfigure.5.8}
+\contentsline {subfigure}{\numberline {(i)}{\ignorespaces {p1 core 0.}}}{123}{subfigure.5.9}
+\contentsline {subfigure}{\numberline {(j)}{\ignorespaces {p1 core 1.}}}{123}{subfigure.5.10}
+\contentsline {subfigure}{\numberline {(k)}{\ignorespaces {p1 Core 2.}}}{123}{subfigure.5.11}
+\contentsline {subfigure}{\numberline {(l)}{\ignorespaces {p1 Core 3.}}}{123}{subfigure.5.12}
+\contentsline {subfigure}{\numberline {(m)}{\ignorespaces {p1 Core 4.}}}{123}{subfigure.5.13}
+\contentsline {subfigure}{\numberline {(n)}{\ignorespaces {p1 Core 5.}}}{123}{subfigure.5.14}
+\contentsline {subfigure}{\numberline {(o)}{\ignorespaces {p1 Core 6.}}}{123}{subfigure.5.15}
+\contentsline {subfigure}{\numberline {(p)}{\ignorespaces {p1 Core 7.}}}{123}{subfigure.5.16}
+\contentsline {figure}{\numberline {5.6}{\ignorespaces For 6 out of 16 cores, ATM configuration (i.e., CPM's inserted delay setting) needs to be rolled back from its idle limit in order for micro-benchmark (uBench) to run successfully. The FP (\texttt {daxpy}), MEM (\texttt {stream}), and INT (\texttt {coremark}) uBench have similar distribution of their pass config, indicating the core's mismatch between its reconfigured CPM timing measurement and its actual circuit speed. The other 10 cores not shown can run uBench safely at their idle limits.\relax }}{124}{figure.caption.32}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {p0 core3, \texttt {daxpy}}}}{124}{subfigure.6.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {p0 core4, \texttt {daxpy}}}}{124}{subfigure.6.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {p1 core3, \texttt {stream}}}}{124}{subfigure.6.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {p1 core4, \texttt {stream}}}}{124}{subfigure.6.4}
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {p1 core5, \texttt {coremark}}}}{124}{subfigure.6.5}
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {p1 core7, \texttt {coremark}}}}{124}{subfigure.6.6}
+\contentsline {figure}{\numberline {5.7}{\ignorespaces \texttt {x264} stresses ATM more heavily and needs a more conservative CPM configuration compared to \texttt {gcc}, as indicated by the larger CPM rollback that is required for \texttt {x264} over \texttt {gcc}.\relax }}{124}{figure.caption.33}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {P0C3}}}{124}{subfigure.7.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {P1C6}}}{124}{subfigure.7.2}
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Application's average CPM delay rollback from the core's uBench limit. The top workloads stress ATM heavily and need more delay rollback for less aggressive margin reclamation.\relax }}{125}{figure.caption.35}
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Aggressive ATM customization expose wide frequency variation, causing performance unpredictability.\relax }}{125}{figure.caption.36}
+\contentsline {figure}{\numberline {5.10}{\ignorespaces After ATM customization, core frequency can be predicted with a fitted linear model, following Equation.~\ref {eq:freq-pred}.\relax }}{125}{figure.caption.36}
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Single-thread application performance can be predicted linearly using core frequency.\relax }}{125}{figure.caption.36}
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Aggressively configured ATM cores exhibit different CPM rollback steps and frequencies when running realistic workloads.\relax }}{126}{figure.caption.37}
+\contentsline {figure}{\numberline {5.13}{\ignorespaces Managing a customized ATM system needs to integrate the per-app performance predictor and per-core frequency predictor, so that \texttt {critical} application performance can be satifised by using faster cores and maintaining an estimated chip power budget.\relax }}{126}{figure.caption.38}
+\contentsline {figure}{\numberline {5.14}{\ignorespaces \texttt {Critical} application performance co-located with \texttt {background} workloads under different settings, shown as $<\tmspace -\thinmuskip {.1667em}critical:background\tmspace -\thinmuskip {.1667em}>$ pairs. Aggressively customized ATM, together with low-power co-running \texttt {background} workloads, boosts performance by 15.4\% on average. With proper management, a 10\% performance improvement goal is guaranteed for \texttt {critical workloads} by throttling co-runner's core frequency to main total chip power below budget.\relax }}{127}{figure.caption.40}
 \addvspace {10pt}
