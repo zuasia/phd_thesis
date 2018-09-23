@@ -21,16 +21,8 @@ By design, a chip's ATM implementation is usually programmable for post-silicon 
 
 Inspired by the benefits shown in~\Fig{fig:motivate-latency}, we set out to systematically customize each core's \emph{Active Timing Margin}, with the goal of extracting useful insights on ATM operation that will guide overall system level performance and power management. Although our work is conducted on an IBM POWER7+ server, the insights we gathered apply to other ATM systems as the knobs we instrument exist for all ATM implementations.
 
-
-\begin{figure}[t!]
-  \centering
-  \includegraphics[trim=20 80 20 80,clip,width=\linewidth]{graphs/process//atm-loop.pdf}
-  \caption{In POWER7+, Critical Path Monitor (CPM), Digital Phase Locked Loop (DPLL), and off-chip voltage controller work synergistically to let ATM provide just enough margin~\cite{lefurgy2013active}.}
-  \label{fig:active-margin-loop}
-\end{figure}
-
-\section{Active Timing Margin in POWER7+}
-\label{sec:process:setup}
+\section{Customizing Active Timing \\Margin Operation}
+\label{sec:process:configurability}
 
 \begin{figure}[t]
     \subfloat[CPM structure: programming the inserted delay sets the margin sensed by the inverter chain.] {
@@ -47,36 +39,7 @@ Inspired by the benefits shown in~\Fig{fig:motivate-latency}, we set out to syst
     \caption{CPM's inserted delay can be set by programming the number of inverters used~\cite{drake2007distributed, drake2013single}. Reducing the added delay makes the CPM count more time margin after a signal travels through the synthetic path which simulates real circuit toggling. The DPLL then increases frequency to harvest the excess margin reported by CPM's inverter chain.}
 \end{figure}
 
-%Traditionally, all processors are designed with a static timing margin that ensures correct execution under exceptional circumstances, such as big $di/dt$ events or extreme temperature, that significantly slow down circuits~\cite{zu2016tistate, papadimitriou2017harnessing}. The static margin is a fixed time buffer which ensures that, even under worst-case conditions, the signals still propagate by the end of each clock cycle. However, exceptional events occur very rarely~\cite{reddi2009voltage}, wasting the margin most of the time~\cite{powell2003pipeline}.
-
-All processors are designed with a mechanism that ensures correct execution under exceptional circumstances, such as big $di/dt$ events or extreme temperature conditions that significantly slow down circuits~\cite{papadimitriou2017harnessing,tschanz2007adaptive,zu2016tistate}. The traditional \emph{static timing margin} approach adds a fixed time buffer implemented as a higher voltage which ensures that, even under exceptional cases, the signals still propagate by the end of each clock cycle. However, exceptional events occur very rarely~\cite{reddi2009voltage}, making static margin unnecessary most of the time~\cite{powell2003pipeline}. Consequently, the excess voltage is usually wasted.
-
-%All processors are designed with a timing margin that ensures correct execution even under exceptional circumstances, such as big $di/dt$ events or severe temperature hotspots~\cite{powell2003pipeline, reddi2010voltage, miller2012vrsync, zu2016tistate}. Each of these events cuts into the delay of the chip's transistors, threatening to prevent signals from fully propagating before the end of a clock cycle; the timing margin is a buffer of extra time implemented as higher voltage which ensures that, even in the presence of an exceptional timing event, the signals will still propagate by the end of each clock cycle. In a chip with static timing margin, the margin is unnecessary most of the time: signals arrive at their destinations well in advance of the next clock signal because the exceptional event occurs very rarely~\cite{reddi2009voltage}. Consequently, the excess voltage is usually wasted.
-
-Active Timing Margin adapts the timing margin dynamically to meet the needs of the chip environment~\cite{lefurgy2011active, tokunaga20145, bowman20158, vezyrtzis2018droop, zu2016tistate}. The buffered voltage in a static margin is converted to either power savings (a lower voltage) or performance enhancements (a higher frequency).
-
-For our study of ATM, we use a two-socket POWER7+ server with ATM support. Each processor features eight out-of-order cores. The server runs Redhat 6.4 operating system, and all workloads are compiled with GCC 4.8.5. The POWER7+ supports efficiency management both in coarse-grained dynamic voltage and frequency scaling (DVFS), which adjusts p-states from 2.1~GHz to 4.2~GHz in 28~MHz steps by controlling $V_{dd}$ with a static timing margin, and in fine-grained ATM that further tunes $V_{dd}$ and frequency around each p-state.
-Each processor features eight out-of-order cores with four-way simultaneous multi-threading (SMT) for 64 logical cores. In this paper, we conduct our study on both processors to sweep more cores and identify trends across different chips. 
-
-Like other ATM processors, POWER7+'s ATM consists of three parts: (1)~the timing margin sensor, (2)~the adaptive frequency control loop, and (3)~the overclocking/undervolting policy controller, as depicted in \Fig{fig:active-margin-loop}.
-
-\textbf{Timing Margin Sensor} is the foundation of ATM. It monitors the excess timing margin either by directly measuring the available slack in a clock cycle~\cite{drake2007distributed} or by measuring circuit delay time~\cite{grenat20145}. It typically outputs integer measurements every cycle to provide real-time chip monitoring. In practice, a set of timing margin sensors are usually dispersed across the chip to capture spatial variation of different parasitic effects, such as temperature variation or core-focused $di/dt$ effect.
-
-In the POWER7+, the timing margin sensor is implemented as a Critical Path Monitor (CPM). A CPM mimics real circuit delay with a set of synthetic paths and monitors the timing slack after the synthetic paths complete execution. There are five CPMs in each core, integrated inside the instruction fetch unit, instruction scheduling unit, fixed point unit, floating point unit, and last level cache as shown in \Fig{fig:active-margin-loop}. The worst of the five CPM measurements is reported every cycle.
-
-
-\textbf{Adaptive Frequency Control Loop} is a hardware loop that operates between the timing margin sensor and an agile clock generator. Each cycle, the measured timing margin is sent to the clock generator, which compares the margin against a preset threshold and adjusts the clock frequency at very fast and short intervals.
-
-An emergency timing event, such as a fast-occurring $di/dt$ effect, can drive the margin lower than the preset threshold (a timing margin violation). In response, the clock generator compensates by gating the clock for one cycle or---for a lower penalty---by reducing the clock frequency. The round trip time of the feedback loop must be less than several cycles to deal with fast occurring voltage noise~\cite{vezyrtzis2018droop}. Under typical conditions, the measured margin is far higher than the threshold.
-
-To allow room for flexibility and maximizing effectiveness, the POWER7+ features a control loop for every core. It uses a digital phase-locked loop (DPLL) designed to quickly slew frequency at a fine granularity, enabling timely feedback~\cite{tierno2010dpll,lefurgy2011active}.
-
-\textbf{Off-chip Voltage Control} determines whether to turn ATM's reclaimed margin into power savings via undervolting or into higher performance via overclocking based on user preferences. Often the goal is to reach a certain frequency target and convert the remaining timing margin into power savings. The POWER7+ off-chip controller reads a 32~ms sliding window average frequency of the slowest core of a chip and decides how much $V_{dd}$ can be reduced for the entire chip without hampering the user-specified frequency target.
-
 In our study, we convert all of ATM's reclaimed timing margin into frequency and keep $V_{dd}$ unchanged. This process bypasses the restriction on undervolting wherein a chip's worst-case core limits the amount of undervolting. Overclocking allows each core to independently adapt to its conditions and can fully expose a chip's inter-core speed differential, potentially producing more performance benefit. We let ATM boost each core's frequency at $V_{dd}$ 1.25~V, the 4.2~GHz P-state.
-
-\section{Customizing Active Timing \\Margin Operation}
-\label{sec:process:configurability}
 
 We explain how to customize a multicore's ATM operation to be more aggressive, which extracts more timing margin and increases frequency. Reconfiguring ATM's control loop to its operation limit is unexplored before, thus we propose a systematic procedure to characterize how the processor behaves under different scenarios and timing margin reclamation levels. The insights we gain when executing this procedure is instrumental for deploying customized ATM systems in production.
 

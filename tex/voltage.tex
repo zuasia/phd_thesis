@@ -1,56 +1,54 @@
 %!TEX root=../paper.tex
 
-\chapter{Architecture and Scheduling Optimization for Active Timing Margin of Voltage Variation}
+\chapter{Voltage Noise-aware Scheduling for Power Reduction on Adaptive Clocking Multi-socket Systems}
+
 \label{sec:voltage}
 
-In addition to temperature variation, voltage variation poses unique challenges to active management of processor timing margin. Timing margin must ensure operating reliability under the worst-case, lowest voltage level delivered to transistors, taking into various effects including high loadline, fast $di/dt$ droops, as well as IR drop across the power delivery network (PDN).
+Unlike temperature variation, pipeline circuit's timing uncertainty caused by voltage variation/noise typically happens very fast, at the order of tens of cycles, and have large magnitude, reaching over 10\% of total supply voltage under worst cases, i.e., the $di/dt$ effects~\cite{reddi2010voltage}. Other effects that make supply voltage deviate from standard also contribute to timing margin, such as the IR drop across the power delivery network (PDN).
 
-In recent years, many hardware techniques have been proposed to  address the high amount of static margin allocated for voltage variation~\cite{kurd2008next,lefurgy2011active,bowman201222nm,grenat20145,tokunaga20145,bowman20158}. These active timing margin solutions schemes aim at reducing the total margin in an agile way to improve system efficiency while still ensuring processor reliability. In this thesis, we present a detailed, full-system characterization of these active timing margin hardware designed specifically for tolerating voltage variation. 
+To safely combat voltage noise while successfully reducing margin, active timing margin that dynamically provisions timing margin in response to the degree of voltage noise must act very promptly. A hardware centric active timing margin solution is a natural fit for this problem, as is the practice in many recent chips~\cite{kurd2008next,lefurgy2011active,bowman201222nm,grenat20145,tokunaga20145,bowman20158}. These chips often feature \textit{Adaptive Clocking}, or \textit{Adaptive Instruction Throttling}~\cite{webel2015robust} techniques, where core frequency, or core front-end instruction issue rate is adaptively lowered when a low voltage is detected by sensors. The response time of the control loop is at the level of several cycles, guaranteeing time margin safety.
 
-Using measurements and running real-world workloads, we study the factors that affect these active timing margin processors' behavior. Using a fully built production POWER7+ system, we systematically characterize the benefits and limitations of active timing margin in terms of multicore scaling and workload heterogeneity. In our analysis, we cover both active timing margin's undervolting and overclocking modes to fully characterize the system effects under different usage scenarios. 
+In this dissertation, we make a detailed, full-system analysis of these adaptive clocking style, active timing margin hardware designed specifically for tolerating voltage noise. Using measurements and running real-world workloads, we study the factors that affect these processors' behavior. Using a fully built production POWER7+ system, we systematically characterize the benefits and limitations of active timing margin in terms of multicore scaling and workload heterogeneity. In our analysis, we cover both active timing margin's undervolting and overclocking modes to fully characterize the system effects under different usage scenarios. 
 
 We find when only one core is active, the current hardware active timing margin schemes can efficiently turn the underutilized timing margin into significant power and performance benefits while tolerating voltage swings. However, as more cores are progressively utilized by a multithreaded application, the benefits of active margin begin to diminish in both power and performance improvements. Using POWER7+'s sensor-rich features, we systematically characterize and decompose the on-chip voltage drop that affects the active timing margin's efficiency into its different components, and analyze the root cause of the problem. Under heavy load, the IR drop across the chip and the voltage regulator module's (VRM) loadline effect limit active timing margin's ability to the point of almost no benefit. 
 
-The magnitude of the efficiency drop aforementioned, however, varies significantly from one workload to another. Thus, given the workload sensitivity of hardware active timing margin techniques, and the long-term nature of the observed effects, we introduce the notion of \emph{adaptive margin scheduling (AMS)}. The intent behind AMS is to compensate for active margin's inefficiencies in system software. The remainder of this section is structured as follows: \Sec{sec:voltage:background} provides background for the POWER7+ architecture and its implementation of active timing margin for voltage variation. \Sec{sec:voltage:characterization} characterizes active margin's limitations when scaling up the number of active cores under different workload scenarios. \Sec{sec:voltage:rootcause} analyzes the root cause of active margin's behavior as seen in the previous section. \Sec{sec:voltage:opt} proposes active timing margining scheduling to improve POWER7+'s efficiency when the load is light versus heavy. \Sec{sec:voltage:related} compares our work with prior work.
+The magnitude of the efficiency drop aforementioned, however, varies significantly from one workload to another. Thus, given the workload sensitivity of hardware active timing margin techniques, and the long-term nature of the observed effects, we introduce the notion of voltage noise-awre scheduling. The intent behind our scheduling proposal is to compensate for active margin's inefficiencies in system software. The remainder of this section is structured as follows: \Sec{sec:voltage:background} provides background for the POWER7+ architecture and its implementation of active timing margin for voltage variation. \Sec{sec:voltage:characterization} characterizes active margin's limitations when scaling up the number of active cores under different workload scenarios. \Sec{sec:voltage:rootcause} analyzes the root cause of active margin's behavior as seen in the previous section. \Sec{sec:voltage:opt} proposes active timing margining scheduling to improve POWER7+'s efficiency when the load is light versus heavy. \Sec{sec:voltage:related} compares our work with prior work.
 
 \section{Active Timing Margin in the POWER7+ Multicore Processor}
 \label{sec:voltage:background}
 
-\TODO{to be merged with the next chapter}
+The POWER7+ is an eight-core out-of-order processor manufactured on a 32-nm process. It supports 4-way simultaneous multithreading, allowing a total of 32 threads to execute simultaneously on the system~\cite{manousopoulos2012characterizing}. The server runs Redhat 6.4 operating system, and all workloads are compiled with GCC 4.8.5.
 
-The POWER7+ is an eight-core out-of-order processor manufactured on a 32-nm process. It supports 4-way simultaneous multithreading, allowing a total of 32 threads to execute simultaneously on the system~\cite{manousopoulos2012characterizing}.
+A POWER7+ processor has two main power domains, each with its own on-chip power delivery network (PDN). The V$_{dd}$ domain is dedicated to the logic circuits in the core and caches, and the V$_{cs}$ domain is dedicated for the on-chip storage structures~\cite{zyuban2013ibm,barth201045nm}. The PDNs are shared among all eight cores to reduce voltage noise~\cite{james2007comparison}. In our study, we primarily focus on voltage noise and power under the logic circuit's power domain as it is the main power consumer.
 
-A POWER7+ processor has two main power domains, each with its own on-chip power delivery network (PDN). The V$_{dd}$ domain is dedicated to the logic circuits in the core and caches, and the V$_{cs}$ domain is dedicated for the on-chip storage structures~\cite{zyuban2013ibm,barth201045nm}. The PDNs are shared among all eight cores to reduce voltage noise~\cite{james2007comparison}. In our study, we primarily focus on voltage variation over the logic circuits's power domain as it is the main power consumer.
+The processor supports both coarse-grained and fine-grained power management. Coarse-grained power management includes per-core power gating to reduce idle power consumption, and dynamic and voltage frequency scaling (DVFS) which adjusts p-states from 2.1~GHz to 4.2~GHz in 28~MHz steps by controlling $V_{dd}$ with a static timing margin. Fine-grained power management is the active timing margin that further tunes $V_{dd}$ and frequency around each p-state.
 
-The processor supports both coarse-grained and fine-grained power management. Coarse-grained power management includes per-core power gating to reduce idle power consumption. Fine-grained power management is the active timing margin. In our later AMS optimization, we combine these two schemes to enhance the processor's overall efficiency.
+\begin{figure}[t]
+  \centering
+  \includegraphics[trim=20 80 20 80,clip,width=0.8\linewidth]{graphs/process//atm-loop.pdf}
+  \caption{In POWER7+, Critical Path Monitor (CPM), Digital Phase Locked Loop (DPLL), and off-chip voltage controller work synergistically to let active timing margin provide just enough margin~\cite{lefurgy2013active}.}
+  \label{fig:active-margin-loop}
+\end{figure}
 
-POWER7+ uses active timing to prevent circuit timing emergencies~\cite{lefurgy2011active,lefurgy2013active,floyd2013runtime}. Although the implementation of active timing margin for voltage variation can vary from one platform to another~\cite{fischer200590nm,tschanz2007adaptive,kurd2008next,lefurgy2011active,bowman201222nm,grenat20145,tokunaga20145,bowman20158}, the general building blocks and principles largely remain the same. 
-In POWER7+, clock cycle time is variable and actively tracks circuit speed from cycle to cycle. In the event of a voltage droop, the processor slows down the cycle time to allow circuit operation to complete. Because voltage droops occur rarely, during normal operation the active timing margin mechanism eliminates a significant portion of the timing slack.
+POWER7+'s active timing margin features adaptive clocking to tolerate circuit timing emergencies caused by $di/dt$ effects~\cite{lefurgy2011active,lefurgy2013active,floyd2013runtime}. Although the implementation of active timing margin for voltage noise can vary from one platform to another~\cite{fischer200590nm,tschanz2007adaptive,kurd2008next,lefurgy2011active,bowman201222nm,grenat20145,tokunaga20145,bowman20158}, the general building blocks and principles largely remain the same, and consists of three parts: (1)~the timing margin sensor~\cite{drake2007distributed,drake2013single}, (2)~the adaptive frequency control loop~\cite{tierno2010dpll}, and (3)~the overclocking/undervolting policy controller, as depicted in \Fig{fig:active-margin-loop}.
+
+\textbf{Timing Margin Sensor} is the basis of adaptive clocking by monitoring the excess timing margin and driving frequency adjustment. In the POWER7+, the timing margin sensor is implemented as a Critical Path Monitor (CPM). A CPM mimics real circuit delay with a set of synthetic paths and monitors the timing slack after the synthetic paths complete execution. On each cycle, a signal is launched through the synthetic paths and into an inverter chain, similar to the Power Supply Monitor described in~\Sec{sec:temperature:setup:psm}. When the next cycle arrives, the number of inverters the edge has propagated through in the edge detector corresponds to the CPM output, ranging from digital value 0--11 which corresponds to the position of the edge in the inverter chain and directly tells how much margin is available.
 
 \begin{figure*}[t]
 \centering
-\subfloat[Control loop overview.] {
-   \includegraphics[trim=0 250 0 260,clip,width=.625\linewidth]{graphs/voltage/control-loop.pdf}
-   \label{fig:control-loop} 
-}
-\subfloat[CPM behavior.] {
-   \includegraphics[trim=0 20 0 20,clip,width=.385\linewidth]{graphs/voltage/CPM-structure.pdf}
-   \label{fig:cpm_internal} 
-}
-\caption{Interactions among CPMs, DPLLs, and VRMs to guarantee reliability and improve efficiency in POWER7+. CPM measures the timing margin and the controller adjusts voltage and frequency accordingly.}
+   \includegraphics[trim=0 250 0 260,clip,width=.8\linewidth]{graphs/voltage/control-loop.pdf}
+   \label{fig:spatial-noise} 
+
+\caption{Critical path monitors (CPMs) are distributed across the chip to measure spatially variant timing margin consumption, caused by local voltage noise and other system effects.}
 \end{figure*}
 
-\Fig{fig:control-loop} shows an overview of the feedback loop for active timing margin control. The system relies on three key components: (1) critical path monitor (CPM) sensors to sense timing margin~\cite{drake2007distributed,drake2013single}; (2) digital phase locked loops (DPLLs) to quickly and independently adjust clock frequency per core based on CPM readings~\cite{tierno2010dpll}; and (3) hardware and firmware controllers that decide when and how to leverage the benefits from a tighter timing margin.
+Because voltage noise, and other effects that cause timing variation has spatial characteristics as illustrated in~\cite{fig:spatial-noise}, POWER7+ allocate 40 CPMs distributed across the chip to provide chip-wide, cycle-by-cycle timing margin measurement. Each core has five CPMs, integrated inside the instruction fetch unit, instruction scheduling unit, fixed point unit, floating point unit, and last level cache as shown in \Fig{fig:active-margin-loop}. The worst of the five CPM measurements is reported every cycle.
 
-POWER7+ has 40 CPMs distributed across the chip to provide chip-wide, cycle-by-cycle timing margin measurement. Each core has 5 CPMs placed in different units to account for core-level spatial variations in voltage noise and critical path sensitivity. Detailed characterization of CPM placement, calibration, and sensitivity is provided in~\cite{floyd2013runtime}.
+\textbf{Adaptive Frequency Control Loop} is a hardware loop that operates between the timing margin sensor and an agile clock generator. Each cycle, the measured timing margin is sent to the clock generator, which compares the margin against a preset threshold and adjusts the clock frequency at very fast and short intervals.
 
-A CPM uses synthetic paths to mimic different logical circuits' behavior and a 12-bit edge detector to quantify the amount of timing margin left. \Fig{fig:cpm_internal} illustrates the CPM's internal structure. On each cycle, a signal is launched through the synthetic paths and into the edge detector. When the next cycle arrives, the number of delay elements the edge has propagated through in the edge detector corresponds to the CPM output. A CPM outputs an integer index from 0--11, which corresponds to the position of the edge in the edge detector.
+In POWER7+, the per-core DPLL frequency control lets the processor tolerate transient voltage droops by reducing clock frequency for each core with no impact on other cores. The DPLLs can rapidly adjust frequency, as fast as 7\% in less than 10 ns~\cite{vezyrtzis2018droop}, while the clock is still active; thus, the processor can tolerate transient voltage droops. Every cycle, the lowest-value CPM in each core is compared against the calibration position. In response, the DPLL will slew the clock frequency up or down to control the timing margin to the calibrated amount. 
 
-In the POWER7+ processor, during chip testing the different CPMs are calibrated to output a target value.  When the output is less (toward zero), the timing margin has been reduced from the calibrated point. Likewise, when the output is more (toward 11), the available timing margin has increased.
-
-Per-core DPLL frequency control lets the processor tolerate transient voltage droops by reducing clock frequency for each core with no impact on other cores. The DPLLs can rapidly adjust frequency, as fast as 7\% in less than 10 ns, while the clock is still active; thus, the processor can tolerate transient voltage droops. Every cycle, the lowest-value CPM in each core is compared against the calibration position. In response, the DPLL will slew the clock frequency up or down to control the timing margin to the calibrated amount. 
-
-POWER7+ supports two modes to convert the excess timing margin into either a performance increase by overclocking or power reduction by undervolting. In the overclocking mode, the CPM and DPLL hardware form a closed-loop controller. At the fixed nominal voltage, the DPLL continuously adjusts frequency on the basis of the CPM's timing sense to operate at the calibrated timing margin. Under light loads, clock frequency can be boosted by as much as 10\% compared to when active timing margining is off. In the undervolting mode, the firmware observes CPM-DPLL's frequency and over a longer term (32ms) adjusts voltage to make clock frequency hits the target. In this case, the performance benefit from the CPM-DPLL can be turned into an energy-saving benefit.
+\textbf{Off-chip Voltage Control} determines whether to turn the reclaimed timing margin into power savings via undervolting or into higher performance via overclocking based on user preferences. Often the goal is to reach a certain frequency target and convert the remaining timing margin into power savings. In the overclocking mode, the CPM and DPLL hardware form a closed-loop controller. At the fixed nominal voltage, the DPLL continuously adjusts frequency on the basis of the CPM's timing sense to operate at the calibrated timing margin. In the undervolting mode, the firmware observes CPM-DPLL's frequency and over a longer term (32ms) adjusts voltage to make clock frequency hits the target. In this chapter we investigate optimizing power in the undervolting mode, while in~\Sec{sec:process} we discuss performance management issues in the overclocking mode
 
 \section{Efficiency Analysis of Active Timing Margin on Multicore}
 \label{sec:voltage:characterization}
@@ -75,11 +73,11 @@ Using \benchmark{raytrace} from PARSEC (as an example), we show active timing ma
 \begin{figure}[t]
 	\centering
     \subfloat[Power saving.] {
-      \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/raytrace_pwr.pdf}
+      \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/raytrace_pwr.pdf}
       \label{fig:raytrace-ineff_pwr} 
     }
     \subfloat[Energy reduction.] {
-       \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/raytrace_edp.pdf}
+       \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/raytrace_edp.pdf}
        \label{fig:raytrace-ineff_edp} 
     }
     \caption{Active timing margin can save power effectively. However, the benefits decrease as more cores are used to actively run the application.}
@@ -97,7 +95,7 @@ Our observations hold true for frequency-boosting as well. Active timing margin'
 \begin{figure}
 %\vspace*{-.15in}
 \centering
-    \subfloat[Frequency-boosting mode.] {
+    \subfloat[Overclocking mode.] {
         \includegraphics[trim=0 45 65 35,clip,width=.38\linewidth]{graphs/voltage/lucb_freq.pdf}
         \label{fig:lucb-ineff_freq} 
       }
@@ -123,11 +121,11 @@ From \Fig{fig:pwrvariation} and \Fig{fig:freqvariation}, we draw four conclusion
 \begin{figure}[t]
 \vspace*{-.15in}
 \centering
-  \subfloat[Power-saving mode.] {
+  \subfloat[Undervolting mode.] {
     \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/power_saving_variation.pdf}
     \label{fig:pwrvariation} 
   }
-  \subfloat[Frequency-boosting mode.] {
+  \subfloat[Overclocking mode.] {
     \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/freq_saving_variation.pdf}
     \label{fig:freqvariation} 
   }
@@ -152,20 +150,6 @@ In this section, we analyze the root cause of active timing margin's inefficienc
 \subsection{Measuring the On-chip Voltage Drop}
 \label{sec:voltage:rootcause:cpm-measurement}
 
-\begin{figure*}[t]
-\centering
-  \subfloat[Mapping between on-chip voltage and CPM values.] {
-      \includegraphics[trim=25 0 25 0,clip,width=0.425\linewidth]{graphs/voltage/cpm2volt.pdf}
-      \label{fig:cpm2volt} 
-  }
-  \subfloat[The CPMs' sensitivity toward supply voltage in each core.] {
-      \includegraphics[trim=5 0 10 0,clip,width=0.575\linewidth]{graphs/voltage/cpm_process_variation.pdf}
-      \label{fig:cpmsensitivity} 
-  }
-\caption{CPMs can sense the chip supply voltage with a precision of about 21mV per CPM bit at peak frequency.}
-\label{fig:cpm-analysis}
-\end{figure*}
-
 We developed a novel approach to capture and characterize active timing margin's behavior using CPMs. We use CPM output to capture the on-chip voltage drop that affects the timing margin, which in turn affects the active timing margin's efficiency. In effect, we use CPMs as ``performance counters'' to estimate on-chip voltage, similar to how performance counters were first shown to be useful for predicting power consumption~\cite{isci2003runtime,huang2012accurate}.
 
 Because timing margin is determined by on-chip voltage, capturing the CPM's output would reflect the transient voltage drops between the VRM output and on-chip voltage. Low on-chip voltage leads to less time for the CPM's synthetic-path edge to propagate through the inverter chain, and thus the CPM will yield a low output value. Under high on-chip voltage, the circuit runs faster, and the CPM yields a higher output.
@@ -174,31 +158,23 @@ To read the CPMs, we disable active timing margin because it dynamically adjusts
 
 We use the IBM Automated Measurement of Systems for Temperature and Energy Reporting software (AMESTER)~\cite{floyd2011introducing} to read the CPMs' output. We record CPM readings under different on-chip voltage levels to determine how CPM responds to different on-chip voltage. AMESTER reads the CPMs at the minimal sampling interval of 32ms, which is restricted by the service processor. AMESTER can read the CPMs in either {\it sticky mode} or {\it sample mode}. In sticky mode, AMESTER reads the worst-case, i.e. smallest, output of each CPM during the past 32 ms, which is useful for quantifying worst-case droops. In sample mode, AMESTER provides a real-time sample of each CPM, which is useful for characterizing normal operation.
 
-We use CPMs in sample mode to convert their output into on-chip voltage. To minimize experimental variability, we let the operating system run and throttle each core to fetch one instruction every 128 cycles. \Fig{fig:cpm-analysis} shows the mapping between CPM output and on-chip voltage. In~\Fig{fig:cpm2volt}, we sweep the voltage range for all possible clock frequencies and look at the average output of all 40 CPMs over 12,500 samples, which corresponds to about 1 minute of measurement. Each line corresponds to one frequency setting, and the system default voltage levels at DVFS operating points are highlighted with the marked line. Starting from 2.8~GHz, each diagonal line, as we move to the right, corresponds to a 28 MHz increase in frequency. The rightmost line corresponds to the peak frequency of 4.2~GHz. For any one frequency, the CPM value gets smaller as we lower the voltage, confirming the expected behavior that smaller voltages correspond to less timing margin. Also, for a fixed voltage ($x$-axis), higher frequency yields smaller CPM values ($y$-axis) because of less cycle time and a tighter timing margin. 
+We use CPMs in sample mode to convert their output into on-chip voltage. To minimize experimental variability, we let the operating system run and throttle each core to fetch one instruction every 128 cycles. \Fig{fig:cpm2volt} shows the mapping between CPM output and on-chip voltage. We sweep the voltage range for all possible clock frequencies and look at the average output of all 40 CPMs over 12,500 samples, which corresponds to about 1 minute of measurement. Each line corresponds to one frequency setting, and the system default voltage levels at DVFS operating points are highlighted with the marked line. Starting from 2.8~GHz, each diagonal line, as we move to the right, corresponds to a 28 MHz increase in frequency. The rightmost line corresponds to the peak frequency of 4.2~GHz. For any one frequency, the CPM value gets smaller as we lower the voltage, confirming the expected behavior that smaller voltages correspond to less timing margin. Also, for a fixed voltage ($x$-axis), higher frequency yields smaller CPM values ($y$-axis) because of less cycle time and a tighter timing margin. 
 
-\begin{figure*}[t]
-  \centering
-  \hspace{-0.5cm}
-  \begin{minipage}{0.5\linewidth}
-    \centering
-    \includegraphics[trim=0 0 0 0,clip,height=1.5in]{graphs/voltage/cpm_scale_variation.pdf}
-    \captionsetup{width=0.95\textwidth}
-    \vspace{-0.2cm}
-    \caption{On-chip voltage drop analysis across cores under different workloads.}
-  \label{fig:cpm-variation} 
-  \end{minipage}
-\hspace{0cm}
-  \begin{minipage}{0.47\linewidth}
-    \centering
-    \includegraphics[trim=0 0 0 0,clip,height=1.5in]{graphs/voltage/noise_components.pdf}
-    \captionsetup{width=0.95\textwidth}
-    \vspace{-0.3cm}
-    \caption{Voltage drop component analysis, including $di/dt$ droop, IR drop and the loadline effect.}
-    \label{fig:vnoise-component} 
-  \end{minipage}
-\end{figure*}
+\begin{figure}
+\centering
+      \includegraphics[trim=25 0 25 0,clip,width=0.75\linewidth]{graphs/voltage/cpm2volt.pdf}
+      \caption{Mapping between on-chip voltage and CPM values.}
+      \label{fig:cpm2volt} 
+\end{figure}
 
 \Fig{fig:cpm2volt} lets us establish a direct relationship between CPM and on-chip voltage. We observe a near-linear relationship between the two variables under each frequency. Therefore, with a linear fit, we can determine each CPM bit's significance. On average, one CPM output value corresponds to 21~mV of on-chip voltage. On this basis, we can estimate the magnitude of on-chip voltage drop during any 32~ms interval. For instance, if the measured CPM output drops from eight to four, the estimated on-chip voltage has dropped by 84~mV. 
+
+\begin{figure}
+\centering
+      \includegraphics[trim=5 0 10 0,clip,width=0.9\linewidth]{graphs/voltage/cpm_process_variation.pdf}
+      \caption{CPMs can sense the chip supply voltage with a precision of about 21mV per CPM bit at peak frequency.}
+      \label{fig:cpmsensitivity} 
+\end{figure}
 
 \Fig{fig:cpmsensitivity} shows the sensitivity of the CPMs within each processor core. Although we see a near-linear relationship between frequency and all the CPMs, there is variation among the CPMs in each core and between cores. For instance, CPMs in Core~2,~6,~7 have steadier sensitivity compared to Core~1,~3,~5. The latter have higher distribution across CPMs. We attribute this behavior to process variation and CPM calibration error, as explained by prior work~\cite{floyd2013runtime}.
 
@@ -207,66 +183,19 @@ To ensure the robustness of our measurement results, we considered both repeatab
 \subsection{On-chip Voltage Drop Analysis}
 \label{sec:voltage:rootcause:vdrop-analysis}
 
+\begin{figure}
+  \centering
+  \includegraphics[trim=0 0 0 0,clip,width=0.9\linewidth]{graphs/voltage/cpm_scale_variation.pdf}
+  \captionsetup{width=0.95\textwidth}
+  \caption{On-chip voltage drop analysis across cores under different workloads.}
+\label{fig:cpm-variation} 
+\end{figure}
+
 Using our on-chip voltage drop measurement setup, we quantify the magnitude of the on-chip voltage drop to explain the general core scaling trends seen in~\Sec{sec:characterization}. It is important to understand what factors, and more importantly how those factors, impact the efficiency of active timing margin as more cores are activated. 
 
 \Fig{fig:cpm-variation} shows the measured results for the voltage drop across different cores within the processor, ranging from Core~0 through Core~7. The cores are spatially located in the same order as they appear on the physical processor~\cite{zyuban2013ibm}. The $y$-axis is the percentage of on-chip voltage drop from the nominal. Given the magnitude of voltage drop and knowledge about the system's nominal operating voltage, we can determine the percentage change. The $x$-axis indicates the total number of simultaneously active cores, specifically as they are activated in succession from core 0 to 7. Keeping consistent with \Fig{fig:workloadvariation}, each line in the subplots corresponds to one workload from PARSEC and SPLASH-2. Each subplot shows a particular core's characteristics with respect to every other (active or inactive) core in the processor. 
 
 \Fig{fig:cpm-variation} lets us understand several important factors that affect active timing margin's efficiency. First, voltage drop increases as more cores are activated. For all workloads, voltage drop increases from about 2\% to 8\% as the number of active cores increases. The trend is similar to the diminishing benefits seen previously in the power and frequency improvement in \Fig{fig:workloadvariation}. As the magnitude of voltage drop increases, timing margin decreases and thus active timing margin's efficiency decreases at higher loads. 
-
-\begin{figure*}[t]
-     \subfloat[raytrace.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.2\linewidth]{graphs/voltage/current_raytrace.pdf}
-        \label{fig:raytrace_ir} 
-      }
-      \hspace*{-.1in}
-      \subfloat[barnes.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.2\linewidth]{graphs/voltage/current_barnes.pdf}
-        \label{fig:barnes_comp} 
-      }
-      \hspace*{-.1in}
-      \subfloat[blackscholes.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.2\linewidth]{graphs/voltage/current_blackscholes.pdf}
-        \label{fig:blackscholes_comp} 
-      }
-      \hspace*{-.1in}
-      \subfloat[bodytrack.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.2\linewidth]{graphs/voltage/current_bodytrack.pdf}
-        \label{fig:bodytrack_comp} 
-      }
-     \hspace*{-.1in}
-      \subfloat[ferret.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.2\linewidth]{graphs/voltage/current_ferret.pdf}
-        \label{fig:ferret_comp} 
-      }
-\vspace*{-.15in}
-      \hspace*{-.05in} 
-      \subfloat[lu\_ncb.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.2\linewidth]{graphs/voltage/current_lu_ncb.pdf}
-        \label{fig:lu_ncb_comp} 
-      }
-      \hspace*{-.1in} 
-      \subfloat[ocean\_cp.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.2\linewidth]{graphs/voltage/current_ocean_cp.pdf}
-        \label{fig:ocean_cp_comp} 
-      }
-      \hspace*{-.1in} 
-      \subfloat[swaptions.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.2\linewidth]{graphs/voltage/current_swaptions.pdf}
-        \label{fig:swaptions_comp} 
-      }
-      \hspace*{-.1in} 
-      \subfloat[vips.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.2\linewidth]{graphs/voltage/current_vips.pdf}
-        \label{fig:vips_comp} 
-      }
-      \hspace*{-.1in} 
-      \subfloat[water\_nsquared.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.2\linewidth]{graphs/voltage/current_water_nsquared.pdf}
-        \label{fig:water_nsquared_comp} 
-      }
-    \caption{Different components of on-chip voltage drop for some PARSEC and SPLASH-2 benchmarks. In general, as more of the processor's cores are activated, voltage drop increases by varying magnitudes across workloads.}
-    \label{fig:drop-components} 
-\end{figure*}
 
 Second, the increasing on-chip voltage drop trend manifests as chip-wide global behavior because voltage drop affects all cores at the same time, regardless of whether they are idling or actively running a workload. For instance, when cores on the upper row (Core~0 through Core~3) are actively running a workload, they experience voltage drop. Meanwhile, cores in the bottom row also experience voltage drop even though Core~4 through Core~7 are not running any workloads. 
 
@@ -281,37 +210,73 @@ Localized effects impact the operation of the per-core frequency-boosting mode. 
 \subsection{Decomposing the On-chip Voltage Drop}
 \label{sec:voltage:rootcause:vdrop-decompose}
 
+\begin{figure}
+  \centering
+  \includegraphics[trim=0 0 0 0,clip,width=0.9\linewidth]{graphs/voltage/noise_components.pdf}
+  \captionsetup{width=0.95\textwidth}
+  \caption{Voltage drop component analysis, including $di/dt$ droop, IR drop and the loadline effect.}
+  \label{fig:vnoise-component} 
+\end{figure}
+
 To understand how workload heterogeneity affects the power-saving and frequency-boosting modes when all cores are active, we must understand why the on-chip voltage drop varies significantly from one workload to another with an increasing number of cores. For example, in \Fig{fig:cpm-variation} \benchmark{lu\_cb}'s voltage drop increases more quickly compared to \benchmark{radix}, whose voltage drop does not change much as the number of active cores increases.  We decompose the on-chip voltage drop into its three primary components (see \Fig{fig:vnoise-component}): worst-case $di/dt$ noise, also called voltage droops due to sudden current surges caused by microarchitecture activities; typical-case $di/dt$ noise due to regular current ripples; and passive voltage drop due to IR drop across the PDN and the loadline effect~\cite{lefurgy2011active} at the VRM.
 
 We use a mixture of current sensing techniques and CPM measurements to decompose the voltage drop. To measure passive voltage drop (i.e., loadline effect + IR drop), we use VRM's current sensors. The IR drop and loadline effects are quantified using a heuristic equation verified against hardware measurements. The input to the equation is the current going from the VRM into the POWER7+ processor, sampled periodically.
 
 We use CPMs to calculate the magnitude of typical and worst-case voltage noise. To get the typical $di/dt$ value, we run the CPMs in sample mode to acquire an immediate CPM reading, and after converting the CPM output into voltage, we subtract the passive component from it. To get the worst-case $di/dt$ value, we run the CPMs in sticky mode to acquire the largest voltage droop seen in the past 32~ms and subtract it from the long-term average measured in sample mode. 
 
+\begin{figure}[t]
+\centering
+     \subfloat[raytrace.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.27\linewidth]{graphs/voltage/current_raytrace.pdf}
+        \label{fig:raytrace_ir} 
+      }
+      \hfill
+      \subfloat[blackscholes.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.27\linewidth]{graphs/voltage/current_blackscholes.pdf}
+        \label{fig:blackscholes_comp} 
+      }
+      \hfill
+      \subfloat[bodytrack.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.27\linewidth]{graphs/voltage/current_bodytrack.pdf}
+        \label{fig:bodytrack_comp} 
+      }
+
+      \subfloat[swaptions.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.27\linewidth]{graphs/voltage/current_swaptions.pdf}
+        \label{fig:swaptions_comp} 
+      }
+      \hfill
+      \subfloat[vips.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.27\linewidth]{graphs/voltage/current_vips.pdf}
+        \label{fig:vips_comp} 
+      }
+      \hfill
+      \subfloat[water\_nsquared.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.27\linewidth]{graphs/voltage/current_water_nsquared.pdf}
+        \label{fig:water_nsquared_comp} 
+      }
+
+      \subfloat[ferret.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.27\linewidth]{graphs/voltage/current_ferret.pdf}
+        \label{fig:ferret_comp} 
+      }
+      \hfill
+      \subfloat[lu\_ncb.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.27\linewidth]{graphs/voltage/current_lu_ncb.pdf}
+        \label{fig:lu_ncb_comp} 
+      }
+      \hfill
+      \subfloat[ocean\_cp.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.27\linewidth]{graphs/voltage/current_ocean_cp.pdf}
+        \label{fig:ocean_cp_comp} 
+      }
+    \caption{Different components of on-chip voltage drop for some PARSEC and SPLASH-2 benchmarks. In general, as more of the processor's cores are activated, voltage drop increases by varying magnitudes across workloads.}
+    \label{fig:drop-components} 
+\end{figure}
+
 We select several representative benchmarks from previously discussed data and decompose their on-chip voltage drop into $di/dt$ noise and passive drop in \Fig{fig:drop-components}. The subplots are in the form of a stacked area chart, showing the trend as more cores are progressively activated. Only Core~0 data simplifies the presentation of our analysis, although we have verified that the conclusions described in the following paragraphs hold true for the other cores as well.
 
 By analyzing the data, we conclude that passive voltage drop, including IR drop across PDN and VRM's loadline is the dominant factor contributing to increasing voltage drop. Intuitively, these two passive effects have the most direct influence over active timing margin's behavior because they always exist steadily during execution as compared to $di/dt$ noise.
-
-\begin{figure*}[t]
-\centering
-   \subfloat[] {
-    \includegraphics[trim=0 0 20 0,clip, height=1.25in]{graphs/voltage/pwr_loadline.pdf}
-    \label{fig:pwr-loadline} 
-  }
-  \subfloat[] {
-    \includegraphics[trim=0 0 -50 0,clip,height=1.25in]{graphs/voltage/loadline_vdd.pdf}
-    \label{fig:line-vdd} 
-  }
-  \subfloat[] {
-    \includegraphics[trim=0 0 20 0,clip,height=1.25in]{graphs/voltage/vdd_saving.pdf}
-    \label{fig:vdd-saving} 
-  }
-  \subfloat[] {
-    \includegraphics[trim=0 0 20 0,clip,height=1.25in]{graphs/voltage/loadline_freq.pdf}
-    \label{fig:line-freq} 
-  }
-  \caption{Power-intensive workloads induce large loadline and IR drop, which severely limits the active timing margin system's undervolting capability, and thus impacts the system's overall power-saving potential.}
-  \label{fig:ldir-proof}
-\end{figure*}
 
 As we scale the number of active cores, the worst-case $di/dt$ noise increases slightly across all of the benchmarks, and typical-case $di/dt$ noise decreases. For instance, the worst-case $di/dt$ noise growth is noticeable in \benchmark{bodytrack}, \benchmark{vips} and \benchmark{water\_nsquared}. When multiple cores are active simultaneously, they can have synchronous behavior, or random alignment, that can cause large and sudden current swings leading to voltage droops~\cite{reddi2010voltage,miller2012vrsync,kim2012audit}. However, our droop frequency analysis (not shown here) indicates that such large worst-case droops occur infrequently. On the contrary, typical-case $di/dt$ noise gets smaller when core count scales. With more active cores, microarchitectural activities stagger among different cores, which can lead to noise smoothing ~\cite{miller2012vrsync,reddi2010voltage}.
 
@@ -319,14 +284,37 @@ Compared to $di/dt$ noise, we find a clear scale-up trend of passive voltage dro
 
 Because active timing margin can deal with occasional $di/dt$ voltage droops by slowing down frequency quickly, the rare voltage drop caused by this effect does not strongly influence the power-saving and frequency-boosting capability of active timing margin, even though they consume a significant portion of the total voltage guardband. Thus, we believe passive voltage drop is the main source of impact to active timing margin's efficiency. 
 
+\begin{figure*}[t]
+\centering
+   \subfloat[] {
+    \includegraphics[trim=0 0 0 0,clip, width=.4\linewidth]{graphs/voltage/pwr_loadline.pdf}
+    \label{fig:pwr-loadline} 
+  }
+  \subfloat[] {
+    \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/loadline_vdd.pdf}
+    \label{fig:line-vdd} 
+  }
+
+  \subfloat[] {
+    \includegraphics[trim=0 0 0 0,clip, width=.4\linewidth]{graphs/voltage/vdd_saving.pdf}
+    \label{fig:vdd-saving} 
+  }
+  \subfloat[] {
+    \includegraphics[trim=0 0 0 0,clip, width=.4\linewidth]{graphs/voltage/loadline_freq.pdf}
+    \label{fig:line-freq} 
+  }
+  \caption{Power-intensive workloads induce large loadline and IR drop, which severely limits the active timing margin system's undervolting capability, and thus impacts the system's overall power-saving potential.}
+  \label{fig:ldir-proof}
+\end{figure*}
+
 We confirm that loadline and IR drop cause active timing margin's inefficiency at full load by quantifying the relationship between their voltage drop under static guardbanding with respect to the system's two optimization modes: power saving (i.e., undervolting) and frequency boosting (i.e., overclocking). \Fig{fig:ldir-proof} shows the causal relationship between workload power consumption, loadline and IR drop, and the active timing margin's two modes. To ensure we have enough data points, we consider 27 SPECrate workloads on top of the existing 17 PARSEC and SPLASH-2 workloads used before. Each point represents the data we experimentally measured for one benchmark.
 
 In~\Fig{fig:ldir-proof}, across all the subfigures, we see a strong correlation between passive voltage drop and the power-saving and frequency-boosting modes. \Fig{fig:pwr-loadline} shows a strong linear relationship between power and passive voltage drop. \Fig{fig:line-vdd} shows when a workload has a high loadline and IR drop, the voltage guardband is highly utilized, and so active timing margin has less room for undervolting. Thus, the voltage selected by active timing margin is higher. The result is fewer energy savings for high-power workloads, as the data in~\Fig{fig:vdd-saving} demonstrates. The same holds true for active timing margin's frequency-boosting mode. Here as well, a high loadline and IR drop reduce the timing margin; thus, the DPLL has limited room left to overclock the frequency as shown in \Fig{fig:line-freq}.
 
-\section{Architecture \/ Scheduling Optimization}
+\section{Voltage Noise-aware Scheduling}
 \label{sec:voltage:opt}
 
-We propose system-level scheduling techniques to improve the benefits of active timing margin. Our scheduler's overarching goal is to minimize the impact that loadline and IR drop have on an active timing margin processor's power and performance efficiency. We demonstrate \emph{active timing margin scheduling} (AMS) int \Sec{sec:voltage:opt:loadline}, and evaluates its effect in runtime power reduction in \Sec{sec:voltage:opt:result}
+We propose system-level scheduling techniques to improve the benefits of active timing margin. Our scheduler's overarching goal is to minimize the impact that loadline and IR drop have on an active timing margin processor's power and performance efficiency. We demonstrate voltage noise aware scheduling in \Sec{sec:voltage:opt:loadline}, and evaluates its effect in runtime power reduction in \Sec{sec:voltage:opt:result}
 
 In a multi-socket server, conventional wisdom says to consolidate workloads onto fewer processors so that the idle processor can be shut down to eliminate wasted power~\cite{murthy2013linux,lo2014towards,leverich2014reconciling}. However, this principle does not apply to servers with active timing margin and per-core power-gating capability. Our measured results show consolidation actually leads to higher power o these systems. We propose loadline borrowing to maximize active timing margin's power-saving benefits for the underlying processors. Compared to workload consolidation, loadline borrowing achieves up to 12\% power savings.
 
@@ -410,7 +398,7 @@ A handful of benchmarks fall into one of two extremes. On one extreme, some benc
 
 On the other extreme, some other benchmarks that are to the rightmost side on the $x$-axis, such as \benchmark{radix}, \benchmark{zeusmp}, \benchmark{lbm}, \benchmark{fft} and \benchmark{GemsFDTD}, experience large performance improvements from load balancing because there is less memory subsystem contention. This performance improvement increases chip activity that could sometimes lead to higher power consumption than the baseline system, such as in the case of \benchmark{radix} and \benchmark{fft}. Nonetheless, the improved performance brings about large energy reductions for these workloads, as the right \textit{y}-axis in~\Fig{fig:ll-borrow-8core-normal} shows. Improvements range between 50\% and 171\%.
 
-\subsection{Related Work}
+\section{Related Work}
 \label{sec:voltage:related}
 
 The $di/dt$ effect and its impact on reliability has been well noted~\cite{james2007comparison,reddi2010voltage,kim2012audit,bertran2014voltage}. A plethora of work aims at reducing inductive noise in microprocessors, ranging from the circuit~\cite{ernst2003razor,blaauw2008razorii}, architecture~\cite{grochowski2002microarchitectural,powell2003pipeline,gupta2007understanding,gupta2008decor,gupta2009event,reddi2009voltage,reddi2010voltage,miller2012vrsync,zhang2014architecture} and software~\cite{reddi2010eliminating}. These works usually require intrusive design changes to the hardware~\cite{ernst2003razor,blaauw2008razorii,gupta2008decor,reddi2009voltage} and rely on simulation, microarchitecture event detection and activity throttling~\cite{grochowski2002microarchitectural,powell2003pipeline,gupta2009event,reddi2009voltage,reddi2010eliminating,miller2012vrsync}.
