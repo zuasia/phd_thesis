@@ -169,12 +169,12 @@ We use CPMs in sample mode to convert their output into on-chip voltage. To mini
 
 \Fig{fig:cpm2volt} lets us establish a direct relationship between CPM and on-chip voltage. We observe a near-linear relationship between the two variables under each frequency. Therefore, with a linear fit, we can determine each CPM bit's significance. On average, one CPM output value corresponds to 21~mV of on-chip voltage. On this basis, we can estimate the magnitude of on-chip voltage drop during any 32~ms interval. For instance, if the measured CPM output drops from eight to four, the estimated on-chip voltage has dropped by 84~mV. 
 
-\begin{figure}
+\begin{sidewaysfigure}
 \centering
-      \includegraphics[trim=5 0 10 0,clip,width=0.9\linewidth]{graphs/voltage/cpm_process_variation.pdf}
+      \includegraphics[trim=5 0 10 0,clip,width=\linewidth]{graphs/voltage/cpm_process_variation.pdf}
       \caption{CPMs can sense the chip supply voltage with a precision of about 21mV per CPM bit at peak frequency.}
       \label{fig:cpmsensitivity} 
-\end{figure}
+\end{sidewaysfigure}
 
 \Fig{fig:cpmsensitivity} shows the sensitivity of the CPMs within each processor core. Although we see a near-linear relationship between frequency and all the CPMs, there is variation among the CPMs in each core and between cores. For instance, CPMs in Core~2,~6,~7 have steadier sensitivity compared to Core~1,~3,~5. The latter have higher distribution across CPMs. We attribute this behavior to process variation and CPM calibration error, as explained by prior work~\cite{floyd2013runtime}.
 
@@ -183,13 +183,13 @@ To ensure the robustness of our measurement results, we considered both repeatab
 \subsection{On-chip Voltage Drop Analysis}
 \label{sec:voltage:rootcause:vdrop-analysis}
 
-\begin{figure}
+\begin{sidewaysfigure}
   \centering
-  \includegraphics[trim=0 0 0 0,clip,width=0.9\linewidth]{graphs/voltage/cpm_scale_variation.pdf}
+  \includegraphics[trim=0 0 0 0,clip,width=\linewidth]{graphs/voltage/cpm_scale_variation.pdf}
   \captionsetup{width=0.95\textwidth}
   \caption{On-chip voltage drop analysis across cores under different workloads.}
 \label{fig:cpm-variation} 
-\end{figure}
+\end{sidewaysfigure}
 
 Using our on-chip voltage drop measurement setup, we quantify the magnitude of the on-chip voltage drop to explain the general core scaling trends seen in~\Sec{sec:characterization}. It is important to understand what factors, and more importantly how those factors, impact the efficiency of active timing margin as more cores are activated. 
 
@@ -380,17 +380,16 @@ Loadline-borrowing is suitable only for workload scheduling within a multisocket
     \vspace{-0.2cm}
 \end{figure}
 
-\begin{figure*}[t]
-\centering
-    \vspace{0.4in}
-    \includegraphics[trim=0 0 0 0,clip,width=\linewidth]{graphs/voltage/split_benefits_all.pdf}
-    \caption{Loadline borrowing's power and energy improvement when eight cores are active.}
-    \label{fig:ll-borrow-8core-normal}
-\end{figure*}
-
 Current operating systems are unaware and do not incorporate loadline knowledge into process scheduling. We use the Linux kernel's taskset affinity mechanism to emulate a schedule that dynamically performs loadline borrowing. We evaluate loadline borrowing on a wider set of benchmarks including all of PARSEC and SPLASH-2 workloads to capture the general trends. Briefly, the key highlight is that loadline-aware OS-level software scheduling can effectively \emph{double the efficiency} of active timing margin at high core counts.
 
 \Fig{fig:ll-borrow-scale} shows active timing margin's scaling power improvement against static guardbanding under workload consolidation and loadline borrowing. Ideally, active timing margin's power improvement will not scale down, and it will be identical across workloads. Loadline borrowing approaches this goal by increasing active timing margin's power-saving capability for all active cores, shown by the clustered lines at the top of the figure. When fewer cores are active, loadline borrowing's power improvement comes mainly from the reduced idle power on each processor. The improvement increases when more cores are active because each chip's dynamic power also reduces when the workload is distributed. \Fig{fig:ll-borrow-scale} shows that on average consolidated active timing margin achieves 5.5\% power improvement over static guardbanding when eight cores are active, whereas loadline borrowing improves by 13.8\%, over 50\% improvement atop the original system design.
+
+\begin{sidewaysfigure}
+  \centering
+  \includegraphics[trim=0 0 0 0,clip,width=\linewidth]{graphs/voltage/split_benefits_all.pdf}
+    \caption{Loadline borrowing's power and energy improvement when eight cores are active.}
+    \label{fig:ll-borrow-8core-normal}
+\end{sidewaysfigure}
 
 We study more benchmarks along with PARSEC and SPLASH-2, including SPEC CPU 2006 workloads running in the form of SPECrate~\cite{SPECrate}, to further demonstrate loadline borrowing's power and energy improvement when all eight cores are active. SPECrate is commonly used to measure system throughput, typical of evaluating performance when running different tasks simultaneously. We use 32 PARSEC and SPLASH-2 threads and eight SPECrate workload copies to match POWER7+'s eight-core architecture. The results are shown in \Fig{fig:ll-borrow-8core-normal}. On average, loadline borrowing achieves 6.2\% and 7.7\% reduction in power and energy, respectively, across the workloads. For power-intensive workloads such as \benchmark{lu\_cb}, loadline borrowing can achieve 12.7\% power improvement. 
 

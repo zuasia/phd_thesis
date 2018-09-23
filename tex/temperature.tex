@@ -270,12 +270,12 @@ At runtime, the power management scheme can use temperature sensor data to index
 
 We use a representative subset of all workloads to evaluate \tistate's power reduction at different temperatures. We start with \Fig{fig:tistate-show}, which shows the $V_{dd}$ reduction at various \tistates. One temperature range corresponds to one voltage and this is because of the VRM's quantized output. To make the VRM reduce voltage by one step, the temperature has to be high enough to speed up the circuit beyond the current point. Between 20\C and 40\C, the VRM can reduce $V_{dd}$ by exactly one step, yet from 40\C to 60\C there are two VRM steps in between. The results show that $V_{dd}$ reduction is larger at a higher temperature because the extra timing margin offered by temperature inversion is larger than at a lower temperature. 
 
-\begin{figure}[t]
+\begin{sidewaysfigure}
   \centering
   \includegraphics[trim=0 0 0 0,clip,width=\linewidth]{graphs/temperature/evaluate-tistate.pdf}
   \caption{Power saving increases at higher temperatures. We mimic workload temperature by externally controlling die temperature to a 40\C~--~80\C range. \tistate's power reduction is independent of the workload activity. }
   \label{fig:power-save-orig}
-\end{figure}
+\end{sidewaysfigure}
 
 In~\Fig{fig:power-save-orig} we compare the average power savings of the various GPU workloads as a result of the $V_{dd}$ reduction at different temperatures. We set the die temperature manually using our temperature control setup to 40\C, 60\C, and 80\C to mimic the various temperature conditions that the processor typically faces. We manually set the temperature because the GPU on the A10-8700P does not heat up the chip often in the voltage region we study, which limits the temperature range we can use to thoroughly characterize. Therefore, rather than examine the workloads under a ``free run,'' we interject with external temperature control. But on the more high-end and power-hungry server parts, the GPU would hit the higher temperatures we are characterizing.
 
