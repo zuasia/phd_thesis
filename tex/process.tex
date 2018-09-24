@@ -1,6 +1,6 @@
 %!TEX root=../paper.tex
 
-\chapter{Multicore Performance Management on Core-level Active Timing Margin Processors}
+\chapter{Multicore Performance Variation Management on Core-level Active Timing Margin Processors}
 \label{sec:process}
 
 In this chapter, we discuss how to leverage active timing margin's automatic timing margin tracking ability to expose a multicore's static core-to-core performance heterogeneity caused by process variation, and explore how to manage the dynamically occurring inter-core frequency interference caused by the cores sharing the power delivery on an active timing margin system.
@@ -406,3 +406,11 @@ On the contrary, \bench{seq2seq} outperform the 10\% improvement goal when its c
 The other \texttt{critical} and \texttt{background} workloads combinations meet the QoS target when active timing margin is aggressively customized for all cores. The high-frequency gain of active timing margin customization provides this benefit. For these cases, no core throttling needs to take place.
 
 In summary, core-level active timing margin customization and active timing margin-aware application power management provides 5\% to 10\% steady performance improvement over the original active timing margin system. This result is notable because the improvement comes on a production-grade system where even a 1\% performance gain is considered significant.
+
+\section{Related Work}
+\label{sec:process:related}
+
+There is a plethora of work on process variation, inter-core performance heterogeneity and multicore scheduling~\cite{liang2007process,sarangi2008varius,teodorescu2008variation,rangan2009thread,dighe2010within,rangan2011achieving}. We leverage ATM's capability of tracking a core's inherent speed and do not need prior knowledge on the core's max frequency. Our proposal for core-level ATM customization conveniently expose the inter-core performance heterogeneity and help users leverage it.
+
+Prior art has shown multi-core performance interference through the memory subsystem~\cite{mars11micro,tang11isca,delimitrou2014quasar,lo2015heracles,verma2015large,llull2017cooper}. Our work is the first to show that on an ATM system, the shared power delivery subsystem introduces a new dimension of resource contention, and proper management is required to reap ATM's full performance benefits in a predictable way.
+

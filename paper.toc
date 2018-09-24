@@ -46,7 +46,7 @@
 \contentsline {subsection}{\numberline {4.4.1}Solution for Recovering Multicore Scaling Loss}{88}{subsection.4.4.1}
 \contentsline {subsection}{\numberline {4.4.2}Power Reduction Improvement}{92}{subsection.4.4.2}
 \contentsline {section}{\numberline {4.5}Related Work}{95}{section.4.5}
-\contentsline {chapter}{Chapter 5.\hspace *{1em}Multicore Performance Management on Core-level Active Timing Margin Processors}{97}{chapter.5}
+\contentsline {chapter}{Chapter 5.\hspace *{1em}Multicore Performance Variation Management on Core-level Active Timing Margin Processors}{97}{chapter.5}
 \contentsline {section}{\numberline {5.1}Customizing Active Timing \\Margin Operation}{100}{section.5.1}
 \contentsline {subsection}{\numberline {5.1.1}Programming Critical Path Monitors \\to Reconfigure Margin Reclamation}{100}{subsection.5.1.1}
 \contentsline {subsection}{\numberline {5.1.2}Characterizing active timing margin Limits}{103}{subsection.5.1.2}
@@ -65,8 +65,9 @@
 \contentsline {subsection}{\numberline {5.5.2}Per-core Frequency Predictor}{125}{subsection.5.5.2}
 \contentsline {subsection}{\numberline {5.5.3}Delivering Critical App's Performance}{126}{subsection.5.5.3}
 \contentsline {subsection}{\numberline {5.5.4}Performance Improvement}{131}{subsection.5.5.4}
-\contentsline {chapter}{Chapter 6.\hspace *{1em}Retrospective and Prospective Remarks}{137}{chapter.6}
+\contentsline {section}{\numberline {5.6}Related Work}{136}{section.5.6}
+\contentsline {chapter}{Chapter 6.\hspace *{1em}Conclusion}{137}{chapter.6}
 \contentsline {section}{\numberline {6.1}Retrospective}{137}{section.6.1}
 \contentsline {section}{\numberline {6.2}Prospective}{139}{section.6.2}
-\contentsline {chapter}{Bibliography}{143}{section.6.2}
+\contentsline {chapter}{Bibliography}{142}{section.6.2}
 \contentsline {chapter}{Vita}{162}{section.6.2}
