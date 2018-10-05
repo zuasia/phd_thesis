@@ -1,6 +1,6 @@
 \select@language {british}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {1.1}{\ignorespaces Overview of this thesis's cross-layer research on active timing margin management. We characterizes state-of-the art hardware active timing margin mechanisms such as those that deal with fast $di/dt$ effects, proposes software scheduling techniques to aid aid these active timing chips, and draft firmware power management states to augment existing active timing margin techniques.\relax }}{9}{figure.caption.1}
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Overview of this thesis's cross-layer research on active timing margin management. We design platform-level active timing margin solution for the temperature variation, characterizes state-of-the art hardware active timing margin mechanisms that deal with voltage variation, instrument core-level active timing margin fabric to expose process variation, and proposes software scheduling techniques to help these systems achieve the best power-performance gain.\relax }}{9}{figure.caption.1}
 \addvspace {10pt}
 \contentsline {figure}{\numberline {2.1}{\ignorespaces Timing margin ensures processor execution correctness by allocating extra room in pipeline's clock cycle time. Timing margin can be delivered by providing extra voltage, known as the voltage guardband, or alternatively slowing down frequency. Safely reducing the timing margin can improve power via undervolting, or improve performance via overclocking.\relax }}{17}{figure.caption.2}
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Timing margin is the time left in clock cycle after circuit completes its work.}}}{17}{subfigure.1.1}
@@ -17,13 +17,13 @@
 \contentsline {figure}{\numberline {3.3}{\ignorespaces Temperature control setup.\relax }}{32}{figure.caption.7}
 \contentsline {figure}{\numberline {3.4}{\ignorespaces Power supply monitors (PSMs) measures pipeline speed/timing margin with an inverter ring. By counting how many inverters an edge has traveled through, the PSM reports a digital value that reflects circuit speed.\relax }}{34}{figure.caption.8}
 \contentsline {figure}{\numberline {3.5}{\ignorespaces Temperature inversion happens below 0.9~V and is progressively stronger when voltage scales down.\relax }}{36}{figure.caption.9}
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Estimating voltage reduction potential based on PSM characterization at different temperatures.\relax }}{38}{figure.caption.10}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Estimating voltage reduction potential based on PSM characterization at different temperatures.\relax }}{39}{figure.caption.10}
 \contentsline {figure}{\numberline {3.7}{\ignorespaces Voltage reduction potential is more pronounced in the near-threshold low voltage region.\relax }}{41}{figure.caption.11}
 \contentsline {figure}{\numberline {3.8}{\ignorespaces Exploring T$_{i}$-state\xspace at 80$\celsius $\xspace : we measure the ``training'' workloads' timing margin, and choose the $V_{dd}$ that best tracks the standard margin.\relax }}{44}{figure.caption.12}
 \contentsline {figure}{\numberline {3.9}{\ignorespaces T$_{i}$-state\xspace undervolting decision at 80$\celsius $\xspace closely tracks the ``golden'' reference runs' timing margin, which is needed for reliability.\relax }}{45}{figure.caption.13}
 \contentsline {figure}{\numberline {3.10}{\ignorespaces $V_{dd}$ reduction due to T$_{i}$-states\xspace . The line corresponds to the VRM's quantized output values.\relax }}{47}{figure.caption.15}
 \contentsline {figure}{\numberline {3.11}{\ignorespaces Power saving increases at higher temperatures. We mimic workload temperature by externally controlling die temperature to a 40$\celsius $\xspace ~--~80$\celsius $\xspace range. T$_{i}$-state\xspace 's power reduction is independent of the workload activity. \relax }}{49}{figure.caption.16}
-\contentsline {figure}{\numberline {3.12}{\ignorespaces Power versus temperature under different scaling factors for different workloads. In FinFET and FD-SOI, T$_{i}$-state\xspace makes GPU power smaller at high temperature. The optimal temperature is different for the workloads and the different scaling settings, and this is because the ratio of static to dynamic power across the workloads varies.\relax }}{53}{figure.caption.18}
+\contentsline {figure}{\numberline {3.12}{\ignorespaces Power versus temperature at different scaling factors for different workloads. In FinFET and FD-SOI, T$_{i}$-state\xspace makes GPU power smaller at high temperature. The optimal temperature is different for the workloads and the different scaling settings, and this is because the ratio of static to dynamic power across the workloads varies.\relax }}{53}{figure.caption.18}
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Benchmark {\it FFT}}}}{53}{subfigure.12.1}
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Benchmark {\it particlefilter}}}}{53}{subfigure.12.2}
 \contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Benchmark {\it Reduction}}}}{53}{subfigure.12.3}
@@ -59,14 +59,14 @@
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces {}}}{86}{subfigure.11.2}
 \contentsline {subfigure}{\numberline {(c)}{\ignorespaces {}}}{86}{subfigure.11.3}
 \contentsline {subfigure}{\numberline {(d)}{\ignorespaces {}}}{86}{subfigure.11.4}
-\contentsline {figure}{\numberline {4.12}{\ignorespaces Loadline borrowing balances workloads across multiple sockets to reduce per-socket voltage drop and create room for active timing margin.\relax }}{88}{figure.caption.31}
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Voltage noise-aware scheduling balances workloads across multiple sockets to reduce per-socket voltage drop and create room for active timing margin.\relax }}{88}{figure.caption.31}
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Workload consolidation.}}}{88}{subfigure.12.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Loadline borrowing.}}}{88}{subfigure.12.2}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Noise-aware Scheduling.}}}{88}{subfigure.12.2}
 \contentsline {figure}{\numberline {4.13}{\ignorespaces Distributing {\it raytrace} across two processors reduces passive voltage drop, allowing more power saving under high core count.\relax }}{90}{figure.caption.32}
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Undervolt scaling.}}}{90}{subfigure.13.1}
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Power scaling.}}}{90}{subfigure.13.2}
-\contentsline {figure}{\numberline {4.14}{\ignorespaces Loadline borrowing's power and energy improvement under different numbers of active cores. Compared to the baseline, loadline borrowing consistently shifts up every workload's power improvement.\relax }}{92}{figure.caption.33}
-\contentsline {figure}{\numberline {4.15}{\ignorespaces Loadline borrowing's power and energy improvement when eight cores are active.\relax }}{94}{figure.caption.34}
+\contentsline {figure}{\numberline {4.14}{\ignorespaces Voltage noise-aware scheduling's power and energy improvement under different numbers of active cores. Compared to the baseline, noise-aware scheduling consistently shifts up every workload's power improvement.\relax }}{92}{figure.caption.33}
+\contentsline {figure}{\numberline {4.15}{\ignorespaces Voltage noise-aware scheduling's power and energy improvement when eight cores are active.\relax }}{94}{figure.caption.34}
 \addvspace {10pt}
 \contentsline {figure}{\numberline {5.1}{\ignorespaces \texttt {SqueezeNet} inference latency on a POWER7+ core under different timing margin settings. Aggressively customizing Active Timing Margin, putting workload on to faster cores, and co-locating it with ``friendly'' low-power applications significantly enhance performance.\relax }}{98}{figure.caption.35}
 \contentsline {figure}{\numberline {5.2}{\ignorespaces CPM structure: programming the inserted delay affects the timing it takes to travel to the inverter chain, and sets the margin sensed counted by the inverters.~\cite {drake2007distributed, drake2013single} \relax }}{101}{figure.caption.36}

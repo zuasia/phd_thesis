@@ -24,12 +24,12 @@
 \contentsline {section}{\numberline {3.2}Characterizing Timing Margin Under Temperature Inversion Variation}{35}{section.3.2}
 \contentsline {subsection}{\numberline {3.2.1}Circuit Speed Variation Under Different Temperature}{36}{subsection.3.2.1}
 \contentsline {subsection}{\numberline {3.2.2}Estimating Active Timing Margin's Undervolting Opportunity}{39}{subsection.3.2.2}
-\contentsline {section}{\numberline {3.3}Temperature Inversion States (Ti-States)}{41}{section.3.3}
+\contentsline {section}{\numberline {3.3}Temperature Inversion States (Ti-States)}{42}{section.3.3}
 \contentsline {subsection}{\numberline {3.3.1}Methodology to Construct the Ti-States Table}{42}{subsection.3.3.1}
 \contentsline {subsection}{\numberline {3.3.2}Evaluating Ti-State's Voltage and Power Reduction Effects}{46}{subsection.3.3.2}
 \contentsline {section}{\numberline {3.4}Managing Ti-State Processors in Advanced Technology Nodes}{50}{section.3.4}
 \contentsline {subsection}{\numberline {3.4.1}Scaling to FinFET and FD-SOI}{51}{subsection.3.4.1}
-\contentsline {subsection}{\numberline {3.4.2}T$_{i}$-state\xspace Power Analysis under FinFET and FD-SOI}{53}{subsection.3.4.2}
+\contentsline {subsection}{\numberline {3.4.2}T$_{i}$-state\xspace Power Analysis under FinFET and FD-SOI}{52}{subsection.3.4.2}
 \contentsline {subsection}{\numberline {3.4.3}Runtime Temperature Control}{56}{subsection.3.4.3}
 \contentsline {section}{\numberline {3.5}Related Work}{58}{section.3.5}
 \contentsline {chapter}{Chapter 4.\hspace *{1em}Voltage Noise-aware Scheduling for Power Reduction on Adaptive Clocking Multi-socket Systems}{60}{chapter.4}
@@ -37,13 +37,13 @@
 \contentsline {section}{\numberline {4.2}Efficiency Analysis of Active Timing Margin on Multicore}{66}{section.4.2}
 \contentsline {subsection}{\numberline {4.2.1}Experimental Infrastructure}{67}{subsection.4.2.1}
 \contentsline {subsection}{\numberline {4.2.2}Core Scaling}{68}{subsection.4.2.2}
-\contentsline {subsection}{\numberline {4.2.3}Workload Heterogeneity}{70}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.3}Workload Heterogeneity}{71}{subsection.4.2.3}
 \contentsline {section}{\numberline {4.3}Root-Cause Analysis of Active Timing Margin's Inefficiencies}{73}{section.4.3}
 \contentsline {subsection}{\numberline {4.3.1}Measuring the On-chip Voltage Drop}{74}{subsection.4.3.1}
 \contentsline {subsection}{\numberline {4.3.2}On-chip Voltage Drop Analysis}{78}{subsection.4.3.2}
 \contentsline {subsection}{\numberline {4.3.3}Decomposing the On-chip Voltage Drop}{82}{subsection.4.3.3}
 \contentsline {section}{\numberline {4.4}Voltage Noise-aware Scheduling}{87}{section.4.4}
-\contentsline {subsection}{\numberline {4.4.1}Solution for Recovering Multicore Scaling Loss}{88}{subsection.4.4.1}
+\contentsline {subsection}{\numberline {4.4.1}Solution for Recovering Multicore Scaling Loss}{89}{subsection.4.4.1}
 \contentsline {subsection}{\numberline {4.4.2}Power Reduction Improvement}{92}{subsection.4.4.2}
 \contentsline {section}{\numberline {4.5}Related Work}{95}{section.4.5}
 \contentsline {chapter}{Chapter 5.\hspace *{1em}Multicore Performance Variation Management on Core-level Active Timing Margin Processors}{97}{chapter.5}
