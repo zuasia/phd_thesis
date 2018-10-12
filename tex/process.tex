@@ -248,7 +248,8 @@ Cores have varying levels of ``robustness'' to application heterogeneity, where 
 
 %To favor execution reliability, the cores that have more robust active timing margin operation on the right side of \Fig{fig:core-cpm-var} have higher priority for running applications.
 
-\Fig{fig:core-cpm-var} also summarizes different cores' frequency variation under the profiled scenarios. At the uBench limit configuration, core-to-core speed varies by 300~MHz from the fastest, P0C6, to the slowest, P1C7. The speed gap shrinks to 200~MHz at the thread-worst limit, caused by CPM delay rollback of the non-robust active timing margin cores. Nevertheless, the non-uniform core frequency is still impressive and deserves proper management.
+\Fig{fig:core-cpm-var} also summarizes different cores' frequency variation under the profiled scenarios. At the uBench limit configuration, core-to-core speed varies by 300~MHz from the fastest, P0C6, to the slowest, P1C7. The speed gap shrinks to 200~MHz at the thread-worst limit, caused by CPM delay rollback of the non-robust active timing margin cores. Nevertheless, the non-uniform core frequency is still impressive and deserves proper management. The arithmetic mean frequency is 4908~MHz, under thread-worst setting, and the standard deviation is 63.5~MHz.
+
 %If alternatively selected to favor performance, faster cores should be given higher priority for running applications.
 
 \begin{figure}[t]
