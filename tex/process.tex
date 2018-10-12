@@ -330,7 +330,7 @@ On a customized active timing margin system, each application's performance depe
 
 \begin{table}[h!]
   \centering
-  \resizebox{\columnwidth}{!}{
+  \resizebox{0.75\columnwidth}{!}{
   \begin{tabular}{c|c|c}
     \Xhline{1pt}
 
@@ -358,7 +358,7 @@ We use the applications in \Tab{tab:bench-type} for evaluation. The \texttt{crit
   \label{fig:schedule-flow}
 \end{sidewaysfigure}
 
-\Fig{fig:schedule-flow} outlines our management scheme. It takes into account the core-to-core performance and robustness variation as characterized in~\Sec{sec:realistic}, and the inter-core application power interference on the power delivery subsystem. First, the user selects how he/she would like to set different core's CPM. The default policy uses the chip's thread-worst CPM configuration as shown in \Tab{tab:limit-delay}, obtained through our earlier characterization.
+\Fig{fig:schedule-flow} outlines our management scheme. It takes into account the core-to-core performance and robustness variation as characterized in~\Sec{sec:process:realistic}, and the inter-core application power interference on the power delivery subsystem. First, the user selects how he/she would like to set different core's CPM. The default policy uses the chip's thread-worst CPM configuration as shown in \Tab{tab:limit-delay}, obtained through our earlier characterization.
 
 The default thread-worst policy represents a balanced trade-off between performance and reliability. Most likely workloads can execute correctly while still providing better performance. The \texttt{critical} and \texttt{background} workloads all execute correctly under thread-worst.
 
