@@ -42,7 +42,23 @@
 \contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Overclocking mode.}}}{72}{subfigure.5.2}
 \contentsline {figure}{\numberline {4.6}{\ignorespaces Mapping between on-chip voltage and CPM values.\relax }}{76}{figure.caption.25}
 \contentsline {figure}{\numberline {4.7}{\ignorespaces CPMs can sense the chip supply voltage with a precision of about 21mV per CPM bit at peak frequency.\relax }}{77}{figure.caption.26}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {p0 core 0.}}}{77}{subfigure.7.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {p0 core 1.}}}{77}{subfigure.7.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {p0 core 2.}}}{77}{subfigure.7.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {p0 core 3.}}}{77}{subfigure.7.4}
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {p0 core 4.}}}{77}{subfigure.7.5}
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {p0 core 5.}}}{77}{subfigure.7.6}
+\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {p0 core 6.}}}{77}{subfigure.7.7}
+\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {p0 core 7.}}}{77}{subfigure.7.8}
 \contentsline {figure}{\numberline {4.8}{\ignorespaces On-chip voltage drop analysis across cores under different workloads.\relax }}{79}{figure.caption.27}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {p0 core 0.}}}{79}{subfigure.8.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {p0 core 1.}}}{79}{subfigure.8.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {p0 core 2.}}}{79}{subfigure.8.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {p0 core 3.}}}{79}{subfigure.8.4}
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {p0 core 4.}}}{79}{subfigure.8.5}
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {p0 core 5.}}}{79}{subfigure.8.6}
+\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {p0 core 6.}}}{79}{subfigure.8.7}
+\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {p0 core 7.}}}{79}{subfigure.8.8}
 \contentsline {figure}{\numberline {4.9}{\ignorespaces Voltage drop component analysis, including $di/dt$ droop, IR drop and the loadline effect.\relax }}{82}{figure.caption.28}
 \contentsline {figure}{\numberline {4.10}{\ignorespaces Different components of on-chip voltage drop for some PARSEC and SPLASH-2 benchmarks. In general, as more of the processor's cores are activated, voltage drop increases by varying magnitudes across workloads.\relax }}{84}{figure.caption.29}
 \contentsline {subfigure}{\numberline {(a)}{\ignorespaces {raytrace.}}}{84}{subfigure.10.1}

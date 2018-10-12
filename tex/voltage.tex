@@ -168,12 +168,50 @@ We use CPMs in sample mode to convert their output into on-chip voltage. To mini
 
 \Fig{fig:cpm2volt} lets us establish a direct relationship between CPM and on-chip voltage. We observe a near-linear relationship between the two variables under each frequency. Therefore, with a linear fit, we can determine each CPM bit's significance. On average, one CPM output value corresponds to 21~mV of on-chip voltage. On this basis, we can estimate the magnitude of on-chip voltage drop during any 32~ms interval. For instance, if the measured CPM output drops from eight to four, the estimated on-chip voltage has dropped by 84~mV. 
 
-\begin{sidewaysfigure}
+\begin{figure}
 \centering
-      \includegraphics[trim=5 0 10 0,clip,width=\linewidth]{graphs/voltage/cpm_process_variation.pdf}
+      \subfloat[p0 core 0.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c0.pdf}
+        \label{fig:cpmsensitivity_p0c0}
+      }
+      \hfill
+      \subfloat[p0 core 1.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c1.pdf}
+        \label{fig:cpmsensitivity_p0c1} 
+      }
+
+      \subfloat[p0 core 2.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c2.pdf}
+        \label{fig:cpmsensitivity_p0c2} 
+      }
+      \hfill
+      \subfloat[p0 core 3.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c3.pdf}
+        \label{fig:cpmsensitivity_p0c3} 
+      }
+
+      \subfloat[p0 core 4.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c4.pdf}
+        \label{fig:cpmsensitivity_p0c4} 
+      }
+      \hfill
+      \subfloat[p0 core 5.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c5.pdf}
+        \label{fig:cpmsensitivity_p0c5} 
+      }
+
+      \subfloat[p0 core 6.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c6.pdf}
+        \label{fig:cpmsensitivity_p0c6} 
+      }
+      \hfill
+      \subfloat[p0 core 7.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c7.pdf}
+        \label{fig:cpmsensitivity_p0c7} 
+      }
       \caption{CPMs can sense the chip supply voltage with a precision of about 21mV per CPM bit at peak frequency.}
       \label{fig:cpmsensitivity} 
-\end{sidewaysfigure}
+\end{figure}
 
 \Fig{fig:cpmsensitivity} shows the sensitivity of the CPMs within each processor core. Although we see a near-linear relationship between frequency and all the CPMs, there is variation among the CPMs in each core and between cores. For instance, CPMs in Core~2,~6,~7 have steadier sensitivity compared to Core~1,~3,~5. The latter have higher distribution across CPMs. We attribute this behavior to process variation and CPM calibration error, as explained by prior work~\cite{floyd2013runtime}.
 
@@ -182,13 +220,58 @@ To ensure the robustness of our measurement results, we considered both repeatab
 \subsection{On-chip Voltage Drop Analysis}
 \label{sec:voltage:rootcause:vdrop-analysis}
 
-\begin{sidewaysfigure}
-  \centering
-  \includegraphics[trim=0 0 0 0,clip,width=\linewidth]{graphs/voltage/cpm_scale_variation.pdf}
-  \captionsetup{width=0.95\textwidth}
-  \caption{On-chip voltage drop analysis across cores under different workloads.}
-\label{fig:cpm-variation} 
-\end{sidewaysfigure}
+% \begin{sidewaysfigure}
+%   \centering
+%   \includegraphics[trim=0 0 0 0,clip,width=\linewidth]{graphs/voltage/cpm_scale_variation.pdf}
+%   \captionsetup{width=0.95\textwidth}
+%   \caption{On-chip voltage drop analysis across cores under different workloads.}
+% \label{fig:cpm-variation} 
+% \end{sidewaysfigure}
+
+\begin{figure}
+\centering
+      \subfloat[p0 core 0.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c0.pdf}
+        \label{fig:cpm-variation_p0c0}
+      }
+      \hfill
+      \subfloat[p0 core 1.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c1.pdf}
+        \label{fig:cpm-variation_p0c1} 
+      }
+
+      \subfloat[p0 core 2.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c2.pdf}
+        \label{fig:cpm-variation_p0c2} 
+      }
+      \hfill
+      \subfloat[p0 core 3.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c3.pdf}
+        \label{fig:cpm-variation_p0c3} 
+      }
+
+      \subfloat[p0 core 4.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c4.pdf}
+        \label{fig:cpm-variation_p0c4} 
+      }
+      \hfill
+      \subfloat[p0 core 5.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c5.pdf}
+        \label{fig:cpm-variation_p0c5} 
+      }
+
+      \subfloat[p0 core 6.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c6.pdf}
+        \label{fig:cpm-variation_p0c6} 
+      }
+      \hfill
+      \subfloat[p0 core 7.] {
+        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c7.pdf}
+        \label{fig:cpm-variation_p0c7} 
+      }
+      \caption{On-chip voltage drop analysis across cores under different workloads.}
+      \label{fig:cpm-variation}  
+\end{figure}
 
 Using our on-chip voltage drop measurement setup, we quantify the magnitude of the on-chip voltage drop to explain the general core scaling trends seen in~\Sec{sec:voltage:characterization:scaling-trends}. It is important to understand what factors, and more importantly how those factors, impact the efficiency of active timing margin as more cores are activated. 
 
