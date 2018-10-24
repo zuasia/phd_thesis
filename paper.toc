@@ -60,7 +60,7 @@
 \contentsline {section}{\numberline {5.4}Realistic Workload \\Characterization}{116}{section.5.4}
 \contentsline {subsection}{\numberline {5.4.1}Application Heterogeneity}{117}{subsection.5.4.1}
 \contentsline {subsection}{\numberline {5.4.2}Core Robustness Heterogeneity}{120}{subsection.5.4.2}
-\contentsline {section}{\numberline {5.5}Managing active timing margin in the Field}{122}{section.5.5}
+\contentsline {section}{\numberline {5.5}Managing active timing margin in the Field}{123}{section.5.5}
 \contentsline {subsection}{\numberline {5.5.1}Performance Variability}{123}{subsection.5.5.1}
 \contentsline {subsection}{\numberline {5.5.2}Per-core Frequency Predictor}{125}{subsection.5.5.2}
 \contentsline {subsection}{\numberline {5.5.3}Delivering Critical App's Performance}{126}{subsection.5.5.3}
