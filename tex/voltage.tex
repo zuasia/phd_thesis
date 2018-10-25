@@ -61,7 +61,7 @@ Using an enterprise-class server (\Sec{sec:voltage:characterization:setup}), we 
  
 We perform our analysis on a commercial IBM Power 720 Express server (7R2) that has two POWER7+ processors on the motherboard. The processors share the main memory and other peripheral resources, such as storage and network. We focus on one of the two processors, although we validated our conclusions by conducting experiments on the other processor as well. Unless stated otherwise, the first processor is configured to idle and runs background tasks. The system runs RedHat Enterprise Linux, configured with 32~GB RAM. 
 
-We use PARSEC~\cite{bienia2008parsec} and SPLASH-2~\cite{woo1995splash,bienia2008parsecsplash} in this section because they are scalable workloads and we need to the control the applications' parallelism to carefully study the impact of core scaling. The workloads are compiled using GCC with \texttt{-O2} optimization.
+We use PARSEC~\cite{bienia2008parsec} and SPLASH-2~\cite{woo1995splash,bienia2008parsecsplash} in this section because they are scalable workloads and we need to the control the applications' parallelism to carefully study the impact of core scaling. The workloads run four threads on each core to maximize hardware utilization.
 
 We characterize the efficiency of active timing margin across two modes of operation: 1) undervolting to reduce power consumption and 2) overclocking to boost performance. Hooks in the firmware let us place the system in either operating mode. The hardware and firmware autonomously select frequency and voltage depending on the configured operation mode.
 
@@ -72,11 +72,11 @@ Using \benchmark{raytrace} from PARSEC (as an example), we show active timing ma
 \begin{figure}[t]
 	\centering
     \subfloat[Power saving.] {
-      \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/raytrace_pwr.pdf}
+      \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/raytrace_pwr.pdf}
       \label{fig:raytrace-ineff_pwr} 
     }
     \subfloat[Energy reduction.] {
-       \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/raytrace_edp.pdf}
+       \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/raytrace_edp.pdf}
        \label{fig:raytrace-ineff_edp} 
     }
     \caption{Active timing margin can save power effectively. However, the benefits decrease as more cores are used to actively run the application.}
@@ -121,11 +121,11 @@ From \Fig{fig:pwrvariation} and \Fig{fig:freqvariation}, we draw four conclusion
 \vspace*{-.15in}
 \centering
   \subfloat[Undervolting mode.] {
-    \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/power_saving_variation.pdf}
+    \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/power_saving_variation.pdf}
     \label{fig:pwrvariation} 
   }
   \subfloat[Overclocking mode.] {
-    \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/freq_saving_variation.pdf}
+    \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/freq_saving_variation.pdf}
     \label{fig:freqvariation} 
   }
   \caption{Improvements reduce at different rates for each of the PARSEC and SPLASH-2 workloads when cores are progressively activated, leading to magnified workload variation when all cores are active.}
@@ -171,42 +171,42 @@ We use CPMs in sample mode to convert their output into on-chip voltage. To mini
 \begin{figure}
 \centering
       \subfloat[p0 core 0.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c0.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_process_variation_p0c0.pdf}
         \label{fig:cpmsensitivity_p0c0}
       }
       \hfill
       \subfloat[p0 core 1.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c1.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_process_variation_p0c1.pdf}
         \label{fig:cpmsensitivity_p0c1} 
       }
 
       \subfloat[p0 core 2.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c2.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_process_variation_p0c2.pdf}
         \label{fig:cpmsensitivity_p0c2} 
       }
       \hfill
       \subfloat[p0 core 3.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c3.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_process_variation_p0c3.pdf}
         \label{fig:cpmsensitivity_p0c3} 
       }
 
       \subfloat[p0 core 4.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c4.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_process_variation_p0c4.pdf}
         \label{fig:cpmsensitivity_p0c4} 
       }
       \hfill
       \subfloat[p0 core 5.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c5.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_process_variation_p0c5.pdf}
         \label{fig:cpmsensitivity_p0c5} 
       }
 
       \subfloat[p0 core 6.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c6.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_process_variation_p0c6.pdf}
         \label{fig:cpmsensitivity_p0c6} 
       }
       \hfill
       \subfloat[p0 core 7.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_process_variation_p0c7.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_process_variation_p0c7.pdf}
         \label{fig:cpmsensitivity_p0c7} 
       }
       \caption{CPMs can sense the chip supply voltage with a precision of about 21mV per CPM bit at peak frequency.}
@@ -231,42 +231,42 @@ To ensure the robustness of our measurement results, we considered both repeatab
 \begin{figure}
 \centering
       \subfloat[p0 core 0.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c0.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_scale_variation_p0c0.pdf}
         \label{fig:cpm-variation_p0c0}
       }
       \hfill
       \subfloat[p0 core 1.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c1.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_scale_variation_p0c1.pdf}
         \label{fig:cpm-variation_p0c1} 
       }
 
       \subfloat[p0 core 2.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c2.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_scale_variation_p0c2.pdf}
         \label{fig:cpm-variation_p0c2} 
       }
       \hfill
       \subfloat[p0 core 3.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c3.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_scale_variation_p0c3.pdf}
         \label{fig:cpm-variation_p0c3} 
       }
 
       \subfloat[p0 core 4.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c4.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_scale_variation_p0c4.pdf}
         \label{fig:cpm-variation_p0c4} 
       }
       \hfill
       \subfloat[p0 core 5.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c5.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_scale_variation_p0c5.pdf}
         \label{fig:cpm-variation_p0c5} 
       }
 
       \subfloat[p0 core 6.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c6.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_scale_variation_p0c6.pdf}
         \label{fig:cpm-variation_p0c6} 
       }
       \hfill
       \subfloat[p0 core 7.] {
-        \includegraphics[trim=0 0 0 0,clip,width=.45\linewidth]{graphs/voltage/cpm_scale_variation_p0c7.pdf}
+        \includegraphics[trim=0 0 0 0,clip,width=.4\linewidth]{graphs/voltage/cpm_scale_variation_p0c7.pdf}
         \label{fig:cpm-variation_p0c7} 
       }
       \caption{On-chip voltage drop analysis across cores under different workloads.}
@@ -304,7 +304,7 @@ To understand how workload heterogeneity affects the power-saving and frequency-
 
 We use a mixture of current sensing techniques and CPM measurements to decompose the voltage drop. To measure passive voltage drop (i.e., loadline effect + IR drop), we use VRM's current sensors. The IR drop and loadline effects are quantified using a heuristic equation verified against hardware measurements. The input to the equation is the current going from the VRM into the POWER7+ processor, sampled periodically.
 
-We use CPMs to calculate the magnitude of typical and worst-case voltage noise. To get the typical $di/dt$ value, we run the CPMs in sample mode to acquire an immediate CPM reading, and after converting the CPM output into the voltage, we subtract the passive component from it. To get the worst-case $di/dt$ value, we run the CPMs in the sticky mode to acquire the largest voltage droop seen in the past 32~ms and subtract it from the long-term average measured in sample mode. 
+We use CPMs to calculate the magnitude of typical and worst-case voltage noise. To get the typical $di/dt$ value, we put the CPMs in sample mode to get real-time samples of on-chip voltage and subtract the passive component from it which represents static DC voltage drop. To get the worst-case $di/dt$ value, we put the CPMs in the sticky mode to get the largest voltage droop seen in every 32~ms time window and subtract the sampled long-term average on-chip voltage from it.
 
 \begin{figure}[t]
 \centering
@@ -426,7 +426,9 @@ We use~\Fig{fig:ll-borrow-idea} to introduce how voltage noise-aware scheduling 
 
 Voltage noise-aware scheduling balances workloads equally among all available sockets, and power gates off unneeded cores to eliminate idle power consumption.~\Fig{fig:ll-borrow-idea2} illustrates a loadline-borrowing schedule. In~\Fig{fig:ll-borrow-idea2} active cores are distributed to each socket evenly, and each socket power gates off a set of unused cores to achieve the same idle power elimination effect as in a consolidated schedule. In this schedule, each socket draws less power, reducing the passive voltage drop each processor experiences. This allows active timing margin to reduce more voltage from each processor and hence improve total processor power.
 
-We use our two-socket platform to illustrate the benefits of voltage noise-aware scheduling. We compare the case of conventional workload consolidation, which places all loaded cores on one processor as the baseline, to noise-aware scheduling, which balances the loaded core count across both processors. We keep eight of the total 16 cores turned on to respond instantly to utilization levels of up to 50\%. The remaining eight cores are assumed to be not instantly needed, and therefore are put into a deep sleep (power-gated) state. We run the workload using one to eight cores. In the conventional case, all of the turned-on cores reside on a single processor. In the noise-aware scheduling case, each processor has four cores that are turned on and active. In either case, we measure and compare the two processors' total chip power.
+We use our two-socket platform to illustrate the benefits of voltage noise-aware scheduling. We compare the case of conventional workload consolidation, which places all loaded cores on one processor as the baseline, to noise-aware scheduling, which balances the loaded core count across both processors. We keep eight of the total 16 cores turned on to respond instantly to utilization levels of up to 50\%. The remaining eight cores are assumed to be not instantly needed, and therefore are put into a deep sleep (power-gated) state. The power of the on-chip memory controller left powered on is negligible for total processor power across two sockets and total system power.
+
+We run the workloads using one to eight cores. In the conventional case, all of the turned-on cores reside on a single processor. In the noise-aware scheduling case, each processor has four cores that are turned on and active. In either case, we measure and compare the two processors' total chip power.
 
 \begin{figure}[t]
 \centering
@@ -473,7 +475,7 @@ Current operating systems are unaware and do not incorporate loadline knowledge 
     \label{fig:ll-borrow-8core-normal}
 \end{sidewaysfigure}
 
-We study more benchmarks along with PARSEC and SPLASH-2, including SPEC CPU 2006 workloads running in the form of SPECrate~\cite{SPEC2006}, to further demonstrate noise-aware scheduling's power and energy improvement when all eight cores are active. SPECrate is commonly used to measure system throughput, typical of evaluating performance when running different tasks simultaneously. We use 32 PARSEC and SPLASH-2 threads and eight SPECrate workload copies to match POWER7+'s eight-core architecture. The results are shown in \Fig{fig:ll-borrow-8core-normal}. On average, noise-aware scheduling achieves 6.2\% and 7.7\% reduction in power and energy, respectively, across the workloads. For power-intensive workloads such as \benchmark{lu\_cb}, noise-aware scheduling can achieve 12.7\% power improvement. 
+We study more benchmarks along with PARSEC and SPLASH-2, including SPEC CPU 2006 workloads running in the form of SPECrate~\cite{SPEC2006}, to further demonstrate noise-aware scheduling's power and energy improvement when all eight cores are active. SPECrate is commonly used to measure system throughput, typical of evaluating performance when running different tasks simultaneously. We use 32 PARSEC and SPLASH-2 threads and eight SPECrate workload copies to match POWER7+'s eight-core architecture. The results are shown in \Fig{fig:ll-borrow-8core-normal}. On average, noise-aware scheduling achieves 6.2\% and 7.7\% reduction in processor power and energy, respectively, across the workloads. For power-intensive workloads such as \benchmark{lu\_cb}, noise-aware scheduling can achieve 12.7\% power improvement. For all workloads, total server power improves by 2.1\% on average.
 
 A handful of benchmarks fall into one of two extremes. On one extreme, some benchmarks that are to the leftmost side on the $x$-axis, such as \benchmark{lu\_ncb} (not to be confused with \benchmark{lu\_cb}) and \benchmark{radiosity}, suffer from severe performance loss. Performance decreases by more than 20\% due to interchip communication overhead (not shown). This in part leads to reduced core power consumption during noise-aware scheduling (see left $y$-axis), but the longer execution time negatively offsets the benefit and increases total energy consumption. 
 

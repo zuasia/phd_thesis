@@ -4,7 +4,7 @@
 \contentsline {chapter}{List of Tables}{xvii}{Doc-Start}
 \contentsline {chapter}{List of Figures}{xviii}{Doc-Start}
 \contentsline {chapter}{Chapter 1.\hspace *{1em}Introduction}{1}{chapter.1}
-\contentsline {paragraph}{Thesis Statement}{4}{chapter.1}
+\contentsline {paragraph}{Thesis Statement}{3}{chapter.1}
 \contentsline {section}{\numberline {1.1}Research Contributions}{4}{section.1.1}
 \contentsline {section}{\numberline {1.2}Long-term Impact}{10}{section.1.2}
 \contentsline {section}{\numberline {1.3}Dissertation Organization}{11}{section.1.3}
@@ -37,13 +37,13 @@
 \contentsline {section}{\numberline {4.2}Efficiency Analysis of Active Timing Margin on Multicore}{66}{section.4.2}
 \contentsline {subsection}{\numberline {4.2.1}Experimental Infrastructure}{67}{subsection.4.2.1}
 \contentsline {subsection}{\numberline {4.2.2}Core Scaling}{68}{subsection.4.2.2}
-\contentsline {subsection}{\numberline {4.2.3}Workload Heterogeneity}{71}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.3}Workload Heterogeneity}{70}{subsection.4.2.3}
 \contentsline {section}{\numberline {4.3}Root-Cause Analysis of Active Timing Margin's Inefficiencies}{73}{section.4.3}
 \contentsline {subsection}{\numberline {4.3.1}Measuring the On-chip Voltage Drop}{74}{subsection.4.3.1}
 \contentsline {subsection}{\numberline {4.3.2}On-chip Voltage Drop Analysis}{78}{subsection.4.3.2}
 \contentsline {subsection}{\numberline {4.3.3}Decomposing the On-chip Voltage Drop}{82}{subsection.4.3.3}
 \contentsline {section}{\numberline {4.4}Voltage Noise-aware Scheduling}{87}{section.4.4}
-\contentsline {subsection}{\numberline {4.4.1}Solution for Recovering Multicore Scaling Loss}{89}{subsection.4.4.1}
+\contentsline {subsection}{\numberline {4.4.1}Solution for Recovering Multicore Scaling Loss}{88}{subsection.4.4.1}
 \contentsline {subsection}{\numberline {4.4.2}Power Reduction Improvement}{92}{subsection.4.4.2}
 \contentsline {section}{\numberline {4.5}Related Work}{95}{section.4.5}
 \contentsline {chapter}{Chapter 5.\hspace *{1em}Multicore Performance Variation Management on Core-level Active Timing Margin Processors}{97}{chapter.5}
