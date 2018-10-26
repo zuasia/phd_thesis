@@ -351,7 +351,6 @@ Thus far, we have shown the total power savings from \tistate as a result of vol
   \label{fig:scale-analysis}
 \end{figure}
 
-
 In FinFET and FD-SOI, the scenario above will fundamentally change. FinFET and FD-SOI have much less leakage power, therefore the leakage power increase has a smaller effect on overall processor power under higher temperature. The opposite side is the more salient dynamic power improvement caused by \tistate's voltage reduction. These two opposite trends form a trade-off: an optimal temperature may exist where \tistate's dynamic power reduction balances leakage power increase at higher temperatures and the overall processor power is minimized. Carefully evaluating this trade-off is crucial for \tistate to be practical in runtime processor temperature and power management control. 
 
 We examine \tistate's power benefits on FinFET and FD-SOI for three different types of workloads that are representative of different typical dynamic-to-leakage power ratios. The workloads include \benchmark{FFT}, \benchmark{particlefilter} and \benchmark{Reduction}, going from high to low dynamic power consumption. \Fig{fig:scale-analysis} shows \tistate's GPU power under different scaling settings. Power is normalized to 0\C to show how power scales as temperature increases. 
