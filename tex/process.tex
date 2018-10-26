@@ -1,53 +1,83 @@
 %!TEX root=../paper.tex
 
-\chapter{Multicore Performance Variation Management on Core-level Active Timing Margin Processors}
+\chapter{Managing Enhanced Performance Variation on Adaptive Clocking Multicore Processors}
 \label{sec:process}
 
 In this chapter, we discuss how to leverage active timing margin's automatic timing margin tracking ability to expose a multicore's static core-to-core performance heterogeneity caused by process variation, and explore how to manage the dynamically occurring inter-core frequency interference caused by the cores sharing the power delivery on an active timing margin system.
 
-On multi-core and many-core chips, it is critical that we push down timing margin that not only deals with the dynamically occurring effects such as temperature and voltage variation but also covers the core-to-core performance heterogeneity caused by lithography's manufacturing process variation. To investigate this issue, we take the hardware active timing margin solution designed to cope with voltage noise to the next level, such as the POWER7+ multicore we experimented with in~\Sec{sec:voltage}. We study enhancing a multicore's active timing margin capability according to each core's characteristics, as well as the running applications' characteristics. We heavily instrumented the per-core hardware control loop's operation and studied its maximal efficiency gain.
+On multi-core and many-core chips, it is critical that we push down timing margin that not only deals with the dynamically occurring effects such as temperature and voltage variation but also covers the core-to-core performance heterogeneity caused by lithography's manufacturing process variation. To investigate this issue, we fine-tune the hardware active timing margin solution designed to cope with voltage noise, such as the adaptive clocking fabric in the POWER7+ multicore in~\Sec{sec:voltage}. We study enhancing a multicore's active timing margin capability according to each core's characteristics, as well as the running applications' characteristics. Adaptive clocking's per-core configurable control loop provides a new opportunity to expose the inter-core speed variation and to provide more performance gain than the conventional multicore process variation, i.e., calibrating static frequency levels separately for each core~\cite{sarangi2008varius,teodorescu2008variation,rangan2009thread,dighe2010within,rangan2011achieving}.
 
-By design, a chip's active timing margin implementation is usually programmable for post-silicon calibration of how aggressive the control loop should harness the available margin. If set too aggressively, active timing margin can improve power efficiency a lot, potentially at the cost of compromising execution correctness because not enough margin might be available. On the other hand, active timing margin cannot realize the full efficiency gain if it is set too conservatively. In today's practice, multicore's active timing margin configuration is usually conducted by batches in course granularity for ease of mass production, without taking into consideration the heterogeneity between cores and applications. We factor in these scenarios and investigate how to customize and manage active timing margin operation to maximize its efficiency gain.
+The conventional approach to expose core-to-core variation uses per-core $\textless$$v,f$$\textgreater$ setpoint with static margins and thus requires guarding against worst-case voltage variation, such as the $di/dt$ effect and the DC voltage drop across the chip's power delivery path, each of which can consume 3\% of the $V_{dd}$~\cite{zu2015adaptive}. But because active timing margin can handle these adaptively, it provides more performance gain by exploiting the inherent inter-core variation in the processor.
 
 \begin{figure}[t]
   \centering
-  \includegraphics[trim=0 0 0 0,clip,width=.75\linewidth]{graphs/process//noisy-latency.pdf}
-  \caption{\bench{SqueezeNet} inference latency on a POWER7+ core under different timing margin settings. Aggressively customizing Active Timing Margin, putting workload on to faster cores, and co-locating it with ``friendly'' low-power applications significantly enhance performance.}
+  \includegraphics[trim=0 40 0 10,clip,width=.75\linewidth]{graphs/process/schedule-space.pdf}
+  \caption{Fine-tuning active timing margin (ATM) exposes both process (P) and voltage (V) variation, and improves frequency compared with the default active timing margin configuration and the per-core $\textless$$v,f$$\textgreater$ static margin setpoints.}
+
+  \label{fig:motivate-variation}
+\end{figure}
+
+\Fig{fig:motivate-variation} illustrates the performance enhancement and heterogeneity exposed by ``fine-tuning'' the adaptive clocking control loop for each core. On the tested POWER7+ platform, we (re)configure active timing margin via its Critical Path Monitors (CPMs). The CPM is the chip's programmable canary circuit that measures the timing margin~\cite{lefurgy2011active, drake2013single}.Similar interfaces exist on other adaptive clocking systems for test-time calibration of margin measurement accuracy and for configuring margin reduction aggressiveness~\cite{mericas2014performance,webel2015robust,berry2018ibm}, an example is Power Supply Monitor (PSM) on AMD processors~\cite{grenat20145}. The figure exposes the pros and cons of different approaches.
+
+Starting with the baseline where there is no active timing margin, under a chip-wide static margin (i.e., first bar), all cores have a fixed frequency of 4.2~GHz. Setting the static margin for each core (second bar) with fixed $\textless$$v,f$$\textgreater$ improves performance by exposing the fast cores; we estimate the fastest cores can run around 4.5~GHz, based on prior art's voltage noise characterization~\cite{zu2015adaptive}.
+
+Next, the default active timing margin (third bar) carefully programs each CPM to provide uniform core performance, following the conventional contract between processors and users. When idle, all cores run near 4.6~GHz, higher than static margin's fastest cores because of active timing margin's highly effective mitigation of $di/dt$ effects~\cite{lefurgy2011active}. However, when high power workloads are run, the induced DC voltage drop across the power delivery grid can create long-term steady degradation of the supply voltage delivered, eroding timing margin and reducing active timing margin's frequency gain~\cite{zu2015adaptive}, which lowers the worst-case performance to around 4.4~GHz. Setting fixed $\textless$$v,f$$\textgreater$ points for each core requires that this worst-case be guarded against, whereas active timing margin handles it adaptively and frequency only suffers when power consumption is high.
+
+Fine-tuning (fourth bar) at the per-core adaptive clocking control loop level exposes similar inter-core speed variation as static per-core $\textless$$v,f$$\textgreater$ setpoints, but it provides much higher performance under typical conditions because of active timing margin's adaptive margin provisioning capability. Fine-tuning active timing margin also removes any margin left not trimmed in the default system, which further pushes processor efficiency to the extreme. For instance, when the chip is idle, power consumption and DC voltage drop is minimal, pushing the fastest core to nearly 5~GHz, 10\% higher than the fastest static margin core.
+
+While fine-tuning active timing margin provides high frequency gain, it exacerbates variability and induces performance predictability issues. In the worst case, e.g., when DC voltage drop is maximized when running eight high power {\bench{daxpy}} threads, the slowest core, which runs at 4.7~GHz under idle conditions, slows down to 4.5~GHz, a 500~MHz drop from the fastest 5~GHz case. Thus, application performance can vary widely, depending on the core chosen for execution and any co-located workloads.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[trim=0 0 0 0,clip,width=.75\linewidth]{graphs/process/noisy-latency.pdf}
+  \caption{{\bench{SqueezeNet}} inference latency on a POWER7+ core under different timing margin settings. Aggressively fine-tuning active timing margin, and co-locating it with ``friendly'' low-power applications significantly enhance performance.}
 
   \label{fig:motivate-latency}
 \end{figure}
 
-\Fig{fig:motivate-latency} shows a POWER7+ processor core's performance under different timing margin settings~\cite{sinharoy2011power7, floyd2011introducing}. We instrument POWER7+'s active timing margin via its Critical Path Monitors (CPMs), a programmable interface of the chip's canary circuit that measures available margin~\cite{lefurgy2011active, drake2013single}. We illustrate with the inference latency of \bench{SqueezeNet}, a compressed convolutional neural network (CNN). Under conventional static timing, the chip clocks at 4.2~GHz, producing an average inference latency of 80~ms. Under the chip's default active timing margin, a poorly managed system that co-locates \bench{SqueezeNet} with high-power co-runners such as \bench{daxpy} increases frequency to 4.4~GHz, yielding a limited 3.75\% performance improvement. However, customizing each core's active timing margin and wisely managing the system to let \bench{SqueezeNet} run alone boosts core frequency to 5~GHz and reduces latency by 15\%, a 4X the performance gain over the default production system.
+\Fig{fig:motivate-latency} shows a POWER7+ processor core's performance under different timing margin settings~\cite{sinharoy2011power7, floyd2011introducing}. We instrument POWER7+'s active timing margin via its Critical Path Monitors (CPMs), a programmable interface of the chip's canary circuit that measures available margin~\cite{lefurgy2011active, drake2013single}. We illustrate with the inference latency of \bench{SqueezeNet}, a compressed convolutional neural network (CNN). Under conventional static timing, the chip clocks at 4.2~GHz, producing an average inference latency of 80~ms. Under the chip's default active timing margin, a poorly managed system that co-locates \bench{SqueezeNet} with high-power co-runners such as \bench{daxpy} increases frequency to 4.4~GHz, yielding a limited 7.5\% latency improvement. However, customizing each core's active timing margin and wisely managing the system to let \bench{SqueezeNet} run alone boosts core frequency to 5~GHz and reduces latency by 15\%, a 2X the performance gain over the default production system.
 
-Inspired by the benefits shown in~\Fig{fig:motivate-latency}, we set out to systematically customize each core's \emph{Active Timing Margin}, with the goal of extracting useful insights on active timing margin operation that will guide overall system level performance and power management. Although our work is conducted on an IBM POWER7+ server, the insights we gathered apply to other active timing margin systems as the knobs we instrument exist for all active timing margin implementations.
+Inspired by the benefits shown in~\Fig{fig:motivate-latency}, this chapter detail how to fine-tune active timing margin at the core-level to robustly reveal each core's performance limit and to expose inter-core speed differences. We perform extensive hardware measurement to analyze active timing margin's operating limits under different application scenarios, which leads to a low-overhead solution for deploying active timing margin systems with their highest speed at scale, while delivering controllable application performance in the presence of the exposed process and voltage variation. We present a software solution to actively fine-tune and manage active timing margin. In summary, we make the following contributions:
 
-\section{Customizing Active Timing \\Margin Operation}
+\section{Fine-tuning Core-level Active Timing\\ Margin Operation}
 \label{sec:process:configurability}
 
 In our study, we convert all of active timing margin's reclaimed timing margin into frequency and keep $V_{dd}$ unchanged. This process bypasses the restriction on undervolting wherein a chip's worst-case core limits the amount of undervolting. Overclocking allows each core to independently adapt to its conditions and can fully expose a chip's inter-core speed differential, potentially producing more performance benefit. We let active timing margin boost each core's frequency at $V_{dd}$ 1.25~V, the 4.2~GHz P-state.
 
 We explain how to customize a multicore's active timing margin operation to be more aggressive, which extracts more timing margin and increases frequency. Reconfiguring active timing margin's control loop to its operating limit is unexplored before, thus we propose a systematic procedure to characterize how the processor behaves under different scenarios and timing margin reclamation levels. The insights we gain when executing this procedure is instrumental in deploying customized active timing margin systems in production.
 
-%We find active timing margin's operating limits vary between different workload scenarios, so a comprehensive procedure is needed to thoroughly profile active timing margin's reconfiguration and quantify the factors that affect its operating limits. We believe our approach sets the foundation for bringing out an active timing margin core's full performance and exposing the core-to-core speed variation.
-
 \subsection{Programming Critical Path Monitors \\to Reconfigure Margin Reclamation}
 \label{sec:process:configurability:howto}
 
+We configure the POWER7+'s Critical Path Monitors (CPMs) to fine-tune active timing margin's margin reclamation behavior. By design, CPMs are programmable to set how aggressively active timing margin trims the margin and, more importantly, to cover speed variation and deliver uniform performance to users. We leverage this interface to fine-tune each core's active timing margin control loop.
+
 \begin{figure}[t]
   \centering
-  \includegraphics[trim=0 210 0 190,clip,width=0.8\linewidth]{graphs/process//cpm-struct.pdf}
-  \caption{CPM structure: programming the inserted delay affects the timing it takes to travel to the inverter chain, and sets the margin sensed counted by the inverters.~\cite{drake2007distributed, drake2013single}
+  \includegraphics[trim=0 130 0 130,clip,width=0.8\linewidth]{graphs/process/cpm-struct.pdf}
+  \captionsetup{width=.95\linewidth}
+  \caption{CPM has three cascaded parts: programmable inserted delay, synthetic paths, and inverter chain.}
   \label{fig:cpm-struct}
-  }
 \end{figure}
 
-We use the POWER7+'s programmable Critical Path Monitors (CPMs) to control the active timing margin's operation aggressiveness. \Fig{fig:cpm-struct} illustrates the mechanism. A CPM uses three stages to measure timing margin: (1)~inserted delay, (2)~synthetic paths, and (3)~an inverter chain. The inserted delay is a configurable circuit. A user can specify the number of inverters a signal pass through to select its timing delay length. The synthetic path simulates a pipeline circuit's delay with a set of paths, including AND, OR, and XOR gates and wires. The final inverter chain quantifies the time left after the signal propagates past the inserted delay and synthetic path by counting the number of inverters a signal passes. The inverter count is a CPM's final output and is sent to the DPLL for clock adjustment.
+\Fig{fig:cpm-struct} shows a CPM uses three stages to measure margin~\cite{drake2007distributed, drake2013single}: (1)~inserted delay, (2)~synthetic paths, and (3)~an inverter chain. The inserted delay is a configurable circuit. A user can specify the number of inverters a signal passes through to select its timing delay length. The synthetic path simulates a pipeline circuit's delay with a set of paths, including AND, OR, and XOR gates and wires. The final inverter chain quantifies the time left after the signal propagates past the inserted delay and synthetic path by counting the number of inverters a signal passes. The inverter count is a CPM's final output and is sent to the DPLL for clock adjustment.
+
+Before a POWER7+ processor is shipped, each CPM's inserted delay is pre-set at test-time with a default value that serves as extra ``protection'' for the control loop to function robustly. The pre-set delay makes CPMs report less margin than it could have, leaving some margin not trimmed as protection. The pre-set delay also smooths out the speed differences between different corners of a chip by adding more delay to fast corners in order to fill the empty time after a circuit finishes switching and adding less delay to slow corners.
 
 \begin{figure}[t]
-    \centering
-    \includegraphics[trim=0 0 0 0,clip,width=.8\linewidth]{graphs/process//delay-freq.pdf}    
-    \caption{Reducing inserted added delay makes the CPM count more time margin after a signal travels through the synthetic path. The DPLL then increases frequency to harvest the excess margin reported by CPM's inverter chain.}
-    \label{fig:delay-freq}
+  \centering
+  \includegraphics[trim=0 0 0 0,clip,width=0.95\linewidth]{graphs/process/default-cpm.pdf}
+  \captionsetup{width=.95\linewidth}
+  \caption{Pre-set inserted delay of the CPMs in two POWER7+ chips, grouped by core. There exists wide variation between different CPM sensors.}
+  \label{fig:default-cpm}
+\end{figure}
+
+\Fig{fig:default-cpm} shows the preset inserted delays in each core of the two POWER7+ chips (we exclude CPMs in the LLC because it lies in a different clock domain). Intuitively, each unit of the delay represents some amount of timing. Under static margin at 4.2~GHz, reducing the inserted delay by one step lets the CPM detect one to three units more timing margin, equivalent to the speed variation caused by 20-60~mV $V_{dd}$ difference~\cite{drake2013single,zu2015adaptive}. The magnitude of the preset delay shows the amount of ``protection'' built into the default active timing margin system. The pre-set inserted delays range from 7 to 20, nearly a 3X range, indicating significant silicon speed variation.
+
+\begin{figure}[t!]
+  \centering
+  \includegraphics[trim=0 0 0 0,clip,width=0.8\linewidth]{graphs/process/delay-freq.pdf}
+  \caption{Reducing inserted added delay makes the CPM count more time margin after a signal travels through the synthetic path. The DPLL then increases frequency to harvest the excess margin reported by CPM's inverter chain.}
+  \label{fig:delay-freq}
 \end{figure}
 
 By programming the inserted delay to different values, active timing margin's perception of the amount of available timing margin changes, and thus it is induced to become more or less aggressive in reclaiming timing margin. \Fig{fig:delay-freq} shows, for four example cores (C), across two processors (P) on the same system, how active timing margin converts more margin into frequency as the CPM inserted delay is reduced. The default delay (normalized to 0) makes active timing margin push core frequency to around 4.6~GHz, but reducing inserted delay (reduction steps beyond 0) pushes frequency to over 5~GHz, a 20\% improvement over the static timing margin baseline. Programming the inserted delay to a smaller value (higher delay reduction) decreases the time to the end of the synthetic path, leaving more margin to be counted by the inverter chain. The DPLL loop harnesses the excess margin by overclocking.
@@ -65,23 +95,21 @@ As shown by \Fig{fig:delay-freq}, active timing margin has great potential for m
 
 We profile an active timing margin chip on a per-core basis. System idle is our starting point for the analysis; micro-benchmarks (uBench) cover major paths in a core; and single-threaded benchmarks representing real use cases.
 
-\begin{figure}[H]
-  \centering
-  \includegraphics[trim=10 280 10 280,clip,width=.8\linewidth]{graphs/process//profile-flow/profile-flow.pdf}
-  \caption{Our active timing margin characterization methodology iterates over each core and follows a step-by step approach, going from the simplest system idle scenario to the complex real-world workloads.}
-  \label{fig:methodology}
-\end{figure}
-
 \textbf{System Idle} Running background operating system tasks, an idle system imposes the least stress on the processor. {Understanding each core's active timing margin operating limits under system idle provides us with valuable insight into inherent core-to-core differences.}
 
 \textbf{Micro-benchmarks (uBench)} Traditionally, micro-benchmarks are used to measure the performance of individual processor modules, such as the branch predictor, floating point unit, and caches. In active timing margin, micro-benchmarks serve an additional purpose because each one primarily touches only one part of the core, avoiding complex microarchitectural interactions. We thus use uBench to get a more comprehensive profile of core-to-core microarchitecture level variation.
 
-\input{tex/process_submodules/fig_idle-limit-dist}
+\begin{figure}[H]
+  \centering
+  \includegraphics[trim=10 280 10 280,clip,width=.75\linewidth]{graphs/process//profile-flow/profile-flow.pdf}
+  \caption{Our active timing margin characterization methodology iterates over each core and follows a step-by step approach, going from the simplest system idle scenario to the complex real-world workloads.}
+  \label{fig:methodology}
+\end{figure}
 
 \textbf{Realistic Workloads} %\paragraph{Single-threaded Benchmark}
 For the final step, we profile the system with complex applications from SPEC CPU 2017 and PARSEC. These benchmarks cover a wide spectrum of program space in the real world and have diverse architecture behavior~\cite{song2018spec,bienia2008parsecsplash}; hence they can touch more corner-case timing paths or create more active $di/dt$ effects than uBench, all of which threatens the safe execution of aggressively reconfigured active timing margin. {The single-threaded workloads help identify application, chip-wide, and individual core level heterogeneity.}
 
-In each of the above setups, failure may occur as a result of timing violation, manifested as an abnormal application termination (e.g., segmentation fault), silent data corruption (SDC), or a system crash. For SDC related error, we rely on SPEC and uBench's inherent result checking tool for guaranteeing execution correctness. All these failures may occur because either the CPM's delay has become so short that it does not capture real circuit delays or system noise events, such as the $di/dt$ effect, overwhelms the control loop's ability to respond in time. Because the effects that cause active timing margin failure might be not fully deterministic, we repeat the profiling in each setup multiple times to produce a distribution of active timing margin operating limits. We expect the distributions to be tight because timing violations will not be entirely random. These distributions provide a holistic view of active timing margin's margin reclamation capability, so we study them from here on.
+In each of the above setups, failure may occur as a result of timing violation, manifested as an abnormal application termination (e.g., segmentation fault), silent data corruption (SDC), or a system crash. For SDC related error, we rely on SPEC and uBench's inherent result checking tool for guaranteeing execution correctness. All these failures may occur because either the CPM's delay has become so short that it does not capture real circuit delays or system noise events, such as the $di/dt$ effect, overwhelms the control loop's ability to respond in time. Because the effects that cause active timing margin failure might be not fully deterministic, we repeat the profiling in each setup at lest 20 times to produce a distribution of active timing margin operating limits. We expect the distributions to be tight because timing violations will not be entirely random. These distributions provide a holistic view of active timing margin's margin reclamation capability, so we study them from here on.
 
 Our methodology progresses through increasing workload complexity. Thus we often need to roll back the CPM delay setting that was successful in a previous less complex setup to a less aggressive point, reflecting a workload setup's unique impact on active timing margin's operation. Although the worst-case scenario might determine practical active timing margin reconfiguration in the real world, the middle point analysis shed useful insights on what affects the core-level customization of active timing margin's margin reclamation.
 
@@ -105,6 +133,8 @@ Running only the operating system, we build a distribution of the most aggressiv
 \input{tex/process_submodules/tab_limit-delay}
 
 The different core-to-core idle limits reveal lucrative performance potential for aggressive active timing margin customization (\Sec{sec:process:idle:potential}), and the significant core-to-core performance variation (\Sec{sec:process:idle:heterogeneity}) which is partly caused by the non-linearity in CPM configuration (\Sec{sec:process:idle:cpm_variation}).
+
+\input{tex/process_submodules/fig_idle-limit-dist}
 
 \subsection{Significant Performance Potential}
 \label{sec:process:idle:potential}
@@ -156,15 +186,13 @@ We start the uBench characterization from the idle limit because it is the point
 
 For the server's two physical processors, uBench characterization exposes six cores that fail for the three programs. \Fig{fig:ubench-limit-dist} shows the distributions of reintroduced delays for these cores, using the ``rollback steps'' relative to the idle limit, which reflects the stress impact from uBench program execution compared with system idle. For those six cores, rollback ranges from one to three steps and sustains all uBench workloads.
 
-All three programs, despite their different characteristics, show similar behaviors on the six problematic cores. The implication is that the microarchitecture blocks that limit aggressive active timing margin customization are the common structures used by all programs, such as instruction fetch and scheduling, rather than specific modules stressed by each application (e.g., FP unit).
+All three programs, despite their different characteristics, show similar behaviors on the six problematic cores. The implication is that the microarchitecture blocks that limit active timing margin fine-tuning are the common structures used by all programs, such as instruction fetch and scheduling, rather than specific modules stressed by each application (e.g., FP unit). We also find \textit{uBench limit} sustains voltage and power stress-test, which will be detailed later in this paper. We, therefore, use the \textit{uBench limit} as a reference point for further characterization using realistic applications.
 
-Our later analysis with a power virus and a voltage virus corroborates this conjecture. Neither of these stress tests makes the cores fails at their \textit{uBench limit}.
-
-The power virus creates a high IR drop and high-temperature condition. At \textit{uBench limit} in \Tab{tab:limit-delay}, eight copies of \bench{daxpy} threads creates over 160~W total chip power and around 70\C chip temperature, compared with the 50\C temperature under per-core test. However, the high power does not bring any core down, verifying the robustness of \textit{uBench limit}. 
-
-We believe this observation is intuitive because the temperature's impact on circuit speed happens over the long term, which is well within active timing margin control loop's nanosecond-level response time. A higher temperature is beneficial for circuit speed in recent technologies~\cite{zu2016tistate}, reducing concerns on high-temperature conditions.
-
-The voltage virus creates transient voltage droops that threaten the active timing margin control loop to respond in time. We repeatedly throttle all cores' instruction issue rates to its 1/128 in synchronized step while running \bench{daxpy} to create current surges, which induces worst-case $di/dt$ effect~\cite{lefurgy2011active, lefurgy2013active}. However, under this worst-case condition, no core fails at their \textit{uBench limit}, suggesting active timing margin works fairly robustly under aggressive customization. We, therefore, use the uBench limits as a reference point for further characterization using realistic applications.
+%All three programs, despite their different characteristics, show similar behaviors on the six problematic cores. The implication is that the microarchitecture blocks that limit aggressive active timing margin customization are the common structures used by all programs, such as instruction fetch and scheduling, rather than specific modules stressed by each application (e.g., FP unit).
+%Our later analysis with a power virus and a voltage virus corroborates this conjecture. Neither of these stress tests makes the cores fails at their \textit{uBench limit}.
+%The power virus creates a high IR drop and high-temperature condition. At \textit{uBench limit} in \Tab{tab:limit-delay}, eight copies of \bench{daxpy} threads creates over 160~W total chip power and around 70\C chip temperature, compared with the 50\C temperature under per-core test. However, the high power does not bring any core down, verifying the robustness of \textit{uBench limit}. 
+%We believe this observation is intuitive because the temperature's impact on circuit speed happens over the long term, which is well within active timing margin control loop's nanosecond-level response time. A higher temperature is beneficial for circuit speed in recent technologies~\cite{zu2016tistate}, reducing concerns on high-temperature conditions.
+%The voltage virus creates transient voltage droops that threaten the active timing margin control loop to respond in time. We repeatedly throttle all cores' instruction issue rates to its 1/128 in synchronized step while running \bench{daxpy} to create current surges, which induces worst-case $di/dt$ effect~\cite{lefurgy2011active, lefurgy2013active}. However, under this worst-case condition, no core fails at their \textit{uBench limit}, suggesting active timing margin works fairly robustly under aggressive customization. We, therefore, use the uBench limits as a reference point for further characterization using realistic applications.
 
 % The uBench limit is an important configuration that likely reflects the core's inherent active timing margin achievable speed because most timing paths are protected by aggressively configured active timing margin operation and real programs have high confidence of correct execution.
 
@@ -259,35 +287,33 @@ Cores have varying levels of ``robustness'' to application heterogeneity, where 
   \label{fig:core-cpm-var}
 \end{figure}
 
-\section{Managing active timing margin in the Field}
+\section{Managing Fine-tuned Active Timing Margin}
 \label{sec:process:schedule}
 
+In this section, we discuss how to deploy and manage a fine-tuned active timing margin system into the field in the presence of significant variability. Fine-tuning improves application performance because frequency is higher. However, pushing active timing margin to its operation limit requires execution correctness guarantee, and the varying frequency levels of different cores and application scenarios create obstacle for the processor to delivering a promised performance level to end users. Hence, we discuss how to determine CPM settings for each core to robustly expose variation, and show how to schedule and throttle co-running workloads to deliver predictable performance for latency sensitive critical applications.
 
-In this section, we discuss how to manage a customized active timing margin system's performance in the presence of core-to-core variation as well as application heterogeneity. Overall, application performance is improved by customized active timing margin's elevated frequency level. However, the varying frequency levels for each core, and each application creates trouble for the processor in delivering a promised performance level to end users. Hence, we show how to schedule applications and make performance promises to latency sensitive applications.
+\subsection{Deploying Fine-tuned Active Ting Margin Configuration}
 
+The insights we gather while analyzing the operating limits of a fine-tuned active timing margin system under idle, micro-benchmarks, and realistic workload scenarios are useful for understanding the performance opportunity from exposed inter-core variability, but overhead of our procedure is too high for finding a processor's fine-tuned configuration in a real-world deployment.
 
-%To manage active timing margin's performance variability, we first develop a predictor that informs frequency and performance for a candidate application schedule (\Sec{sec:schedule:predict}). Then we propose an active timing margin-aware scheduler to manage application performance improvement with deterministic behavior (\Sec{sec:schedule:framework}). We evaluate its effectiveness (\Sec{sec:schedule:result}).
+Because programs have heterogeneous CPM settings on different cores, one might try to predict each application's best CPM setting on each core. However, such a prediction scheme would demand essentially perfect prediction accuracy because any misprediction can lead to system failure or incorrect execution. Achieving this accuracy is difficult because it relies on deep knowledge of a program's $di/dt$ behavior as well as the circuit paths touched by the program, all of which derives from the dynamic instruction streams and may incur high overhead~\cite{reddi2009voltage}. We leave CPM prediction for future work.
 
-\subsection{Performance Variability}
+Rather than predict CPM settings, we propose a test-time stress-test procedure to identify active timing margin fine-tuning limits while maintaining a correctness guarantee. The approach and evaluation presented here is an example of the process we recommend, and not meant to be literally the exact steps to follow. For instance, the stressmarks we use in the paper are different from what we use in production. Nonetheless, the general approach we discuss is useful.
 
- \begin{figure}[t]
+During test-time, we iterate over each core and run worst-case workloads, such as a $di/dt$ stressmark~\cite{kim2012audit,bertran2014voltage}, power stressmark~\cite{bertran2012systematic}, and ISA test suites to create high voltage noise and high operating temperatures and to cover all potential circuit paths. The combined stress-test finds each core's limit active timing margin configuration, providing a guarantee of correctness for any realistic workload because, by definition, a stress-test pushes the system beyond the requirements of any other workload.
+
+In our work, we try our best to create a stress-test with a voltage virus that repeatedly and synchronously throttles all cores' instruction issue rate to operate only one out of every 128 cycles while simultaneously running 32 {\bench{daxpy}} threads. The {\bench{daxpy}} workloads create high power consumption, raising chip power to 160~W and temperature to 70\C; the issue throttling creates a synchronous power surge across the chip, inducing concurrent $di/dt$ effects from adjacent cores, representing worst-case voltage noise ~\cite{lefurgy2011active,vezyrtzis2018droop}. We recognize that better power stressmarks can be constructed using more systematic procedures~\cite{bertran2012systematic}, but we do not expect power and temperature to be the limiting factors for active timing margin operation because these are long-term effects and are well within active timing margin control loop's nanosecond-level response time. Though the realistic workload characterization in \Sec{sec:process:realistic} covers a variety of instructions, in practice, chip vendors have tailored ISA verification suites that provide wider coverage and execute in less time.
+
+\begin{figure}[t]
   \centering
-      \includegraphics[trim=0 0 0 0,clip,width=.75\linewidth]{graphs/process/schedule-space.pdf}
-      \captionsetup{width=.9\linewidth}
-      \caption{Aggressive ATM customization expose wide frequency variation, causing performance unpredictability.}
-      \label{fig:schedule-space}
+  \includegraphics[trim=0 50 0 0,clip,width=.85\linewidth]{graphs/process/freq-variation.pdf}
+  \caption{To ensure execution correctness, fine-tuning active timing margin goes through worst-case stress-test during test time. Vendors can optionally roll back stress-test active timing margin configurations, providing additional safety guarantee. Either way, speed variability is exposed.}
+  \label{fig:freq-var}
 \end{figure}
 
-Under the conventional static margin setting, all cores are shipped with a single, fixed frequency of 4.2~GHz. The default active timing margin system tries to match this goal with a uniform boosted performance around 4.6~GHz, as shown by the ``default (sys idle)'' bar in~\Fig{fig:schedule-space}. The default CPM setting smooth core-to-core variation to a limited 50~MHz, as illustrated by the max and min frequencies. 
+On the two tested POWER7+ chips, the \textit{thread worst} CPM configurations sustain correct execution under all our stressmarks. To provide additional correctness guarantees, the vendor can optionally rollback the stress-test-determined active timing margin limit by several steps.
 
-But when aggressively customizing each core's active timing margin setting to maximize performance, system operators must learn to manage core-to-core performance variation carefully. active timing margin customization exposes the core-to-core performance variation while boosting performance to over 4.9~GHz. The frequency variation is over 200~MHz between cores even when no application is running, as shown by the ``customized (sys idle)'' bar. 
-
-At runtime, the frequency variation is further complicated because workloads consume a different amount of power, which induces varying levels of DC voltage drop along the chip's shared power delivery path. DC voltage drop decreases the supply voltage delivered to the transistors and erodes the timing margin, limiting the frequency gain available for active timing margin's control loop~\cite{zu2015adaptive}. 
-
-Running eight copies of \bench{daxpy} raises power consumption by 60~W and drops a customized core's frequency to 4.5~GHz, as shown by the min freq of ``customized (workload).'' Though this is still much better than the static margin, the performance delivered to an application is much slower than the max frequency setting, which is over 5.0~GHz when idle. 
-
-Hence, system operators that are deploying customized active timing margin system need to be careful when scheduling applications and making performance promises.
-
+\Fig{fig:freq-var} shows the core frequencies across the two POWER7+ chips after executing the above test-time procedure. At their limit, P0C1 and P0C7 have over 200~MHz speed differential. Rolling back each core's CPM from the limit by one or two steps keeps the same inter-core variation trend and provides an additional safety guarantee. In the management scheme we propose, we will use the limit \textit{thread-worst} configuration, though the conclusions we present and the scheme we propose can be applied to more conservative (rolled back) configuration points.
 
 \subsection{Per-core Frequency Predictor}
 \label{sec:process:schedule:predict}
@@ -296,9 +322,9 @@ To manage active timing margin's performance variability, we first develop a pre
 
 \begin{figure}[t]
   \centering
-      \includegraphics[trim=0 0 0 0,clip,width=.75\linewidth]{graphs/process/freq-pred.pdf}
+      \includegraphics[trim=0 0 0 0,clip,width=.6\linewidth]{graphs/process/freq-pred.pdf}
       \captionsetup{width=.9\linewidth}
-      \caption{After ATM customization, core frequency can be predicted with a fitted linear model, following \Eq{eq:freq-pred}.}
+      \caption{After active timing margin customization, core frequency can be predicted with a fitted linear model, following \Eq{eq:freq-pred}.}
 \label{fig:freq-pred}
 \end{figure}
 
@@ -319,7 +345,7 @@ Because past research has shown that speed is only modestly affected by temperat
 
 \begin{figure}
   \centering
-      \includegraphics[trim=0 0 0 0,clip,width=.7\linewidth]{graphs/process/perf-pred.pdf}
+      \includegraphics[trim=0 0 0 0,clip,width=.6\linewidth]{graphs/process/perf-pred.pdf}
       \captionsetup{width=.9\linewidth}
       \caption{Single-thread application performance can be predicted linearly using core frequency.}
 \label{fig:1t-perf-pred}
@@ -411,7 +437,7 @@ In summary, core-level active timing margin customization and active timing marg
 \section{Related Work}
 \label{sec:process:related}
 
-There is a plethora of work on process variation, inter-core performance heterogeneity, and multicore scheduling~\cite{liang2007process,sarangi2008varius,teodorescu2008variation,rangan2009thread,dighe2010within,rangan2011achieving}. We leverage ATM's capability of tracking a core's inherent speed and do not need prior knowledge on the core's max frequency. Our proposal for core-level ATM customization conveniently expose the inter-core performance heterogeneity and help users leverage it.
+There is a plethora of work on process variation, inter-core performance heterogeneity, and multicore scheduling~\cite{liang2007process,sarangi2008varius,teodorescu2008variation,rangan2009thread,dighe2010within,rangan2011achieving}. We leverage active timing margin's capability of tracking a core's inherent speed and do not need prior knowledge on the core's max frequency. Our proposal for core-level active timing margin customization conveniently expose the inter-core performance heterogeneity and help users leverage it.
 
-Prior art has shown multi-core performance interference through the memory subsystem~\cite{mars11micro,tang11isca,delimitrou2014quasar,lo2015heracles,verma2015large,llull2017cooper}. Our work is the first to show that on an ATM system, the shared power delivery subsystem introduces a new dimension of resource contention, and proper management is required to reap ATM's full performance benefits in a predictable way.
+Prior art has shown multi-core performance interference through the memory subsystem~\cite{mars11micro,tang11isca,delimitrou2014quasar,lo2015heracles,verma2015large,llull2017cooper}. Our work is the first to show that on an active timing margin system, the shared power delivery subsystem introduces a new dimension of resource contention, and proper management is required to reap active timing margin's full performance benefits in a predictable way.
 

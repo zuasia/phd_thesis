@@ -16,7 +16,7 @@
 \contentsline {paragraph}{Voltage variation}{20}{section.2.2}
 \contentsline {paragraph}{Process variation}{22}{figure.caption.3}
 \contentsline {section}{\numberline {2.3}The Need for Active Timing Margin}{23}{section.2.3}
-\contentsline {chapter}{Chapter 3.\hspace *{1em}Ti-states: Active Timing Margin and Its Management in the Temperature Inversion Region}{28}{chapter.3}
+\contentsline {chapter}{Chapter 3.\hspace *{1em}Ti-states: Active Timing Margin Management in the Temperature Inversion Region}{28}{chapter.3}
 \contentsline {section}{\numberline {3.1}Experimental Setup}{31}{section.3.1}
 \contentsline {subsection}{\numberline {3.1.1}AMD\textsuperscript {\textregistered } A10-8700P Accelerated Processing Unit}{32}{subsection.3.1.1}
 \contentsline {subsection}{\numberline {3.1.2}Temperature Control Setup}{33}{subsection.3.1.2}
@@ -32,7 +32,7 @@
 \contentsline {subsection}{\numberline {3.4.2}T$_{i}$-state\xspace Power Analysis under FinFET and FD-SOI}{52}{subsection.3.4.2}
 \contentsline {subsection}{\numberline {3.4.3}Runtime Temperature Control}{56}{subsection.3.4.3}
 \contentsline {section}{\numberline {3.5}Related Work}{58}{section.3.5}
-\contentsline {chapter}{Chapter 4.\hspace *{1em}Voltage Noise-aware Scheduling for Power Reduction on Adaptive Clocking Multi-socket Systems}{60}{chapter.4}
+\contentsline {chapter}{Chapter 4.\hspace *{1em}Voltage Noise-aware Scheduling for Power Reduction on Adaptive Clocking Systems}{60}{chapter.4}
 \contentsline {section}{\numberline {4.1}Active Timing Margin in the POWER7+ Multicore Processor}{62}{section.4.1}
 \contentsline {section}{\numberline {4.2}Efficiency Analysis of Active Timing Margin on Multicore}{66}{section.4.2}
 \contentsline {subsection}{\numberline {4.2.1}Experimental Infrastructure}{67}{subsection.4.2.1}
@@ -46,28 +46,28 @@
 \contentsline {subsection}{\numberline {4.4.1}Solution for Recovering Multicore Scaling Loss}{88}{subsection.4.4.1}
 \contentsline {subsection}{\numberline {4.4.2}Power Reduction Improvement}{92}{subsection.4.4.2}
 \contentsline {section}{\numberline {4.5}Related Work}{95}{section.4.5}
-\contentsline {chapter}{Chapter 5.\hspace *{1em}Multicore Performance Variation Management on Core-level Active Timing Margin Processors}{97}{chapter.5}
-\contentsline {section}{\numberline {5.1}Customizing Active Timing \\Margin Operation}{100}{section.5.1}
-\contentsline {subsection}{\numberline {5.1.1}Programming Critical Path Monitors \\to Reconfigure Margin Reclamation}{100}{subsection.5.1.1}
-\contentsline {subsection}{\numberline {5.1.2}Characterizing active timing margin Limits}{103}{subsection.5.1.2}
-\contentsline {section}{\numberline {5.2}Idle System Characterization}{108}{section.5.2}
-\contentsline {subsection}{\numberline {5.2.1}Significant Performance Potential}{109}{subsection.5.2.1}
-\contentsline {subsection}{\numberline {5.2.2}Exposed Inter-core Frequency Variation}{110}{subsection.5.2.2}
-\contentsline {subsection}{\numberline {5.2.3}Nonlinearity of CPM Configuration}{110}{subsection.5.2.3}
-\contentsline {section}{\numberline {5.3}Micro-bench Characterization}{112}{section.5.3}
-\contentsline {subsection}{\numberline {5.3.1}Workload Selection}{113}{subsection.5.3.1}
-\contentsline {subsection}{\numberline {5.3.2}What Makes Some Cores Fail?}{114}{subsection.5.3.2}
-\contentsline {section}{\numberline {5.4}Realistic Workload \\Characterization}{116}{section.5.4}
-\contentsline {subsection}{\numberline {5.4.1}Application Heterogeneity}{117}{subsection.5.4.1}
-\contentsline {subsection}{\numberline {5.4.2}Core Robustness Heterogeneity}{120}{subsection.5.4.2}
-\contentsline {section}{\numberline {5.5}Managing active timing margin in the Field}{123}{section.5.5}
-\contentsline {subsection}{\numberline {5.5.1}Performance Variability}{123}{subsection.5.5.1}
-\contentsline {subsection}{\numberline {5.5.2}Per-core Frequency Predictor}{125}{subsection.5.5.2}
-\contentsline {subsection}{\numberline {5.5.3}Delivering Critical App's Performance}{126}{subsection.5.5.3}
-\contentsline {subsection}{\numberline {5.5.4}Performance Improvement}{131}{subsection.5.5.4}
-\contentsline {section}{\numberline {5.6}Related Work}{136}{section.5.6}
-\contentsline {chapter}{Chapter 6.\hspace *{1em}Conclusion}{137}{chapter.6}
-\contentsline {section}{\numberline {6.1}Retrospective}{137}{section.6.1}
-\contentsline {section}{\numberline {6.2}Prospective}{139}{section.6.2}
-\contentsline {chapter}{Bibliography}{142}{section.6.2}
-\contentsline {chapter}{Vita}{163}{section.6.2}
+\contentsline {chapter}{Chapter 5.\hspace *{1em}Managing Enhanced Performance Variation on Adaptive Clocking Multicore Processors}{97}{chapter.5}
+\contentsline {section}{\numberline {5.1}Fine-tuning Core-level Active Timing\\ Margin Operation}{102}{section.5.1}
+\contentsline {subsection}{\numberline {5.1.1}Programming Critical Path Monitors \\to Reconfigure Margin Reclamation}{103}{subsection.5.1.1}
+\contentsline {subsection}{\numberline {5.1.2}Characterizing active timing margin Limits}{107}{subsection.5.1.2}
+\contentsline {section}{\numberline {5.2}Idle System Characterization}{111}{section.5.2}
+\contentsline {subsection}{\numberline {5.2.1}Significant Performance Potential}{113}{subsection.5.2.1}
+\contentsline {subsection}{\numberline {5.2.2}Exposed Inter-core Frequency Variation}{113}{subsection.5.2.2}
+\contentsline {subsection}{\numberline {5.2.3}Nonlinearity of CPM Configuration}{114}{subsection.5.2.3}
+\contentsline {section}{\numberline {5.3}Micro-bench Characterization}{115}{section.5.3}
+\contentsline {subsection}{\numberline {5.3.1}Workload Selection}{116}{subsection.5.3.1}
+\contentsline {subsection}{\numberline {5.3.2}What Makes Some Cores Fail?}{117}{subsection.5.3.2}
+\contentsline {section}{\numberline {5.4}Realistic Workload \\Characterization}{118}{section.5.4}
+\contentsline {subsection}{\numberline {5.4.1}Application Heterogeneity}{119}{subsection.5.4.1}
+\contentsline {subsection}{\numberline {5.4.2}Core Robustness Heterogeneity}{123}{subsection.5.4.2}
+\contentsline {section}{\numberline {5.5}Managing Fine-tuned Active Timing Margin}{125}{section.5.5}
+\contentsline {subsection}{\numberline {5.5.1}Deploying Fine-tuned Active Ting Margin Configuration}{126}{subsection.5.5.1}
+\contentsline {subsection}{\numberline {5.5.2}Per-core Frequency Predictor}{128}{subsection.5.5.2}
+\contentsline {subsection}{\numberline {5.5.3}Delivering Critical App's Performance}{130}{subsection.5.5.3}
+\contentsline {subsection}{\numberline {5.5.4}Performance Improvement}{135}{subsection.5.5.4}
+\contentsline {section}{\numberline {5.6}Related Work}{140}{section.5.6}
+\contentsline {chapter}{Chapter 6.\hspace *{1em}Conclusion}{141}{chapter.6}
+\contentsline {section}{\numberline {6.1}Retrospective}{141}{section.6.1}
+\contentsline {section}{\numberline {6.2}Prospective}{143}{section.6.2}
+\contentsline {chapter}{Bibliography}{146}{section.6.2}
+\contentsline {chapter}{Vita}{168}{section.6.2}
