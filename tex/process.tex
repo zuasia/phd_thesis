@@ -409,21 +409,32 @@ We evaluate our solution(s) against the static margin and the default active tim
 Our evaluation is carried out when all cores are scheduled to run an application. In practice, power gating idle cores off when not enough workloads are available can further free up chip power and boost the performance of target workload~\cite{zu2015adaptive}. For all our tests, die temperature is maintained under 70\C, and no side effect on-chip cooling is observed. 
 
 \begin{sidewaysfigure}
-  \centering
-  \includegraphics[trim=10 30 0 0,clip,width=\linewidth]{graphs/process//schedule-1t.pdf}
-  \caption{\texttt{Critical} application performance co-located with \texttt{background} workloads under different settings, shown as $<\!critical:background\!>$ pairs. Aggressively customized active timing margin, together with low-power co-running \texttt{background} workloads, boosts performance by 15.4\% on average. With proper management, a 10\% performance improvement goal is guaranteed for \texttt{critical workloads} by throttling co-runner's core frequency to main total chip power below budget.}
-  \label{fig:schedule-1t-results}
+\centering 
+\subfloat[Fine-tuning core-level ATM enhances application performance compared to the default ATM, but scheduling workloads to the slow core and co-locating high-power jobs limit the performance benefits.]
+{
+  \includegraphics[trim=0 0 0 0,clip,width=\linewidth]{graphs/process/schedule-1t-1.pdf}
+  \label{fig:schedule-1t-results-1}
+}
+
+\subfloat[In a fine-tuned ATM multicore, scheduling workloads to the fast core, and throttling co-located workload power can boost performance by 15.4\%. With proper management, a 10\% performance improvement goal is guaranteed for \texttt{critical workloads} while \texttt{background workloads} performance is maximized.] 
+{
+  \includegraphics[trim=0 0 0 0,clip,width=\linewidth]{graphs/process/schedule-1t-2.pdf}  
+  \label{fig:schedule-1t-results-2}
+}
+\caption{\texttt{Critical} application performance under different timing margin and scheduling settings; shown as $<\!critical:background\!>$ pairs. The result is normalized to the performance under static margin's fixed 4.2~GHz point, and the goal is to achieve 10\% improvement over static margin.}
+
+\label{fig:schedule-1t-results}
 \end{sidewaysfigure}
 
 \Fig{fig:schedule-1t-results} summarizes the performance benefit of managing an aggressively customized active timing margin system. To highlight frequency interference's impact, we use one core to run \texttt{critical} application, which is a natural fit for many applications, such as LSTM and RNN inference. We co-locate all \texttt{critical} and \texttt{background} applications on processor 0 (P0) of our two-socket server.
 
 Under static margin, the default DVFS governor makes POWER7+ processors clock at fixed 4.2~GHz to run applications, providing predictable but low performance. 
 
-The default active timing margin improves performance uniformly for all cores, not with the highest efficiency. An unmanaged system ignores the sensitivity of core frequency to total chip power. active timing margin may be indiscriminately activated on all cores, both for \texttt{critical} and \texttt{background} workloads, which significantly raises total chip power, eroding timing margin and reducing all cores' frequency, thereby diminishing the \texttt{critical} application performance. This unmanaged system still increases frequency thanks to active timing margin's harnessed margin, but the improvement is restricted to only 6.1\% on average.
+In~\Fig{fig:schedule-1t-results-1}, the default active timing margin improves performance uniformly for all cores, not with the highest efficiency. An unmanaged system ignores the sensitivity of core frequency to total chip power. active timing margin may be indiscriminately activated on all cores, both for \texttt{critical} and \texttt{background} workloads, which significantly raises total chip power, eroding timing margin and reducing all cores' frequency, thereby diminishing the \texttt{critical} application performance. This unmanaged system still increases frequency thanks to active timing margin's harnessed margin, but the improvement is restricted to only 6.1\% on average.
 
 Aggressively customized active timing margin provides more frequency gain, but an unmanaged system prevents the processor from providing maximum benefit. Compared with the default active timing margin, an unmanaged processor system may carelessly assign the slowest core after CPM reconfiguration to a \texttt{critical} job, limiting the peak performance that can be achieved. The unmanaged system may also let all co-located \texttt{background} workloads run under their highest frequency, increasing total chip power and reducing \texttt{critical} workload frequency. However, in this scenario \texttt{critical} applications still enjoy 10.2\% improvement over static margin because customizing active timing margin unlocks substantial frequency gain.
 
-A managed active timing margin system can opt to maximize the performance of \texttt{critical} applications. Specifically, \texttt{critical} applications get assigned to the fastest cores, and \texttt{background} application power is minimized by applying the lowest p-state. In this way, \texttt{critical} application frequency is maximized, at the cost of \texttt{background} workload performance. On average, \texttt{critical} workload performance improves by 15.2\%.
+In~\Fig{fig:schedule-1t-results-2}, a managed active timing margin system can opt to maximize the performance of \texttt{critical} applications. Specifically, \texttt{critical} applications get assigned to the fastest cores, and \texttt{background} application power is minimized by applying the lowest p-state. In this way, \texttt{critical} application frequency is maximized, at the cost of \texttt{background} workload performance. On average, \texttt{critical} workload performance improves by 15.2\%.
 
 Alternatively, a managed active timing margin system can opt to balance \texttt{critical} and \texttt{background} jobs by letting \texttt{critical} applications just meet their performance goal, and maximizing \texttt{background} performance under that promise. Suppose the user targets 10\% performance improvement for a \texttt{critical} workload over the static margin run, our managed system then throttles \texttt{background} core frequencies with the minimal amount to control total chip power, letting the frequency of the core running \texttt{critical} workload reach the level that delivers target performance. Compared with the schedule that maximizes \texttt{critical} application performance, the managed schedule on average doubles the frequency of cores running \texttt{background} workloads, which is estimated to provide over 50\% performance \texttt{background} application performance improvement.
 
