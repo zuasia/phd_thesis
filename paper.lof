@@ -2,128 +2,128 @@
 \addvspace {10pt}
 \contentsline {figure}{\numberline {1.1}{\ignorespaces Overview of this thesis's cross-layer research on active timing margin management. We design platform-level active timing margin solution for temperature variation, characterizes state-of-the art hardware active timing margin mechanisms that deal with voltage variation, instrument core-level active timing margin fabric to expose process variation, and proposes software scheduling techniques to help these systems achieve the best power-performance gain.\relax }}{9}{figure.caption.1}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Timing margin ensures processor execution correctness by allocating extra room in pipeline's clock cycle time. Timing margin can be delivered by providing extra voltage, known as the voltage guardband, or alternatively slowing down frequency. Safely reducing the timing margin can improve power via undervolting, or improve performance via overclocking.\relax }}{17}{figure.caption.2}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Timing margin is the time left in clock cycle after circuit completes its work.}}}{17}{subfigure.1.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Voltage guardband}}}{17}{subfigure.1.2}
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Power/Performance saving}}}{17}{subfigure.1.3}
-\contentsline {figure}{\numberline {2.2}{\ignorespaces An electrical model of a computer's power delivery subsystem, from the voltage regulator module (VRM) to on-chip transistors. Resistive, capacitive, and inductive impedance exist on this path, adding noise to the voltage delivered to transistors which causes timing uncertainty.\relax }}{21}{figure.caption.3}
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Active timing margin is a control loop that detects timing margin and related chip load environment, and accordingly adjust supply voltage or operating frequency in real-time to supply just enough margin.\relax }}{26}{figure.caption.4}
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Active timing margin protects $di/dt$ effect by making frequency/clock cycle track supply voltage, which improves performance and reduces timing margin wastage.\relax }}{26}{figure.caption.5}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Timing margin ensures processor execution correctness by allocating extra room in pipeline's clock cycle time. Timing margin can be delivered by providing extra voltage, known as the voltage guardband, or alternatively slowing down frequency. Safely reducing the timing margin can improve power via undervolting, or improve performance via overclocking.\relax }}{18}{figure.caption.2}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Timing margin is the time left in clock cycle after circuit completes its work.}}}{18}{subfigure.1.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Voltage guardband}}}{18}{subfigure.1.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Power/Performance saving}}}{18}{subfigure.1.3}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces An electrical model of a computer's power delivery subsystem, from the voltage regulator module (VRM) to on-chip transistors. Resistive, capacitive, and inductive impedance exist on this path, adding noise to the voltage delivered to transistors which causes timing uncertainty.\relax }}{22}{figure.caption.3}
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Active timing margin is a control loop that detects timing margin and related chip load environment, and accordingly adjust supply voltage or operating frequency in real-time to supply just enough margin.\relax }}{27}{figure.caption.4}
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Active timing margin protects $di/dt$ effect by making frequency/clock cycle track supply voltage, which improves performance and reduces timing margin wastage.\relax }}{27}{figure.caption.5}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Temperature inversion is having more impact on processor performance as technology scales.\relax }}{29}{figure.caption.6}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Under low voltage, temperature inversion increases circuit performance.}}}{29}{subfigure.1.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Temperature inversion's inflection voltage approaches nominal supply.}}}{29}{subfigure.1.2}
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Die photo of the A10-8700P SoC.\relax }}{32}{figure.caption.7}
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Temperature control setup.\relax }}{32}{figure.caption.7}
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Power supply monitors (PSMs) measures pipeline speed/timing margin with an inverter ring. By counting how many inverters an edge has traveled through, the PSM reports a digital value that reflects circuit speed.\relax }}{34}{figure.caption.8}
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Temperature inversion happens below 0.9~V and is progressively stronger when voltage scales down.\relax }}{36}{figure.caption.9}
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Estimating voltage reduction potential based on PSM characterization at different temperatures.\relax }}{39}{figure.caption.10}
-\contentsline {figure}{\numberline {3.7}{\ignorespaces Voltage reduction potential is more pronounced in the near-threshold low voltage region.\relax }}{41}{figure.caption.11}
-\contentsline {figure}{\numberline {3.8}{\ignorespaces Exploring T$_{i}$-state\xspace at 80$\celsius $\xspace : we measure the ``training'' workloads' timing margin, and choose the $V_{dd}$ that best tracks the standard margin.\relax }}{44}{figure.caption.12}
-\contentsline {figure}{\numberline {3.9}{\ignorespaces T$_{i}$-state\xspace undervolting decision at 80$\celsius $\xspace closely tracks the ``golden'' reference runs' timing margin, which is needed for reliability.\relax }}{45}{figure.caption.13}
-\contentsline {figure}{\numberline {3.10}{\ignorespaces $V_{dd}$ reduction due to T$_{i}$-states\xspace . The line corresponds to the VRM's quantized output values.\relax }}{47}{figure.caption.15}
-\contentsline {figure}{\numberline {3.11}{\ignorespaces Power saving increases at higher temperatures. We mimic workload temperature by externally controlling die temperature to a 40$\celsius $\xspace ~--~80$\celsius $\xspace range. T$_{i}$-state\xspace 's power reduction is independent of the workload activity. \relax }}{49}{figure.caption.16}
-\contentsline {figure}{\numberline {3.12}{\ignorespaces Power versus temperature at different scaling factors for different workloads. In FinFET and FD-SOI, T$_{i}$-state\xspace makes GPU power smaller at high temperature. The optimal temperature is different for the workloads and the different scaling settings, and this is because the ratio of static to dynamic power across the workloads varies.\relax }}{53}{figure.caption.18}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Benchmark {\it FFT}}}}{53}{subfigure.12.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Benchmark {\it particlefilter}}}}{53}{subfigure.12.2}
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Benchmark {\it Reduction}}}}{53}{subfigure.12.3}
-\contentsline {figure}{\numberline {3.13}{\ignorespaces T$_{i}$-state\xspace temperature and voltage control: two loops work in synergy to minimize power. Loop~1 is a fast control loop that uses T$_{i}$-state\xspace table to keep adjusting voltage in response to silicon temperature variation. Loop~2 is a slow control loop that sets the optimal temperature based on workload steady-state dynamic power profile.\relax }}{56}{figure.caption.19}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Temperature inversion is having more impact on processor performance as technology scales.\relax }}{30}{figure.caption.6}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Under low voltage, temperature inversion increases circuit performance.}}}{30}{subfigure.1.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Temperature inversion's inflection voltage approaches nominal supply.}}}{30}{subfigure.1.2}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Die photo of the A10-8700P SoC.\relax }}{33}{figure.caption.7}
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Temperature control setup.\relax }}{33}{figure.caption.7}
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Power supply monitors (PSMs) measures pipeline speed/timing margin with an inverter ring. By counting how many inverters an edge has traveled through, the PSM reports a digital value that reflects circuit speed.\relax }}{35}{figure.caption.8}
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Temperature inversion happens below 0.9~V and is progressively stronger when voltage scales down.\relax }}{37}{figure.caption.9}
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Estimating voltage reduction potential based on PSM characterization at different temperatures.\relax }}{40}{figure.caption.10}
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Voltage reduction potential is more pronounced in the near-threshold low voltage region.\relax }}{42}{figure.caption.11}
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Exploring T$_{i}$-state\xspace at 80$\celsius $\xspace : we measure the ``training'' workloads' timing margin, and choose the $V_{dd}$ that best tracks the standard margin.\relax }}{45}{figure.caption.12}
+\contentsline {figure}{\numberline {3.9}{\ignorespaces T$_{i}$-state\xspace undervolting decision at 80$\celsius $\xspace closely tracks the ``golden'' reference runs' timing margin, which is needed for reliability.\relax }}{46}{figure.caption.13}
+\contentsline {figure}{\numberline {3.10}{\ignorespaces $V_{dd}$ reduction due to T$_{i}$-states\xspace . The line corresponds to the VRM's quantized output values.\relax }}{48}{figure.caption.15}
+\contentsline {figure}{\numberline {3.11}{\ignorespaces Power saving increases at higher temperatures. We mimic workload temperature by externally controlling die temperature to a 40$\celsius $\xspace ~--~80$\celsius $\xspace range. T$_{i}$-state\xspace 's power reduction is independent of the workload activity. \relax }}{50}{figure.caption.16}
+\contentsline {figure}{\numberline {3.12}{\ignorespaces Power versus temperature at different scaling factors for different workloads. In FinFET and FD-SOI, T$_{i}$-state\xspace makes GPU power smaller at high temperature. The optimal temperature is different for the workloads and the different scaling settings, and this is because the ratio of static to dynamic power across the workloads varies.\relax }}{54}{figure.caption.18}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Benchmark {\it FFT}}}}{54}{subfigure.12.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Benchmark {\it particlefilter}}}}{54}{subfigure.12.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {Benchmark {\it Reduction}}}}{54}{subfigure.12.3}
+\contentsline {figure}{\numberline {3.13}{\ignorespaces T$_{i}$-state\xspace temperature and voltage control: two loops work in synergy to minimize power. Loop~1 is a fast control loop that uses T$_{i}$-state\xspace table to keep adjusting voltage in response to silicon temperature variation. Loop~2 is a slow control loop that sets the optimal temperature based on workload steady-state dynamic power profile.\relax }}{57}{figure.caption.19}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {4.1}{\ignorespaces In POWER7+, Critical Path Monitor (CPM), Digital Phase Locked Loop (DPLL), and off-chip voltage controller work synergistically to let active timing margin provide just enough margin~\cite {lefurgy2013active}.\relax }}{63}{figure.caption.20}
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Critical path monitors (CPMs) are distributed across the chip to measure spatially variant timing margin consumption, caused by local voltage noise and other system effects.\relax }}{65}{figure.caption.21}
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Active timing margin can save power effectively. However, the benefits decrease as more cores are used to actively run the application.\relax }}{68}{figure.caption.22}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Power saving.}}}{68}{subfigure.3.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Energy reduction.}}}{68}{subfigure.3.2}
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Active timing margin can improve performance by increasing frequency. However, the overclocking benefits decrease as more cores are used.\relax }}{70}{figure.caption.23}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Overclocking mode.}}}{70}{subfigure.4.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Execution time.}}}{70}{subfigure.4.2}
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Improvements reduce at different rates for each of the PARSEC and SPLASH-2 workloads when cores are progressively activated, leading to magnified workload variation when all cores are active.\relax }}{72}{figure.caption.24}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Undervolting mode.}}}{72}{subfigure.5.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Overclocking mode.}}}{72}{subfigure.5.2}
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Mapping between on-chip voltage and CPM values.\relax }}{76}{figure.caption.25}
-\contentsline {figure}{\numberline {4.7}{\ignorespaces CPMs can sense the chip supply voltage with a precision of about 21mV per CPM bit at peak frequency.\relax }}{77}{figure.caption.26}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {p0 core 0.}}}{77}{subfigure.7.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {p0 core 1.}}}{77}{subfigure.7.2}
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {p0 core 2.}}}{77}{subfigure.7.3}
-\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {p0 core 3.}}}{77}{subfigure.7.4}
-\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {p0 core 4.}}}{77}{subfigure.7.5}
-\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {p0 core 5.}}}{77}{subfigure.7.6}
-\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {p0 core 6.}}}{77}{subfigure.7.7}
-\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {p0 core 7.}}}{77}{subfigure.7.8}
-\contentsline {figure}{\numberline {4.8}{\ignorespaces On-chip voltage drop analysis across cores under different workloads.\relax }}{79}{figure.caption.27}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {p0 core 0.}}}{79}{subfigure.8.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {p0 core 1.}}}{79}{subfigure.8.2}
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {p0 core 2.}}}{79}{subfigure.8.3}
-\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {p0 core 3.}}}{79}{subfigure.8.4}
-\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {p0 core 4.}}}{79}{subfigure.8.5}
-\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {p0 core 5.}}}{79}{subfigure.8.6}
-\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {p0 core 6.}}}{79}{subfigure.8.7}
-\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {p0 core 7.}}}{79}{subfigure.8.8}
-\contentsline {figure}{\numberline {4.9}{\ignorespaces Voltage drop component analysis, including $di/dt$ droop, IR drop and the loadline effect.\relax }}{82}{figure.caption.28}
-\contentsline {figure}{\numberline {4.10}{\ignorespaces Different components of on-chip voltage drop for some PARSEC and SPLASH-2 benchmarks. In general, as more of the processor's cores are activated, voltage drop increases by varying magnitudes across workloads.\relax }}{84}{figure.caption.29}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {raytrace.}}}{84}{subfigure.10.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {blackscholes.}}}{84}{subfigure.10.2}
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {bodytrack.}}}{84}{subfigure.10.3}
-\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {swaptions.}}}{84}{subfigure.10.4}
-\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {vips.}}}{84}{subfigure.10.5}
-\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {water\_nsquared.}}}{84}{subfigure.10.6}
-\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {ferret.}}}{84}{subfigure.10.7}
-\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {lu\_ncb.}}}{84}{subfigure.10.8}
-\contentsline {subfigure}{\numberline {(i)}{\ignorespaces {ocean\_cp.}}}{84}{subfigure.10.9}
-\contentsline {figure}{\numberline {4.11}{\ignorespaces Power-intensive workloads induce large loadline and IR drop, which severely limits the active timing margin system's undervolting capability, and thus impacts the system's overall power-saving potential.\relax }}{86}{figure.caption.30}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {}}}{86}{subfigure.11.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {}}}{86}{subfigure.11.2}
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {}}}{86}{subfigure.11.3}
-\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {}}}{86}{subfigure.11.4}
-\contentsline {figure}{\numberline {4.12}{\ignorespaces Voltage noise-aware scheduling balances workloads across multiple sockets to reduce per-socket voltage drop and create room for active timing margin.\relax }}{88}{figure.caption.31}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Workload consolidation.}}}{88}{subfigure.12.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Noise-aware Scheduling.}}}{88}{subfigure.12.2}
-\contentsline {figure}{\numberline {4.13}{\ignorespaces Distributing {\it raytrace} across two processors reduces passive voltage drop, allowing more power saving under high core count.\relax }}{90}{figure.caption.32}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Undervolt scaling.}}}{90}{subfigure.13.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Power scaling.}}}{90}{subfigure.13.2}
-\contentsline {figure}{\numberline {4.14}{\ignorespaces Voltage noise-aware scheduling's power and energy improvement under different numbers of active cores. Compared to the baseline, noise-aware scheduling consistently shifts up every workload's power improvement.\relax }}{92}{figure.caption.33}
-\contentsline {figure}{\numberline {4.15}{\ignorespaces Voltage noise-aware scheduling's power and energy improvement when eight cores are active.\relax }}{94}{figure.caption.34}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces In POWER7+, Critical Path Monitor (CPM), Digital Phase Locked Loop (DPLL), and off-chip voltage controller work synergistically to let active timing margin provide just enough margin~\cite {lefurgy2013active}.\relax }}{64}{figure.caption.20}
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Critical path monitors (CPMs) are distributed across the chip to measure spatially variant timing margin consumption, caused by local voltage noise and other system effects.\relax }}{66}{figure.caption.21}
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Active timing margin can save power effectively. However, the benefits decrease as more cores are used to actively run the application.\relax }}{69}{figure.caption.22}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Power saving.}}}{69}{subfigure.3.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Energy reduction.}}}{69}{subfigure.3.2}
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Active timing margin can improve performance by increasing frequency. However, the overclocking benefits decrease as more cores are used.\relax }}{71}{figure.caption.23}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Overclocking mode.}}}{71}{subfigure.4.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Execution time.}}}{71}{subfigure.4.2}
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Improvements reduce at different rates for each of the PARSEC and SPLASH-2 workloads when cores are progressively activated, leading to magnified workload variation when all cores are active.\relax }}{73}{figure.caption.24}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Undervolting mode.}}}{73}{subfigure.5.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Overclocking mode.}}}{73}{subfigure.5.2}
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Mapping between on-chip voltage and CPM values.\relax }}{77}{figure.caption.25}
+\contentsline {figure}{\numberline {4.7}{\ignorespaces CPMs can sense the chip supply voltage with a precision of about 21mV per CPM bit at peak frequency.\relax }}{78}{figure.caption.26}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {p0 core 0.}}}{78}{subfigure.7.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {p0 core 1.}}}{78}{subfigure.7.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {p0 core 2.}}}{78}{subfigure.7.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {p0 core 3.}}}{78}{subfigure.7.4}
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {p0 core 4.}}}{78}{subfigure.7.5}
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {p0 core 5.}}}{78}{subfigure.7.6}
+\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {p0 core 6.}}}{78}{subfigure.7.7}
+\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {p0 core 7.}}}{78}{subfigure.7.8}
+\contentsline {figure}{\numberline {4.8}{\ignorespaces On-chip voltage drop analysis across cores under different workloads.\relax }}{80}{figure.caption.27}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {p0 core 0.}}}{80}{subfigure.8.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {p0 core 1.}}}{80}{subfigure.8.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {p0 core 2.}}}{80}{subfigure.8.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {p0 core 3.}}}{80}{subfigure.8.4}
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {p0 core 4.}}}{80}{subfigure.8.5}
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {p0 core 5.}}}{80}{subfigure.8.6}
+\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {p0 core 6.}}}{80}{subfigure.8.7}
+\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {p0 core 7.}}}{80}{subfigure.8.8}
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Voltage drop component analysis, including $di/dt$ droop, IR drop and the loadline effect.\relax }}{83}{figure.caption.28}
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Different components of on-chip voltage drop for some PARSEC and SPLASH-2 benchmarks. In general, as more of the processor's cores are activated, voltage drop increases by varying magnitudes across workloads.\relax }}{85}{figure.caption.29}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {raytrace.}}}{85}{subfigure.10.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {blackscholes.}}}{85}{subfigure.10.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {bodytrack.}}}{85}{subfigure.10.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {swaptions.}}}{85}{subfigure.10.4}
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {vips.}}}{85}{subfigure.10.5}
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {water\_nsquared.}}}{85}{subfigure.10.6}
+\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {ferret.}}}{85}{subfigure.10.7}
+\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {lu\_ncb.}}}{85}{subfigure.10.8}
+\contentsline {subfigure}{\numberline {(i)}{\ignorespaces {ocean\_cp.}}}{85}{subfigure.10.9}
+\contentsline {figure}{\numberline {4.11}{\ignorespaces Power-intensive workloads induce large loadline and IR drop, which severely limits the active timing margin system's undervolting capability, and thus impacts the system's overall power-saving potential.\relax }}{87}{figure.caption.30}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {}}}{87}{subfigure.11.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {}}}{87}{subfigure.11.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {}}}{87}{subfigure.11.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {}}}{87}{subfigure.11.4}
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Voltage noise-aware scheduling balances workloads across multiple sockets to reduce per-socket voltage drop and create room for active timing margin.\relax }}{89}{figure.caption.31}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Workload consolidation.}}}{89}{subfigure.12.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Noise-aware Scheduling.}}}{89}{subfigure.12.2}
+\contentsline {figure}{\numberline {4.13}{\ignorespaces Distributing {\it raytrace} across two processors reduces passive voltage drop, allowing more power saving under high core count.\relax }}{91}{figure.caption.32}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Undervolt scaling.}}}{91}{subfigure.13.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {Power scaling.}}}{91}{subfigure.13.2}
+\contentsline {figure}{\numberline {4.14}{\ignorespaces Voltage noise-aware scheduling's power and energy improvement under different numbers of active cores. Compared to the baseline, noise-aware scheduling consistently shifts up every workload's power improvement.\relax }}{93}{figure.caption.33}
+\contentsline {figure}{\numberline {4.15}{\ignorespaces Voltage noise-aware scheduling's power and energy improvement when eight cores are active.\relax }}{95}{figure.caption.34}
 \addvspace {10pt}
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Fine-tuning active timing margin (ATM) exposes both process (P) and voltage (V) variation, and improves frequency compared with the default active timing margin configuration and the per-core $\textless $$v,f$$\textgreater $ static margin setpoints.\relax }}{98}{figure.caption.35}
-\contentsline {figure}{\numberline {5.2}{\ignorespaces {\texttt {SqueezeNet}} inference latency on a POWER7+ core under different timing margin settings. Aggressively fine-tuning active timing margin, and co-locating it with ``friendly'' low-power applications significantly enhance performance.\relax }}{101}{figure.caption.36}
-\contentsline {figure}{\numberline {5.3}{\ignorespaces CPM has three cascaded parts: programmable inserted delay, synthetic paths, and inverter chain.\relax }}{103}{figure.caption.37}
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Pre-set inserted delay of the CPMs in two POWER7+ chips, grouped by core. There exists wide variation between different CPM sensors.\relax }}{104}{figure.caption.38}
-\contentsline {figure}{\numberline {5.5}{\ignorespaces Reducing inserted added delay makes the CPM count more time margin after a signal travels through the synthetic path. The DPLL then increases frequency to harvest the excess margin reported by CPM's inverter chain.\relax }}{105}{figure.caption.39}
-\contentsline {figure}{\numberline {5.6}{\ignorespaces Our active timing margin characterization methodology iterates over each core and follows a step-by step approach, going from the simplest system idle scenario to the complex real-world workloads.\relax }}{108}{figure.caption.40}
-\contentsline {figure}{\numberline {5.7}{\ignorespaces The limit configuration of each POWER7+ core (i.e., the most aggressive reduction of CPM's inserted delay from its default setting, beyond which ATM operation can cause system failure under idle condition) distributes over a narrow range (red bar, left y axis). The operating frequency at each core's limit delay config is over 4800~MHz, more than 15\% higher than static margin's 4200~MHz level (blue mark, right y axis).\relax }}{112}{figure.caption.42}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {p0 core 0.}}}{112}{subfigure.7.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {p0 core 1.}}}{112}{subfigure.7.2}
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {p0 core 2.}}}{112}{subfigure.7.3}
-\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {p0 core 3.}}}{112}{subfigure.7.4}
-\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {p0 core 4.}}}{112}{subfigure.7.5}
-\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {p0 core 5.}}}{112}{subfigure.7.6}
-\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {p0 core 6.}}}{112}{subfigure.7.7}
-\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {p0 core 7.}}}{112}{subfigure.7.8}
-\contentsline {subfigure}{\numberline {(i)}{\ignorespaces {p1 core 0.}}}{112}{subfigure.7.9}
-\contentsline {subfigure}{\numberline {(j)}{\ignorespaces {p1 core 1.}}}{112}{subfigure.7.10}
-\contentsline {subfigure}{\numberline {(k)}{\ignorespaces {p1 Core 2.}}}{112}{subfigure.7.11}
-\contentsline {subfigure}{\numberline {(l)}{\ignorespaces {p1 Core 3.}}}{112}{subfigure.7.12}
-\contentsline {subfigure}{\numberline {(m)}{\ignorespaces {p1 Core 4.}}}{112}{subfigure.7.13}
-\contentsline {subfigure}{\numberline {(n)}{\ignorespaces {p1 Core 5.}}}{112}{subfigure.7.14}
-\contentsline {subfigure}{\numberline {(o)}{\ignorespaces {p1 Core 6.}}}{112}{subfigure.7.15}
-\contentsline {subfigure}{\numberline {(p)}{\ignorespaces {p1 Core 7.}}}{112}{subfigure.7.16}
-\contentsline {figure}{\numberline {5.8}{\ignorespaces For 6 out of 16 cores, ATM configuration (i.e., CPM's inserted delay setting) needs to be rolled back from its idle limit in order for micro-benchmark (uBench) to run successfully. The FP (\texttt {daxpy}), MEM (\texttt {stream}), and INT (\texttt {coremark}) uBench have similar distribution of their pass config, indicating the core's mismatch between its reconfigured CPM timing measurement and its actual circuit speed. The other 10 cores not shown can run uBench safely at their idle limits.\relax }}{116}{figure.caption.43}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {p0 core3, \texttt {daxpy}}}}{116}{subfigure.8.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {p0 core4, \texttt {daxpy}}}}{116}{subfigure.8.2}
-\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {p1 core3, \texttt {stream}}}}{116}{subfigure.8.3}
-\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {p1 core4, \texttt {stream}}}}{116}{subfigure.8.4}
-\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {p1 core5, \texttt {coremark}}}}{116}{subfigure.8.5}
-\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {p1 core7, \texttt {coremark}}}}{116}{subfigure.8.6}
-\contentsline {figure}{\numberline {5.9}{\ignorespaces \texttt {x264} stresses active timing margin more heavily and needs a more conservative CPM configuration compared to \texttt {gcc}, as indicated by the larger CPM rollback that is required for \texttt {x264} over \texttt {gcc}.\relax }}{120}{figure.caption.44}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {P0C3}}}{120}{subfigure.9.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {P1C6}}}{120}{subfigure.9.2}
-\contentsline {figure}{\numberline {5.10}{\ignorespaces Application's average CPM delay rollback from the core's uBench limit. The top workloads stress active timing margin heavily and need more delay rollback for less aggressive margin reclamation.\relax }}{123}{figure.caption.46}
-\contentsline {figure}{\numberline {5.11}{\ignorespaces Aggressively configured active timing margin cores exhibit different CPM rollback steps and frequencies when running realistic workloads.\relax }}{125}{figure.caption.47}
-\contentsline {figure}{\numberline {5.12}{\ignorespaces To ensure execution correctness, fine-tuning active timing margin goes through worst-case stress-test during test time. Vendors can optionally roll back stress-test active timing margin configurations, providing additional safety guarantee. Either way, speed variability is exposed.\relax }}{128}{figure.caption.48}
-\contentsline {figure}{\numberline {5.13}{\ignorespaces After active timing margin customization, core frequency can be predicted with a fitted linear model, following Equation.~\ref {eq:freq-pred}.\relax }}{129}{figure.caption.49}
-\contentsline {figure}{\numberline {5.14}{\ignorespaces Single-thread application performance can be predicted linearly using core frequency.\relax }}{130}{figure.caption.50}
-\contentsline {figure}{\numberline {5.15}{\ignorespaces Managing a customized active timing margin system needs to integrate the per-app performance predictor and per-core frequency predictor, so that \texttt {critical} application performance can be satisfied by using faster cores and maintaining an estimated chip power budget.\relax }}{133}{figure.caption.52}
-\contentsline {figure}{\numberline {5.16}{\ignorespaces \texttt {Critical} application performance under different timing margin and scheduling settings; shown as $<\tmspace -\thinmuskip {.1667em}critical:background\tmspace -\thinmuskip {.1667em}>$ pairs. The result is normalized to the performance under static margin's fixed 4.2~GHz point, and the goal is to achieve 10\% improvement over static margin.\relax }}{137}{figure.caption.53}
-\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Fine-tuning core-level ATM enhances application performance compared to the default ATM, but scheduling workloads to the slow core and co-locating high-power jobs limit the performance benefits.}}}{137}{subfigure.16.1}
-\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {In a fine-tuned ATM multicore, scheduling workloads to the fast core, and throttling co-located workload power can boost performance by 15.4\%. With proper management, a 10\% performance improvement goal is guaranteed for \texttt {critical workloads} while \texttt {background workloads} performance is maximized.}}}{137}{subfigure.16.2}
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Fine-tuning active timing margin (ATM) exposes both process (P) and voltage (V) variation, and improves frequency compared with the default active timing margin configuration and the per-core $\textless $$v,f$$\textgreater $ static margin setpoints.\relax }}{99}{figure.caption.35}
+\contentsline {figure}{\numberline {5.2}{\ignorespaces {\texttt {SqueezeNet}} inference latency on a POWER7+ core under different timing margin settings. Aggressively fine-tuning active timing margin, and co-locating it with ``friendly'' low-power applications significantly enhance performance.\relax }}{102}{figure.caption.36}
+\contentsline {figure}{\numberline {5.3}{\ignorespaces CPM has three cascaded parts: programmable inserted delay, synthetic paths, and inverter chain.\relax }}{104}{figure.caption.37}
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Pre-set inserted delay of the CPMs in two POWER7+ chips, grouped by core. There exists wide variation between different CPM sensors.\relax }}{105}{figure.caption.38}
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Reducing inserted added delay makes the CPM count more time margin after a signal travels through the synthetic path. The DPLL then increases frequency to harvest the excess margin reported by CPM's inverter chain.\relax }}{106}{figure.caption.39}
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Our active timing margin characterization methodology iterates over each core and follows a step-by step approach, going from the simplest system idle scenario to the complex real-world workloads.\relax }}{109}{figure.caption.40}
+\contentsline {figure}{\numberline {5.7}{\ignorespaces The limit configuration of each POWER7+ core (i.e., the most aggressive reduction of CPM's inserted delay from its default setting, beyond which ATM operation can cause system failure under idle condition) distributes over a narrow range (red bar, left y axis). The operating frequency at each core's limit delay config is over 4800~MHz, more than 15\% higher than static margin's 4200~MHz level (blue mark, right y axis).\relax }}{113}{figure.caption.42}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {p0 core 0.}}}{113}{subfigure.7.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {p0 core 1.}}}{113}{subfigure.7.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {p0 core 2.}}}{113}{subfigure.7.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {p0 core 3.}}}{113}{subfigure.7.4}
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {p0 core 4.}}}{113}{subfigure.7.5}
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {p0 core 5.}}}{113}{subfigure.7.6}
+\contentsline {subfigure}{\numberline {(g)}{\ignorespaces {p0 core 6.}}}{113}{subfigure.7.7}
+\contentsline {subfigure}{\numberline {(h)}{\ignorespaces {p0 core 7.}}}{113}{subfigure.7.8}
+\contentsline {subfigure}{\numberline {(i)}{\ignorespaces {p1 core 0.}}}{113}{subfigure.7.9}
+\contentsline {subfigure}{\numberline {(j)}{\ignorespaces {p1 core 1.}}}{113}{subfigure.7.10}
+\contentsline {subfigure}{\numberline {(k)}{\ignorespaces {p1 Core 2.}}}{113}{subfigure.7.11}
+\contentsline {subfigure}{\numberline {(l)}{\ignorespaces {p1 Core 3.}}}{113}{subfigure.7.12}
+\contentsline {subfigure}{\numberline {(m)}{\ignorespaces {p1 Core 4.}}}{113}{subfigure.7.13}
+\contentsline {subfigure}{\numberline {(n)}{\ignorespaces {p1 Core 5.}}}{113}{subfigure.7.14}
+\contentsline {subfigure}{\numberline {(o)}{\ignorespaces {p1 Core 6.}}}{113}{subfigure.7.15}
+\contentsline {subfigure}{\numberline {(p)}{\ignorespaces {p1 Core 7.}}}{113}{subfigure.7.16}
+\contentsline {figure}{\numberline {5.8}{\ignorespaces For 6 out of 16 cores, ATM configuration (i.e., CPM's inserted delay setting) needs to be rolled back from its idle limit in order for micro-benchmark (uBench) to run successfully. The FP (\texttt {daxpy}), MEM (\texttt {stream}), and INT (\texttt {coremark}) uBench have similar distribution of their pass config, indicating the core's mismatch between its reconfigured CPM timing measurement and its actual circuit speed. The other 10 cores not shown can run uBench safely at their idle limits.\relax }}{117}{figure.caption.43}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {p0 core3, \texttt {daxpy}}}}{117}{subfigure.8.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {p0 core4, \texttt {daxpy}}}}{117}{subfigure.8.2}
+\contentsline {subfigure}{\numberline {(c)}{\ignorespaces {p1 core3, \texttt {stream}}}}{117}{subfigure.8.3}
+\contentsline {subfigure}{\numberline {(d)}{\ignorespaces {p1 core4, \texttt {stream}}}}{117}{subfigure.8.4}
+\contentsline {subfigure}{\numberline {(e)}{\ignorespaces {p1 core5, \texttt {coremark}}}}{117}{subfigure.8.5}
+\contentsline {subfigure}{\numberline {(f)}{\ignorespaces {p1 core7, \texttt {coremark}}}}{117}{subfigure.8.6}
+\contentsline {figure}{\numberline {5.9}{\ignorespaces \texttt {x264} stresses active timing margin more heavily and needs a more conservative CPM configuration compared to \texttt {gcc}, as indicated by the larger CPM rollback that is required for \texttt {x264} over \texttt {gcc}.\relax }}{121}{figure.caption.44}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {P0C3}}}{121}{subfigure.9.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {P1C6}}}{121}{subfigure.9.2}
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Application's average CPM delay rollback from the core's uBench limit. The top workloads stress active timing margin heavily and need more delay rollback for less aggressive margin reclamation.\relax }}{124}{figure.caption.46}
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Aggressively configured active timing margin cores exhibit different CPM rollback steps and frequencies when running realistic workloads.\relax }}{126}{figure.caption.47}
+\contentsline {figure}{\numberline {5.12}{\ignorespaces To ensure execution correctness, fine-tuning active timing margin goes through worst-case stress-test during test time. Vendors can optionally roll back stress-test active timing margin configurations, providing additional safety guarantee. Either way, speed variability is exposed.\relax }}{129}{figure.caption.48}
+\contentsline {figure}{\numberline {5.13}{\ignorespaces After active timing margin customization, core frequency can be predicted with a fitted linear model, following Equation.~\ref {eq:freq-pred}.\relax }}{130}{figure.caption.49}
+\contentsline {figure}{\numberline {5.14}{\ignorespaces Single-thread application performance can be predicted linearly using core frequency.\relax }}{131}{figure.caption.50}
+\contentsline {figure}{\numberline {5.15}{\ignorespaces Managing a customized active timing margin system needs to integrate the per-app performance predictor and per-core frequency predictor, so that \texttt {critical} application performance can be satisfied by using faster cores and maintaining an estimated chip power budget.\relax }}{134}{figure.caption.52}
+\contentsline {figure}{\numberline {5.16}{\ignorespaces \texttt {Critical} application performance under different timing margin and scheduling settings; shown as $<\tmspace -\thinmuskip {.1667em}critical:background\tmspace -\thinmuskip {.1667em}>$ pairs. The result is normalized to the performance under static margin's fixed 4.2~GHz point, and the goal is to achieve 10\% improvement over static margin.\relax }}{138}{figure.caption.53}
+\contentsline {subfigure}{\numberline {(a)}{\ignorespaces {Fine-tuning core-level ATM enhances application performance compared to the default ATM, but scheduling workloads to the slow core and co-locating high-power jobs limit the performance benefits.}}}{138}{subfigure.16.1}
+\contentsline {subfigure}{\numberline {(b)}{\ignorespaces {In a fine-tuned ATM multicore, scheduling workloads to the fast core, and throttling co-located workload power can boost performance by 15.4\%. With proper management, a 10\% performance improvement goal is guaranteed for \texttt {critical workloads} while \texttt {background workloads} performance is maximized.}}}{138}{subfigure.16.2}
 \addvspace {10pt}

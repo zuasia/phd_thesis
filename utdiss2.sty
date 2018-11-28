@@ -665,7 +665,8 @@
 \newcount\membernumbercounter
 
 \def\signline{%
-    \leftline{\hbox to 2.5in{}\hrulefill} % 26 Aug 2001	cwm
+    %\leftline{\hbox to 2.5in{}\hrulefill} % 26 Aug 2001	cwm
+    \leftline{\hbox to 2.5in{}} % 26 Aug 2001 cwm
     \endgraf
     }
 
@@ -870,7 +871,8 @@
     \centerline{\large\bf by}
     \vspace{25pt}
 %    \centerline{\large\bf\AU@THOR, \previous@degrees}
-    \centerline{\large\bf\au@thor, \previous@degrees}
+%    \centerline{\large\bf\au@thor, \previous@degrees}
+    \centerline{\large\bf\au@thor}    
     \vfill
     \begin{center}
     {\bf\DOC@TYPE}\\
@@ -1009,7 +1011,7 @@
 \def\vitahead{\chapter*{Vita}\thispagestyle{plain}
     \addcontentsline{toc}{chapter}{Vita} }
 \def\vitatail{ \par\vfill\par
-    \noindent Permanent address: \parbox[t]{3.5in}{\raggedright\add@ress}
+    \noindent Email address: \parbox[t]{3.5in}{\raggedright\add@ress}
     \vfill\par\noindent
     \renewcommand{\thefootnote}{\fnsymbol{footnote}}
     This \doc@type{} was typeset
